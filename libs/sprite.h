@@ -1,0 +1,25 @@
+#ifndef _SPRITEH_
+#define _SPRITEH_
+
+#include "utils.h"
+
+typedef struct SPRITES_STRUCT
+{
+  ALLEGRO_BITMAP *_sheet;
+  ALLEGRO_BITMAP *rockford;
+  ALLEGRO_BITMAP *rockford_running_left;
+  ALLEGRO_BITMAP *rockford_running_right;
+  ALLEGRO_BITMAP *rockford_waiting;
+
+  ALLEGRO_BITMAP *diamond;
+
+  ALLEGRO_BITMAP *firefly;
+
+  ALLEGRO_BITMAP *amoeba;
+} SPRITES_STRUCT;
+
+void sprites_init(SPRITES_STRUCT *sprites); 
+
+void sprites_deinit(SPRITES_STRUCT *sprites);
+
+#endif
