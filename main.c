@@ -2,6 +2,10 @@
 #include "./libs/diamond.h"
 #include "./libs/firefly.h"
 #include "./libs/amoeba.h"
+#include "./libs/butterfly.h"
+#include "./libs/exit.h"
+#include "./libs/magic-wall.h"
+
 
 ALLEGRO_DISPLAY *display;
 ALLEGRO_BITMAP *buffer;
@@ -44,6 +48,9 @@ int main()
   DIAMOND_STRUCT diamond;
   FIREFLY_STRUCT firefly;
   AMOEBA_STRUCT amoeba;
+  BUTTERFLY_STRUCT butterfly;
+  EXIT_STRUCT exit;
+  MAGIC_WALL_STRUCT magicWall;
   long frames;
   long score;
 
@@ -71,6 +78,9 @@ int main()
   diamond_init(&diamond, 0, 0);
   firefly_init(&firefly, 50, 50);
   amoeba_init(&amoeba, 100, 100);
+  butterfly_init(&butterfly, 150, 150);
+  exit_init(&exit, 150, 200);
+  magic_wall_init(&magicWall, 200, 200);
 
   frames = 0;
   score = 0;
@@ -97,6 +107,9 @@ int main()
       diamond_update(&diamond, &sprites);
       firefly_update(&firefly, &sprites);
       amoeba_update(&amoeba, &sprites);
+      butterfly_update(&butterfly, &sprites);
+      exit_update(&exit, &sprites);
+      magic_wall_update(&magicWall, &sprites);
       redraw = true;
       break;
     default:
@@ -111,6 +124,9 @@ int main()
       diamond_draw(&diamond, &sprites);
       firefly_draw(&firefly, &sprites);
       amoeba_draw(&amoeba, &sprites);
+      butterfly_draw(&butterfly, &sprites);
+      exit_draw(&exit, &sprites);
+      magic_wall_draw(&magicWall, &sprites);
       post_draw_display();
       redraw = false;
     }

@@ -22,6 +22,12 @@ void sprites_init(SPRITES_STRUCT *sprites)
   sprites->firefly = sprite_grab(sprites, 0, 288, FIREFLY_WIDTH * 8, FIREFLY_HEIGHT);
 
   sprites->amoeba = sprite_grab(sprites, 0, 256, AMOEBA_WIDTH * 8, AMOEBA_HEIGHT);
+
+  sprites->butterfly = sprite_grab(sprites, 0, 352, BUTTERFLY_WIDTH * 8, BUTTERFLY_HEIGHT);
+
+  sprites->exit = sprite_grab(sprites, 0, 192, EXIT_WIDTH * 3, EXIT_HEIGHT);
+
+  sprites->magic_wall = sprite_grab(sprites, 96, 192, MAGIC_WALL_WIDTH * 5, MAGIC_WALL_HEIGHT);
 }
 
 void sprites_deinit(SPRITES_STRUCT *sprites)
@@ -36,6 +42,12 @@ void sprites_deinit(SPRITES_STRUCT *sprites)
   al_destroy_bitmap(sprites->firefly);
 
   al_destroy_bitmap(sprites->amoeba);
+
+  al_destroy_bitmap(sprites->butterfly);
+
+  al_destroy_bitmap(sprites->exit);
+
+  al_destroy_bitmap(sprites->magic_wall);
 
   al_destroy_bitmap(sprites->_sheet);
 }

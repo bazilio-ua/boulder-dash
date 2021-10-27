@@ -35,4 +35,13 @@
 #define AMOEBA_WIDTH 32
 #define AMOEBA_HEIGHT 32
 
+#define BUTTERFLY_WIDTH 32
+#define BUTTERFLY_HEIGHT 32
+
+#define EXIT_WIDTH 32
+#define EXIT_HEIGHT 32
+
+#define MAGIC_WALL_WIDTH 32
+#define MAGIC_WALL_HEIGHT 32
+
 void initialize(bool isInitialized, const char *description); 
