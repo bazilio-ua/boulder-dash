@@ -13,7 +13,7 @@ typedef struct AMOEBA_STRUCT
 
 void amoeba_init(AMOEBA_STRUCT *amoeba, int pos_x, int pos_y); 
 
-void amoeba_update(AMOEBA_STRUCT *amoeba, SPRITES_STRUCT *sprites);
+void amoeba_update(AMOEBA_STRUCT *amoeba, SPRITES_STRUCT *sprites, long int count);
 
 void amoeba_draw(AMOEBA_STRUCT *amoeba, SPRITES_STRUCT *sprites); 
 

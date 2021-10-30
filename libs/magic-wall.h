@@ -13,7 +13,7 @@ typedef struct MAGIC_WALL_STRUCT
 
 void magic_wall_init(MAGIC_WALL_STRUCT *magicWall, int pos_x, int pos_y); 
 
-void magic_wall_update(MAGIC_WALL_STRUCT *magicWall, SPRITES_STRUCT *sprites);
+void magic_wall_update(MAGIC_WALL_STRUCT *magicWall, SPRITES_STRUCT *sprites, long int count);
 
 void magic_wall_draw(MAGIC_WALL_STRUCT *magicWall, SPRITES_STRUCT *sprites); 
 

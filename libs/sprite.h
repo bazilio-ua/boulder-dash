@@ -22,6 +22,12 @@ typedef struct SPRITES_STRUCT
   ALLEGRO_BITMAP *exit;
 
   ALLEGRO_BITMAP *magic_wall;
+
+  ALLEGRO_BITMAP *steel_wall;
+
+  ALLEGRO_BITMAP *boulder;
+
+  ALLEGRO_BITMAP *dirt;
 } SPRITES_STRUCT;
 
 void sprites_init(SPRITES_STRUCT *sprites); 

@@ -5,6 +5,9 @@
 #include "./libs/butterfly.h"
 #include "./libs/exit.h"
 #include "./libs/magic-wall.h"
+#include "./libs/steel-wall.h"
+#include "./libs/boulder.h"
+#include "./libs/dirt.h"
 
 
 ALLEGRO_DISPLAY *display;
@@ -51,6 +54,10 @@ int main()
   BUTTERFLY_STRUCT butterfly;
   EXIT_STRUCT exit;
   MAGIC_WALL_STRUCT magicWall;
+  STEEL_WALL_STRUCT steelWall;
+  BOULDER_STRUCT boulder;
+  DIRT_STRUCT dirt;
+
   long frames;
   long score;
 
@@ -76,11 +83,14 @@ int main()
 
   rockford_init(&rockford);
   diamond_init(&diamond, 0, 0);
-  firefly_init(&firefly, 50, 50);
-  amoeba_init(&amoeba, 100, 100);
-  butterfly_init(&butterfly, 150, 150);
-  exit_init(&exit, 150, 200);
-  magic_wall_init(&magicWall, 200, 200);
+  firefly_init(&firefly, 96, 0);
+  amoeba_init(&amoeba, 16, 0);
+  butterfly_init(&butterfly, 48, 0);
+  exit_init(&exit, 80, 0);
+  magic_wall_init(&magicWall, 112, 0);
+  steel_wall_init(&steelWall, 128, 0);
+  boulder_init(&boulder, 32, 0);
+  dirt_init(&dirt, 64, 0);
 
   frames = 0;
   score = 0;
@@ -103,13 +113,15 @@ int main()
       done = true;
       break;
     case ALLEGRO_EVENT_TIMER:
-      rockford_update(&rockford, &keyState, &sprites);
-      diamond_update(&diamond, &sprites);
-      firefly_update(&firefly, &sprites);
-      amoeba_update(&amoeba, &sprites);
-      butterfly_update(&butterfly, &sprites);
-      exit_update(&exit, &sprites);
-      magic_wall_update(&magicWall, &sprites);
+      rockford_update(&rockford, &keyState, &sprites, event.timer.count);
+      diamond_update(&diamond, &sprites, &rockford, event.timer.count);
+      firefly_update(&firefly, &sprites, event.timer.count);
+      amoeba_update(&amoeba, &sprites, event.timer.count);
+      butterfly_update(&butterfly, &sprites, event.timer.count);
+      exit_update(&exit, &sprites, event.timer.count);
+      magic_wall_update(&magicWall, &sprites, event.timer.count);
+      boulder_update(&boulder, &sprites, event.timer.count);
+      dirt_update(&dirt, &sprites, event.timer.count);
       redraw = true;
       break;
     default:
@@ -127,6 +139,9 @@ int main()
       butterfly_draw(&butterfly, &sprites);
       exit_draw(&exit, &sprites);
       magic_wall_draw(&magicWall, &sprites);
+      steel_wall_draw(&steelWall, &sprites);
+      boulder_draw(&boulder, &sprites);
+      dirt_draw(&dirt, &sprites);
       post_draw_display();
       redraw = false;
     }

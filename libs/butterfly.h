@@ -13,7 +13,7 @@ typedef struct BUTTERFLY_STRUCT
 
 void butterfly_init(BUTTERFLY_STRUCT *butterfly, int pos_x, int pos_y); 
 
-void butterfly_update(BUTTERFLY_STRUCT *butterfly, SPRITES_STRUCT *sprites);
+void butterfly_update(BUTTERFLY_STRUCT *butterfly, SPRITES_STRUCT *sprites, long int count);
 
 void butterfly_draw(BUTTERFLY_STRUCT *butterfly, SPRITES_STRUCT *sprites); 
 

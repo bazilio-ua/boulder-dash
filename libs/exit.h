@@ -13,7 +13,7 @@ typedef struct EXIT_STRUCT
 
 void exit_init(EXIT_STRUCT *exit, int pos_x, int pos_y); 
 
-void exit_update(EXIT_STRUCT *exit, SPRITES_STRUCT *sprites);
+void exit_update(EXIT_STRUCT *exit, SPRITES_STRUCT *sprites, long int count);
 
 void exit_draw(EXIT_STRUCT *exit, SPRITES_STRUCT *sprites); 
 
