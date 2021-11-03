@@ -31,6 +31,8 @@ void sprites_init(SPRITES_STRUCT *sprites)
 
   sprites->steel_wall = sprite_grab(sprites, 32, 192, STEEL_WALL_SPRITE_WIDTH, STEEL_WALL_SPRITE_HEIGHT);
 
+  sprites->brick_wall = sprite_grab(sprites, 224, 192, BRICK_WALL_SPRITE_WIDTH, BRICK_WALL_SPRITE_HEIGHT);
+
   sprites->boulder = sprite_grab(sprites, 0, 224, BOULDER_SPRITE_WIDTH, BOULDER_SPRITE_HEIGHT);
 
   sprites->dirt = sprite_grab(sprites, 32, 224, DIRT_SPRITE_WIDTH, DIRT_SPRITE_HEIGHT);
@@ -56,6 +58,8 @@ void sprites_deinit(SPRITES_STRUCT *sprites)
   al_destroy_bitmap(sprites->magic_wall);
 
   al_destroy_bitmap(sprites->steel_wall);
+
+  al_destroy_bitmap(sprites->brick_wall);
 
   al_destroy_bitmap(sprites->boulder);
 

@@ -14,20 +14,25 @@ typedef struct ROCKFORD_STRUCT
   int last_direction;
   int source_x;
   int source_y;
-  int score; 
+  int score;
   int quantity_of_diamonds;
   bool active;
+  bool redraw;
 } ROCKFORD_STRUCT;
 
-void rockford_init(ROCKFORD_STRUCT *rockford);
+ROCKFORD_STRUCT *allocate_rockford();
+
+void rockford_init(ROCKFORD_STRUCT *rockford, int pos_x, int pos_y);
 
 void rockford_update(
-    ROCKFORD_STRUCT *rockford, 
-    ALLEGRO_KEYBOARD_STATE *keyState, 
+    ROCKFORD_STRUCT *rockford,
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    ALLEGRO_KEYBOARD_STATE *keyState,
     SPRITES_STRUCT *sprites,
-    long int count
-    );
+    long int count);
 
 void rockford_draw(ROCKFORD_STRUCT *rockford, SPRITES_STRUCT *sprites);
+
+void rockford_free(ROCKFORD_STRUCT *rockford);
 
 #endif

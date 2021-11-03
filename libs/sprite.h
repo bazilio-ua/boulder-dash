@@ -25,6 +25,8 @@ typedef struct SPRITES_STRUCT
 
   ALLEGRO_BITMAP *steel_wall;
 
+  ALLEGRO_BITMAP *brick_wall;
+
   ALLEGRO_BITMAP *boulder;
 
   ALLEGRO_BITMAP *dirt;

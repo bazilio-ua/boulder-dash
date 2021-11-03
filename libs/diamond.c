@@ -1,11 +1,17 @@
 #include "diamond.h"
 
+DIAMOND_STRUCT *allocate_array_diamond(int diamondCount)
+{
+  return (DIAMOND_STRUCT *)malloc(sizeof(DIAMOND_STRUCT) * diamondCount);
+}
+
 void diamond_init(DIAMOND_STRUCT *diamond, int pos_x, int pos_y)
 {
   diamond->x = pos_x;
   diamond->y = pos_y;
   diamond->source_x = DIAMOND_SPRITE_WIDTH;
   diamond->source_y = 0;
+  diamond->redraw = true;
 }
 
 void diamond_update(
@@ -22,12 +28,11 @@ void diamond_update(
       diamond->source_x = 0;
   }
 
-  if (isCollision(diamond->x, diamond->y, rockford->x, rockford->y))
+  if (isCollision(diamond->x, diamond->y, rockford->x, rockford->y) && diamond->redraw)
   {
     rockford->quantity_of_diamonds++;
     rockford->score += DIAMOND_SCORE;
-    diamond->x = -100;
-    diamond->y = -100;
+    diamond->redraw = false; 
   }
 }
 
@@ -42,4 +47,9 @@ void diamond_draw(DIAMOND_STRUCT *diamond, SPRITES_STRUCT *sprites)
       DIAMOND_SCALE, DIAMOND_SCALE,                                                      // scale
       0, 0);
   // al_draw_bitmap_region(sprites->diamond, diamond->source_x, diamond->source_y, DIAMOND_SPRITE_WIDTH, DIAM, diamond->x, diamond->y, 0);
+}
+
+void diamond_free(DIAMOND_STRUCT *diamond)
+{
+  free(diamond);
 }

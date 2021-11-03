@@ -1,9 +1,14 @@
 #include "rockford.h"
 
-void rockford_init(ROCKFORD_STRUCT *rockford)
+ROCKFORD_STRUCT *allocate_rockford()
 {
-  rockford->x = (BUFFER_WIDTH / 2) - (ROCKFORD_WIDTH / 2);
-  rockford->y = (BUFFER_HEIGHT / 2) - (ROCKFORD_HEIGHT / 2);
+  return malloc(sizeof(ROCKFORD_STRUCT));
+}
+
+void rockford_init(ROCKFORD_STRUCT *rockford, int pos_x, int pos_y)
+{
+  rockford->x = pos_x;
+  rockford->y = pos_y;
   rockford->lives = 3;
   rockford->respawn_timer = 0;
   rockford->invincible_timer = 120;
@@ -13,10 +18,12 @@ void rockford_init(ROCKFORD_STRUCT *rockford)
   rockford->last_direction = NO_DIRECTION;
   rockford->score = 0;
   rockford->quantity_of_diamonds = 0;
+  rockford->redraw = true;
 }
 
 void rockford_update(
     ROCKFORD_STRUCT *rockford,
+    char map[MAP_HEIGHT][MAP_WIDTH],
     ALLEGRO_KEYBOARD_STATE *keyState,
     SPRITES_STRUCT *sprites,
     long int count)
@@ -36,32 +43,40 @@ void rockford_update(
 
     if (al_key_down(keyState, ALLEGRO_KEY_LEFT))
     {
+      update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
       rockford->x -= ROCKFORD_SPEED;
       rockford->last_direction = rockford->direction;
       rockford->direction = LEFT;
+      update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
     }
     else if (al_key_down(keyState, ALLEGRO_KEY_RIGHT))
     {
+      update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
       rockford->x += ROCKFORD_SPEED;
       rockford->last_direction = rockford->direction;
       rockford->direction = RIGHT;
+      update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
     }
     else if (al_key_down(keyState, ALLEGRO_KEY_UP))
     {
+      update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
       rockford->y -= ROCKFORD_SPEED;
 
       if (rockford->direction != DOWN && rockford->direction != UP)
         rockford->last_direction = rockford->direction;
 
+      update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
       rockford->direction = UP;
     }
     else if (al_key_down(keyState, ALLEGRO_KEY_DOWN))
     {
+      update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
       rockford->y += ROCKFORD_SPEED;
 
       if (rockford->direction != DOWN && rockford->direction != UP)
         rockford->last_direction = rockford->direction;
 
+      update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
       rockford->direction = DOWN;
     }
     else
@@ -165,4 +180,9 @@ void rockford_draw(ROCKFORD_STRUCT *rockford, SPRITES_STRUCT *sprites)
         rockford->x, rockford->y,                                                              // destination
         ROCKFORD_SCALE, ROCKFORD_SCALE,                                                        // scale
         0, 0);
+}
+
+void rockford_free(ROCKFORD_STRUCT *rockford)
+{
+  free(rockford);
 }
