@@ -16,10 +16,18 @@ void diamond_init(DIAMOND_STRUCT *diamond, int pos_x, int pos_y)
 
 void diamond_update(
     DIAMOND_STRUCT *diamond,
+    char map[MAP_HEIGHT][MAP_WIDTH],
     SPRITES_STRUCT *sprites,
     ROCKFORD_STRUCT *rockford,
     long int count)
 {
+
+  if (!isSpaceDiamond(map, diamond->y / BLOCK_SIZE, diamond->x / BLOCK_SIZE))
+  {
+    diamond->redraw = false;
+    return;
+  }
+
   if (count % 5 == 0)
   {
     diamond->source_x += al_get_bitmap_width(sprites->diamond) / 8;
@@ -28,11 +36,11 @@ void diamond_update(
       diamond->source_x = 0;
   }
 
-  if (isCollision(diamond->x, diamond->y, rockford->x, rockford->y) && diamond->redraw)
+  if (isCollision(diamond->x, diamond->y, rockford->x, rockford->y))
   {
     rockford->quantity_of_diamonds++;
     rockford->score += DIAMOND_SCORE;
-    diamond->redraw = false; 
+    diamond->redraw = false;
   }
 }
 

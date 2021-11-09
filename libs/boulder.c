@@ -19,87 +19,96 @@ void boulder_update(
     ROCKFORD_STRUCT *rockford,
     long int count)
 {
+  if (!isSpaceBoulder(map, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE))
+  {
+    boulder->redraw = false;
+    return;
+  }
+
   if (count % 5 == 0)
   {
-    if (map[boulder->y / BLOCK_SIZE + 1][boulder->x / BLOCK_SIZE] == IS_EMPTY)
+    if (isSpaceEmpty(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE))
     {
       update_map_state(map, IS_EMPTY, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
       boulder->y += BLOCK_SIZE;
       update_map_state(map, IS_BOULDER, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
     }
     else if (
-        map[boulder->y / BLOCK_SIZE + 1][boulder->x / BLOCK_SIZE - 1] == IS_EMPTY &&
-        map[boulder->y / BLOCK_SIZE][boulder->x / BLOCK_SIZE - 1] == IS_EMPTY && 
-        map[boulder->y / BLOCK_SIZE + 1][boulder->x / BLOCK_SIZE] == IS_BOULDER)
+        isSpaceEmpty(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE - 1) &&
+        isSpaceEmpty(map, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE - 1) &&
+        (isSpaceBoulder(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE) ||
+         isSpaceBrickWall(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE)))
     {
       update_map_state(map, IS_EMPTY, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
       boulder->x -= BLOCK_SIZE;
       update_map_state(map, IS_BOULDER, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
     }
     else if (
-        map[boulder->y / BLOCK_SIZE + 1][boulder->x / BLOCK_SIZE + 1] == IS_EMPTY &&
-        map[boulder->y / BLOCK_SIZE][boulder->x / BLOCK_SIZE + 1] == IS_EMPTY && 
-        map[boulder->y / BLOCK_SIZE + 1][boulder->x / BLOCK_SIZE] == IS_BOULDER)
+        isSpaceEmpty(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE + 1) &&
+        isSpaceEmpty(map, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE + 1) &&
+        (isSpaceBoulder(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE) ||
+         isSpaceBrickWall(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE)))
     {
       update_map_state(map, IS_EMPTY, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
       boulder->x += BLOCK_SIZE;
       update_map_state(map, IS_BOULDER, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
     }
-    else if (isCollision(boulder->x, boulder->y, rockford->x, rockford->y))
+    else if (
+        isSpaceRockford(map, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE + 1) &&
+        rockford->active && rockford->direction == LEFT)
     {
+
       if (!boulder->collision_time)
         boulder->collision_time = count;
-      switch (rockford->direction)
+
+      if (count - boulder->collision_time == 60) //1s
       {
-      case UP:
-        rockford->y += ROCKFORD_SPEED;
-        update_map_state(map, IS_BOULDER, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
-        update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
-        break;
-      case DOWN:
-        rockford->y -= ROCKFORD_SPEED;
-        update_map_state(map, IS_BOULDER, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
-        update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
-        break;
-      case LEFT:
-        if (count - boulder->collision_time == 60) //1s
-        {
-          rockford->x -= ROCKFORD_SPEED;
-          boulder->x -= ROCKFORD_SPEED;
+        update_map_state(map, IS_EMPTY, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
+        update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
 
-          if (map[boulder->y / BLOCK_SIZE][boulder->x / BLOCK_SIZE] != IS_EMPTY)
-          {
-            rockford->x += ROCKFORD_SPEED;
-            boulder->x += ROCKFORD_SPEED;
-          }
+        rockford->x -= ROCKFORD_SPEED;
+        boulder->x -= ROCKFORD_SPEED;
 
-          boulder->collision_time = count;
-        }
-        rockford->x += ROCKFORD_SPEED;
-        update_map_state(map, IS_BOULDER, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
-        update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
-        break;
-      case RIGHT:
-        if (count - boulder->collision_time == 60) //1s
+        if (map[boulder->y / BLOCK_SIZE][boulder->x / BLOCK_SIZE] != IS_EMPTY)
         {
           rockford->x += ROCKFORD_SPEED;
           boulder->x += ROCKFORD_SPEED;
-
-          if (map[boulder->y / BLOCK_SIZE][boulder->x / BLOCK_SIZE] != IS_EMPTY)
-          {
-            boulder->x -= ROCKFORD_SPEED;
-            rockford->x -= ROCKFORD_SPEED;
-          }
-
-          boulder->collision_time = count;
         }
-        rockford->x -= ROCKFORD_SPEED;
-        update_map_state(map, IS_BOULDER, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
-        update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
-        break;
-      default:
-        break;
+
+        boulder->collision_time = count;
       }
+
+      update_map_state(map, IS_BOULDER, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
+      update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
+    }
+
+    else if (
+        isSpaceRockford(map, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE - 1) &&
+        rockford->active && rockford->direction == RIGHT)
+    {
+
+      if (!boulder->collision_time)
+        boulder->collision_time = count;
+
+      if (count - boulder->collision_time == 60) //1s
+      {
+        update_map_state(map, IS_EMPTY, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
+        update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
+
+        rockford->x += ROCKFORD_SPEED;
+        boulder->x += ROCKFORD_SPEED;
+
+        if (map[boulder->y / BLOCK_SIZE][boulder->x / BLOCK_SIZE] != IS_EMPTY)
+        {
+          rockford->x -= ROCKFORD_SPEED;
+          boulder->x -= ROCKFORD_SPEED;
+        }
+
+        boulder->collision_time = count;
+      }
+
+      update_map_state(map, IS_BOULDER, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
+      update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
     }
     else
       boulder->collision_time = 0;

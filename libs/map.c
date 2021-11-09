@@ -37,7 +37,9 @@ void count_map_objects(
     int *brickWallCount,
     int *boulderCount,
     int *dirtCount,
-    int *diamondCount)
+    int *diamondCount,
+    int *fireflyCount,
+    int *butterflyCount)
 {
   for (int i = 0; i < MAP_HEIGHT; i++)
     for (int j = 0; j < MAP_WIDTH; j++)
@@ -57,6 +59,13 @@ void count_map_objects(
         break;
       case IS_DIAMOND:
         (*diamondCount)++;
+        break;
+      case IS_FIREFLY:
+        (*fireflyCount)++;
+        break;
+      case IS_BUTTERFLY:
+        (*butterflyCount)++;
+        break;
       default:
         break;
       }
@@ -70,11 +79,15 @@ void init_map_objects(
     DIRT_STRUCT *dirt,
     DIAMOND_STRUCT *diamond,
     ROCKFORD_STRUCT *rockford,
+    FIREFLY_STRUCT *firefly,
+    BUTTERFLY_STRUCT *butterfly,
     int *steelWallCount,
     int *brickWallCount,
     int *boulderCount,
     int *dirtCount,
-    int *diamondCount)
+    int *diamondCount,
+    int *fireflyCount,
+    int *butterflyCount)
 {
   for (int i = 0; i < MAP_HEIGHT; i++)
     for (int j = 0; j < MAP_WIDTH; j++)
@@ -102,6 +115,14 @@ void init_map_objects(
         break;
       case IS_ROCKFORD:
         rockford_init(rockford, j * BLOCK_SIZE, i * BLOCK_SIZE);
+        break;
+      case IS_FIREFLY:
+        firefly_init(&firefly[*fireflyCount], j * BLOCK_SIZE, i * BLOCK_SIZE);
+        (*fireflyCount)++;
+        break;
+      case IS_BUTTERFLY:
+        butterfly_init(&butterfly[*butterflyCount], j * BLOCK_SIZE, i * BLOCK_SIZE);
+        (*butterflyCount)++;
         break;
       default:
         break;

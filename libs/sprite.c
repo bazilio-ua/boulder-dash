@@ -36,6 +36,8 @@ void sprites_init(SPRITES_STRUCT *sprites)
   sprites->boulder = sprite_grab(sprites, 0, 224, BOULDER_SPRITE_WIDTH, BOULDER_SPRITE_HEIGHT);
 
   sprites->dirt = sprite_grab(sprites, 32, 224, DIRT_SPRITE_WIDTH, DIRT_SPRITE_HEIGHT);
+
+  sprites->explosion = sprite_grab(sprites, 0, 0, EXPLOSION_SPRITE_WIDTH * 5, EXPLOSION_SPRITE_HEIGHT);
 }
 
 void sprites_deinit(SPRITES_STRUCT *sprites)
@@ -64,6 +66,8 @@ void sprites_deinit(SPRITES_STRUCT *sprites)
   al_destroy_bitmap(sprites->boulder);
 
   al_destroy_bitmap(sprites->dirt);
+
+  al_destroy_bitmap(sprites->explosion);
 
   al_destroy_bitmap(sprites->_sheet);
 }

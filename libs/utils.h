@@ -89,6 +89,14 @@
 #define BRICK_WALL_WIDTH BRICK_WALL_SPRITE_WIDTH *BRICK_WALL_SCALE
 #define BRICK_WALL_HEIGHT BRICK_WALL_SPRITE_HEIGHT *BRICK_WALL_SCALE
 
+#define EXPLOSION_SPRITE_WIDTH 32
+#define EXPLOSION_SPRITE_HEIGHT 32
+#define EXPLOSION_SCALE 0.5
+#define EXPLOSION_WIDTH EXPLOSION_SPRITE_WIDTH *EXPLOSION_SCALE
+#define EXPLOSION_HEIGHT EXPLOSION_SPRITE_HEIGHT *EXPLOSION_SCALE
+#define EXPLOSION_COUNT 9
+#define EXPLOSION_DURATION 40
+
 #define MAP_WIDTH 20
 #define MAP_HEIGHT 10
 
@@ -111,3 +119,22 @@ void initialize(bool isInitialized, const char *description);
 bool isCollision(int x1, int y1, int x2, int y2);
 
 void update_map_state(char map[MAP_HEIGHT][MAP_WIDTH], char updatedState, int i, int j);
+
+bool isSpaceEmpty(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
+
+bool isSpaceDirt(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
+
+bool isSpaceDiamond(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
+
+bool isSpaceBoulder(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
+
+bool isSpaceRockford(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
+
+bool isSpaceBrickWall(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
+
+bool isSpaceSteelWall(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
+
+bool isSpaceFirefly(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
+
+bool isSpaceButterfly(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
+

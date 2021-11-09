@@ -12,10 +12,20 @@ void dirt_init(DIRT_STRUCT *dirt, int pos_x, int pos_y)
   dirt->redraw = true;
 }
 
-void dirt_update(DIRT_STRUCT *dirt, ROCKFORD_STRUCT *rockford, long int count)
+void dirt_update(
+    DIRT_STRUCT *dirt,
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    ROCKFORD_STRUCT *rockford,
+    long int count)
 {
+  if (!isSpaceDirt(map, dirt->y / BLOCK_SIZE, dirt->x / BLOCK_SIZE))
+  {
+    dirt->redraw = false;
+    return;
+  }
+
   if (count % 5 == 0)
-    if (isCollision(dirt->x, dirt->y, rockford->x, rockford->y) && dirt->redraw)
+    if (isCollision(dirt->x, dirt->y, rockford->x, rockford->y))
       dirt->redraw = false;
 }
 

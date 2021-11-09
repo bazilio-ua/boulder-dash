@@ -8,6 +8,8 @@
 #include "dirt.h"
 #include "diamond.h"
 #include "rockford.h"
+#include "firefly.h"
+#include "butterfly.h"
 
 void initialize_map(char map[MAP_HEIGHT][MAP_WIDTH], char *filePath);
 
@@ -16,8 +18,10 @@ void count_map_objects(
     int *steelWallCount,
     int *brickWallCount,
     int *boulderCount,
-    int *dirtCount, 
-    int *diamondCount);
+    int *dirtCount,
+    int *diamondCount,
+    int *fireflyCount, 
+    int *butterflyCount);
 
 void init_map_objects(
     char map[MAP_HEIGHT][MAP_WIDTH],
@@ -27,10 +31,14 @@ void init_map_objects(
     DIRT_STRUCT *dirt,
     DIAMOND_STRUCT *diamond,
     ROCKFORD_STRUCT *rockford,
+    FIREFLY_STRUCT *firefly,
+    BUTTERFLY_STRUCT *butterfly,
     int *steelWallCount,
     int *brickWallCount,
     int *boulderCount,
     int *dirtCount,
-    int *diamondCount);
+    int *diamondCount,
+    int *fireflyCount, 
+    int *butterflyCount);
 
 #endif

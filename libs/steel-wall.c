@@ -18,35 +18,7 @@ void steel_wall_update(
   ROCKFORD_STRUCT *rockford, 
   long int count)
 {
-  if (count % 5 == 0)
-    if (isCollision(steelWall->x, steelWall->y, rockford->x, rockford->y))
-    {
-      switch (rockford->direction)
-      {
-      case UP:
-        rockford->y += ROCKFORD_SPEED;
-        update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
-        update_map_state(map, IS_STEEL_WALL, steelWall->y / BLOCK_SIZE, steelWall->x / BLOCK_SIZE);
-        break;
-      case DOWN:
-        rockford->y -= ROCKFORD_SPEED;
-        update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
-        update_map_state(map, IS_STEEL_WALL, steelWall->y / BLOCK_SIZE, steelWall->x / BLOCK_SIZE);
-        break;
-      case LEFT:
-        rockford->x += ROCKFORD_SPEED;
-        update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
-        update_map_state(map, IS_STEEL_WALL, steelWall->y / BLOCK_SIZE, steelWall->x / BLOCK_SIZE);
-        break;
-      case RIGHT:
-        rockford->x -= ROCKFORD_SPEED;
-        update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
-        update_map_state(map, IS_STEEL_WALL, steelWall->y / BLOCK_SIZE, steelWall->x / BLOCK_SIZE);
-        break;
-      default:
-        break;
-      }
-    }
+  return;
 }
 
 void steel_wall_draw(STEEL_WALL_STRUCT *steelWall, SPRITES_STRUCT *sprites)

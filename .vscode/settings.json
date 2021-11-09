@@ -1,0 +1,10 @@
+{
+  "files.associations": {
+    "utils.h": "c",
+    "explosion.h": "c",
+    "rockford.h": "c",
+    "diamond.h": "c",
+    "dirt.h": "c",
+    "steel-wall.h": "c"
+  }
+}

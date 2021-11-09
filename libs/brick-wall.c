@@ -13,40 +13,13 @@ void brick_wall_init(BRICK_WALL_STRUCT *brickWall, int pos_x, int pos_y)
 }
 
 void brick_wall_update(
-  BRICK_WALL_STRUCT *brickWall,
-  char map[MAP_HEIGHT][MAP_WIDTH], 
-  ROCKFORD_STRUCT *rockford,
-  long int count)
+    BRICK_WALL_STRUCT *brickWall,
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    ROCKFORD_STRUCT *rockford,
+    long int count)
 {
-  if (count % 5 == 0)
-    if (isCollision(brickWall->x, brickWall->y, rockford->x, rockford->y))
-    {
-      switch (rockford->direction)
-      {
-      case UP:
-        rockford->y += ROCKFORD_SPEED;
-        update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
-        update_map_state(map, IS_BRICK_WALL, brickWall->y / BLOCK_SIZE, brickWall->x / BLOCK_SIZE);
-        break;
-      case DOWN:
-        rockford->y -= ROCKFORD_SPEED;
-        update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
-        update_map_state(map, IS_BRICK_WALL, brickWall->y / BLOCK_SIZE, brickWall->x / BLOCK_SIZE);
-        break;
-      case LEFT:
-        rockford->x += ROCKFORD_SPEED;
-        update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
-        update_map_state(map, IS_BRICK_WALL, brickWall->y / BLOCK_SIZE, brickWall->x / BLOCK_SIZE);
-        break;
-      case RIGHT:
-        rockford->x -= ROCKFORD_SPEED;
-        update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
-        update_map_state(map, IS_BRICK_WALL, brickWall->y / BLOCK_SIZE, brickWall->x / BLOCK_SIZE);
-        break;
-      default:
-        break;
-      }
-    }
+  if (!isSpaceBrickWall(map, brickWall->y / BLOCK_SIZE, brickWall->x / BLOCK_SIZE))
+    brickWall->redraw = false;
 }
 
 void brick_wall_draw(BRICK_WALL_STRUCT *brickWall, SPRITES_STRUCT *sprites)

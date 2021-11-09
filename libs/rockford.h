@@ -3,6 +3,7 @@
 
 #include "utils.h"
 #include "sprite.h"
+#include "explosion.h"
 
 typedef struct ROCKFORD_STRUCT
 {
@@ -27,6 +28,7 @@ void rockford_init(ROCKFORD_STRUCT *rockford, int pos_x, int pos_y);
 void rockford_update(
     ROCKFORD_STRUCT *rockford,
     char map[MAP_HEIGHT][MAP_WIDTH],
+    EXPLOSION_STRUCT *explosion,
     ALLEGRO_KEYBOARD_STATE *keyState,
     SPRITES_STRUCT *sprites,
     long int count);

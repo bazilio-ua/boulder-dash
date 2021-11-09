@@ -24,6 +24,7 @@ void rockford_init(ROCKFORD_STRUCT *rockford, int pos_x, int pos_y)
 void rockford_update(
     ROCKFORD_STRUCT *rockford,
     char map[MAP_HEIGHT][MAP_WIDTH],
+    EXPLOSION_STRUCT *explosion,
     ALLEGRO_KEYBOARD_STATE *keyState,
     SPRITES_STRUCT *sprites,
     long int count)
@@ -37,46 +38,97 @@ void rockford_update(
     return;
   }
 
-  if (count % 5 == 0)
+  if (!isSpaceRockford(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE)) && rockford->redraw)
   {
+    int rockfordLine = rockford->y / BLOCK_SIZE;
+    int rockfordColumn = rockford->x / BLOCK_SIZE;
+
+    EXPLOSION_STRUCT *explosionPtr;
+    int explosionCount = 0;
+
+    for (int i = rockfordLine - 1; i <= rockfordLine + 1; i++)
+      for (int j = rockfordColumn - 1; j <= rockfordColumn + 1; j++)
+        if (!isSpaceSteelWall(map, i, j))
+        {
+          update_map_state(map, IS_EMPTY, i, j);
+          
+          explosionPtr = &explosion[explosionCount];
+
+          explosionPtr->x = j * BLOCK_SIZE;
+          explosionPtr->y = i * BLOCK_SIZE;
+          explosionPtr->redraw = true;
+          explosionPtr->start = 0;
+          explosionPtr->end = EXPLOSION_DURATION;
+
+          explosionCount++;
+        }
+
+    rockford->redraw = false;
+  }
+
+  if (count % 5 == 0 && rockford->redraw)
+  {
+
     rockford->active = true;
 
     if (al_key_down(keyState, ALLEGRO_KEY_LEFT))
     {
-      update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
-      rockford->x -= ROCKFORD_SPEED;
+      if (isSpaceEmpty(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE) - 1) ||
+          isSpaceDirt(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE) - 1) ||
+          isSpaceDiamond(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE) - 1))
+      {
+        update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
+        rockford->x -= ROCKFORD_SPEED;
+        update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
+      }
+
       rockford->last_direction = rockford->direction;
       rockford->direction = LEFT;
-      update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
     }
     else if (al_key_down(keyState, ALLEGRO_KEY_RIGHT))
     {
-      update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
-      rockford->x += ROCKFORD_SPEED;
+      if (isSpaceEmpty(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE) + 1) ||
+          isSpaceDirt(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE) + 1) ||
+          isSpaceDiamond(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE) + 1))
+      {
+        update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
+        rockford->x += ROCKFORD_SPEED;
+        update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
+      }
+
       rockford->last_direction = rockford->direction;
       rockford->direction = RIGHT;
-      update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
     }
     else if (al_key_down(keyState, ALLEGRO_KEY_UP))
     {
-      update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
-      rockford->y -= ROCKFORD_SPEED;
+      if (isSpaceEmpty(map, (rockford->y / BLOCK_SIZE) - 1, (rockford->x / BLOCK_SIZE)) ||
+          isSpaceDirt(map, (rockford->y / BLOCK_SIZE) - 1, (rockford->x / BLOCK_SIZE)) ||
+          isSpaceDiamond(map, (rockford->y / BLOCK_SIZE) - 1, (rockford->x / BLOCK_SIZE)))
+      {
+        update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
+        rockford->y -= ROCKFORD_SPEED;
+        update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
+      }
 
       if (rockford->direction != DOWN && rockford->direction != UP)
         rockford->last_direction = rockford->direction;
 
-      update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
       rockford->direction = UP;
     }
     else if (al_key_down(keyState, ALLEGRO_KEY_DOWN))
     {
-      update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
-      rockford->y += ROCKFORD_SPEED;
+      if (isSpaceEmpty(map, (rockford->y / BLOCK_SIZE) + 1, (rockford->x / BLOCK_SIZE)) ||
+          isSpaceDirt(map, (rockford->y / BLOCK_SIZE) + 1, (rockford->x / BLOCK_SIZE)) ||
+          isSpaceDiamond(map, (rockford->y / BLOCK_SIZE) + 1, (rockford->x / BLOCK_SIZE)))
+      {
+        update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
+        rockford->y += ROCKFORD_SPEED;
+        update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
+      }
 
       if (rockford->direction != DOWN && rockford->direction != UP)
         rockford->last_direction = rockford->direction;
 
-      update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
       rockford->direction = DOWN;
     }
     else
@@ -118,16 +170,6 @@ void rockford_update(
     }
   }
 
-  if (rockford->x < 0)
-    rockford->x = 0;
-  if (rockford->y < 0)
-    rockford->y = 0;
-
-  if (rockford->x > ROCKFORD_MAX_X)
-    rockford->x = ROCKFORD_MAX_X;
-  if (rockford->y > ROCKFORD_MAX_Y)
-    rockford->y = ROCKFORD_MAX_Y;
-
   if (rockford->invincible_timer)
     rockford->invincible_timer--;
 }
@@ -168,7 +210,7 @@ void rockford_draw(ROCKFORD_STRUCT *rockford, SPRITES_STRUCT *sprites)
           al_map_rgb(255, 255, 255),                           // color, just use white if you don't want a tint
           0, 0,                                                // center of rotation/scaling
           rockford->x, rockford->y,                            // destination
-          0.5, 0.5,                                            // scale
+          ROCKFORD_SCALE, ROCKFORD_SCALE,                      // scale
           0, 0);
   }
   else

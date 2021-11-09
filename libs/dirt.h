@@ -15,7 +15,11 @@ DIRT_STRUCT *allocate_array_dirt(int dirtCount);
 
 void dirt_init(DIRT_STRUCT *dirt, int pos_x, int pos_y);
 
-void dirt_update(DIRT_STRUCT *dirt, ROCKFORD_STRUCT *rockford, long int count);
+void dirt_update(
+    DIRT_STRUCT *dirt,
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    ROCKFORD_STRUCT *rockford,
+    long int count);
 
 void dirt_draw(DIRT_STRUCT *dirt, SPRITES_STRUCT *sprites);
 
