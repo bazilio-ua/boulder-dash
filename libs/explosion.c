@@ -29,7 +29,7 @@ void explosion_update(
 {
   if (explosion->start % (EXPLOSION_DURATION / 5) == 0)
     explosion->source_x += al_get_bitmap_width(sprites->explosion) / 5;
-  else if (explosion->start > explosion->end)
+  else if (explosion->start >= explosion->end)
     explosion_reset(explosion);
 
   explosion->start += 1;

@@ -7,9 +7,11 @@ ROCKFORD_STRUCT *allocate_rockford()
 
 void rockford_init(ROCKFORD_STRUCT *rockford, int pos_x, int pos_y)
 {
+  if (!rockford->lives)
+    rockford->lives = 3;
+
   rockford->x = pos_x;
   rockford->y = pos_y;
-  rockford->lives = 3;
   rockford->respawn_timer = 0;
   rockford->invincible_timer = 120;
   rockford->source_x = ROCKFORD_SPRITE_WIDTH;
@@ -18,6 +20,8 @@ void rockford_init(ROCKFORD_STRUCT *rockford, int pos_x, int pos_y)
   rockford->last_direction = NO_DIRECTION;
   rockford->score = 0;
   rockford->quantity_of_diamonds = 0;
+  rockford->won = false;
+  rockford->lose = false;
   rockford->redraw = true;
 }
 
@@ -29,16 +33,19 @@ void rockford_update(
     SPRITES_STRUCT *sprites,
     long int count)
 {
-  if (rockford->lives < 0)
-    return;
-
   if (rockford->respawn_timer)
   {
     rockford->respawn_timer--;
     return;
   }
 
-  if (!isSpaceRockford(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE)) && rockford->redraw)
+  if (isSpaceEmpty(map, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE))
+  {
+    rockford->redraw = false;
+    rockford->lives = rockford->lives - 1;
+  }
+
+  else if (!isSpaceRockford(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE)))
   {
     int rockfordLine = rockford->y / BLOCK_SIZE;
     int rockfordColumn = rockford->x / BLOCK_SIZE;
@@ -51,7 +58,7 @@ void rockford_update(
         if (!isSpaceSteelWall(map, i, j))
         {
           update_map_state(map, IS_EMPTY, i, j);
-          
+
           explosionPtr = &explosion[explosionCount];
 
           explosionPtr->x = j * BLOCK_SIZE;
@@ -63,10 +70,17 @@ void rockford_update(
           explosionCount++;
         }
 
+    rockford->lives = rockford->lives - 1;
     rockford->redraw = false;
   }
 
-  if (count % 5 == 0 && rockford->redraw)
+  if (rockford->lives == 0)
+  {
+    rockford->lose = true;
+    return;
+  }
+
+  else if (count % 5 == 0)
   {
 
     rockford->active = true;

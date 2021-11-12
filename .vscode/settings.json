@@ -5,6 +5,14 @@
     "rockford.h": "c",
     "diamond.h": "c",
     "dirt.h": "c",
-    "steel-wall.h": "c"
+    "steel-wall.h": "c",
+    "boulder.h": "c",
+    "firefly.h": "c",
+    "amoeba.h": "c",
+    "butterfly.h": "c",
+    "map.h": "c",
+    "stdio.h": "c",
+    "sprite.h": "c",
+    "allegro_font.h": "c"
   }
 }

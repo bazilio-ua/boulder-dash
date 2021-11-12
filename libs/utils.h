@@ -138,3 +138,5 @@ bool isSpaceFirefly(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
 
 bool isSpaceButterfly(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
 
+bool isSpaceAmoeba(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
+

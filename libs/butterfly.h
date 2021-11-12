@@ -3,6 +3,7 @@
 
 #include "utils.h"
 #include "sprite.h"
+#include "explosion.h"
 
 typedef struct BUTTERFLY_STRUCT
 {
@@ -17,7 +18,12 @@ BUTTERFLY_STRUCT *allocate_array_butterfly(int butterflyCount);
 
 void butterfly_init(BUTTERFLY_STRUCT *butterfly, int pos_x, int pos_y);
 
-void butterfly_update(BUTTERFLY_STRUCT *butterfly, char map[MAP_HEIGHT][MAP_WIDTH], SPRITES_STRUCT *sprites, long int count);
+void butterfly_update(
+    BUTTERFLY_STRUCT *butterfly,
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    EXPLOSION_STRUCT *explosion, 
+    SPRITES_STRUCT *sprites,
+    long int count);
 
 void butterfly_draw(BUTTERFLY_STRUCT *butterfly, SPRITES_STRUCT *sprites);
 

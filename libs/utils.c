@@ -63,3 +63,8 @@ bool isSpaceButterfly(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j)
 {
   return (map[i][j] == IS_BUTTERFLY);
 }
+
+bool isSpaceAmoeba(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j)
+{
+  return (map[i][j] == IS_AMOEBA);
+}

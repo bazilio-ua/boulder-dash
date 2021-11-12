@@ -11,6 +11,7 @@
 #include "./libs/brick-wall.h"
 #include "./libs/map.h"
 #include "./libs/explosion.h"
+#include "./libs/utils.h"
 
 ALLEGRO_DISPLAY *display;
 ALLEGRO_BITMAP *buffer;
@@ -49,8 +50,12 @@ void post_draw_display()
 int main()
 {
   int i;
+  long frames;
+  long score;
+  char map[MAP_HEIGHT][MAP_WIDTH];
+  bool restart = true;
+
   SPRITES_STRUCT sprites;
-  AMOEBA_STRUCT amoeba;
   EXIT_STRUCT exit;
   MAGIC_WALL_STRUCT magicWall;
 
@@ -77,11 +82,10 @@ int main()
   DIAMOND_STRUCT *diamond;
   int diamondCount = 0;
 
-  EXPLOSION_STRUCT *explosion;
+  AMOEBA_STRUCT *amoeba;
+  int amoebaCount = 0;
 
-  char map[MAP_HEIGHT][MAP_WIDTH];
-  long frames;
-  long score;
+  EXPLOSION_STRUCT *explosion;
 
   initialize_map(map, "./resources/map.txt");
   count_map_objects(map,
@@ -91,35 +95,32 @@ int main()
                     &dirtCount,
                     &diamondCount,
                     &fireflyCount,
-                    &butterflyCount);
+                    &butterflyCount,
+                    &amoebaCount);
 
   steelWall = allocate_array_steel_wall(steelWallCount);
   initialize(steelWall, "steel wall");
-  steelWallCount = 0;
 
   brickWall = allocate_array_brick_wall(brickWallCount);
   initialize(brickWall, "brick wall");
-  brickWallCount = 0;
 
   boulder = allocate_array_boulder(boulderCount);
   initialize(boulder, "boulder");
-  boulderCount = 0;
 
   dirt = allocate_array_dirt(dirtCount);
   initialize(dirt, "dirt");
-  dirtCount = 0;
 
   diamond = allocate_array_diamond(diamondCount);
   initialize(diamond, "diamond");
-  diamondCount = 0;
 
   firefly = allocate_array_firefly(fireflyCount);
   initialize(firefly, "firefly");
-  fireflyCount = 0;
 
   butterfly = allocate_array_butterfly(butterflyCount);
   initialize(butterfly, "butterfly");
-  butterflyCount = 0;
+
+  amoeba = allocate_array_amoeba(amoebaCount);
+  initialize(amoeba, "amoeba");
 
   rockford = allocate_rockford();
   initialize(rockford, "rockford");
@@ -127,24 +128,6 @@ int main()
   explosion = allocate_array_explosion(EXPLOSION_COUNT);
   initialize(explosion, "explosion");
   explosion_init(explosion);
-
-  init_map_objects(
-      map,
-      steelWall,
-      brickWall,
-      boulder,
-      dirt,
-      diamond,
-      rockford,
-      firefly,
-      butterfly,
-      &steelWallCount,
-      &brickWallCount,
-      &boulderCount,
-      &dirtCount,
-      &diamondCount,
-      &fireflyCount,
-      &butterflyCount);
 
   initialize(al_init(), "allegro");
   initialize(al_install_keyboard(), "keyboard");
@@ -176,8 +159,44 @@ int main()
 
   al_start_timer(timer);
 
-  while (!done)
+  while (!rockford->won && !rockford->lose && !done)
   {
+    if (restart)
+    {
+      initialize_map(map, "./resources/map.txt");
+
+      steelWallCount = 0;
+      brickWallCount = 0;
+      boulderCount = 0;
+      dirtCount = 0;
+      diamondCount = 0;
+      fireflyCount = 0;
+      butterflyCount = 0;
+      amoebaCount = 0;
+
+      init_map_objects(
+          map,
+          steelWall,
+          brickWall,
+          boulder,
+          dirt,
+          diamond,
+          rockford,
+          firefly,
+          butterfly,
+          amoeba,
+          &steelWallCount,
+          &brickWallCount,
+          &boulderCount,
+          &dirtCount,
+          &diamondCount,
+          &fireflyCount,
+          &butterflyCount,
+          &amoebaCount);
+
+      restart = false;
+    }
+
     al_wait_for_event(queue, &event);
     al_get_keyboard_state(&keyState);
 
@@ -187,7 +206,26 @@ int main()
       done = true;
       break;
     case ALLEGRO_EVENT_TIMER:
-      rockford_update(rockford, map, explosion, &keyState, &sprites, event.timer.count);
+
+      if (rockford->redraw)
+      {
+        rockford_update(rockford, map, explosion, &keyState, &sprites, event.timer.count);
+
+        if (!rockford->redraw)
+          restart = true;
+      }
+
+      for (i = 0; i < fireflyCount; i++)
+        if (firefly[i].redraw)
+          firefly_update(&firefly[i], map, explosion, &sprites, event.timer.count);
+
+      for (i = 0; i < butterflyCount; i++)
+        if (butterfly[i].redraw)
+          butterfly_update(&butterfly[i], map, explosion, &sprites, event.timer.count);
+
+      for (i = 0; i < amoebaCount; i++)
+        if (amoeba[i].redraw)
+          amoeba_update(&amoeba[i], map, explosion, &sprites, event.timer.count);
 
       for (i = 0; i < steelWallCount; i++)
         steel_wall_update(&steelWall[i], map, rockford, event.timer.count);
@@ -208,16 +246,8 @@ int main()
         if (boulder[i].redraw)
           boulder_update(&boulder[i], map, rockford, event.timer.count);
 
-      for (i = 0; i < fireflyCount; i++)
-        if (firefly[i].redraw)
-          firefly_update(&firefly[i], map, &sprites, event.timer.count);
-
-      for (i = 0; i < butterflyCount; i++)
-        if (butterfly[i].redraw)
-          butterfly_update(&butterfly[i], map, &sprites, event.timer.count);
-
       for (i = 0; i < EXPLOSION_COUNT; i++)
-        if (explosion->redraw)
+        if (explosion[i].redraw)
           explosion_update(&explosion[i], &sprites, event.timer.count);
 
       redraw = true;
@@ -262,8 +292,12 @@ int main()
         if (butterfly[i].redraw)
           butterfly_draw(&butterfly[i], &sprites);
 
+      for (i = 0; i < amoebaCount; i++)
+        if (amoeba[i].redraw)
+          amoeba_draw(&amoeba[i], &sprites);
+
       for (i = 0; i < EXPLOSION_COUNT; i++)
-        if (explosion->redraw)
+        if (explosion[i].redraw)
           explosion_draw(&explosion[i], &sprites);
 
       post_draw_display();
@@ -289,6 +323,7 @@ int main()
   firefly_free(firefly);
   butterfly_free(butterfly);
   explosion_free(explosion);
+  amoeba_free(amoeba);
   sprites_deinit(&sprites);
   destroy_display();
   al_destroy_timer(timer);

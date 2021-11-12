@@ -11,6 +11,7 @@ void boulder_init(BOULDER_STRUCT *boulder, int pos_x, int pos_y)
   boulder->y = pos_y;
   boulder->collision_time = 0;
   boulder->redraw = true;
+  boulder->falling = false;
 }
 
 void boulder_update(
@@ -27,17 +28,32 @@ void boulder_update(
 
   if (count % 5 == 0)
   {
+    if (boulder->falling &&
+        (isSpaceRockford(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE) ||
+         isSpaceFirefly(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE) ||
+         isSpaceButterfly(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE)))
+    {
+      update_map_state(map, IS_EMPTY, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
+      boulder->y += BLOCK_SIZE;
+      update_map_state(map, IS_BOULDER, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
+      return;
+    }
+
+    boulder->falling = false;
+
     if (isSpaceEmpty(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE))
     {
       update_map_state(map, IS_EMPTY, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
       boulder->y += BLOCK_SIZE;
       update_map_state(map, IS_BOULDER, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
+      boulder->falling = true;
     }
     else if (
         isSpaceEmpty(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE - 1) &&
         isSpaceEmpty(map, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE - 1) &&
         (isSpaceBoulder(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE) ||
-         isSpaceBrickWall(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE)))
+         isSpaceBrickWall(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE) ||
+         isSpaceDiamond(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE)))
     {
       update_map_state(map, IS_EMPTY, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
       boulder->x -= BLOCK_SIZE;
@@ -47,7 +63,8 @@ void boulder_update(
         isSpaceEmpty(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE + 1) &&
         isSpaceEmpty(map, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE + 1) &&
         (isSpaceBoulder(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE) ||
-         isSpaceBrickWall(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE)))
+         isSpaceBrickWall(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE) ||
+         isSpaceDiamond(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE)))
     {
       update_map_state(map, IS_EMPTY, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
       boulder->x += BLOCK_SIZE;

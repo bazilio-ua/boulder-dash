@@ -10,6 +10,7 @@ typedef struct BOULDER_STRUCT
 {
   int x, y;
   long int collision_time;
+  bool falling;
   bool redraw;
 } BOULDER_STRUCT;
 

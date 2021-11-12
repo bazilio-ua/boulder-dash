@@ -10,6 +10,7 @@ typedef struct DIAMOND_STRUCT
   int x, y;
   int source_x;
   int source_y;
+  bool falling;
   bool redraw;
 } DIAMOND_STRUCT;
 

@@ -39,7 +39,8 @@ void count_map_objects(
     int *dirtCount,
     int *diamondCount,
     int *fireflyCount,
-    int *butterflyCount)
+    int *butterflyCount,
+    int *amoebaCount)
 {
   for (int i = 0; i < MAP_HEIGHT; i++)
     for (int j = 0; j < MAP_WIDTH; j++)
@@ -66,6 +67,9 @@ void count_map_objects(
       case IS_BUTTERFLY:
         (*butterflyCount)++;
         break;
+      case IS_AMOEBA:
+        (*amoebaCount)++;
+        break;
       default:
         break;
       }
@@ -81,13 +85,15 @@ void init_map_objects(
     ROCKFORD_STRUCT *rockford,
     FIREFLY_STRUCT *firefly,
     BUTTERFLY_STRUCT *butterfly,
+    AMOEBA_STRUCT *amoeba,
     int *steelWallCount,
     int *brickWallCount,
     int *boulderCount,
     int *dirtCount,
     int *diamondCount,
     int *fireflyCount,
-    int *butterflyCount)
+    int *butterflyCount,
+    int *amoebaCount)
 {
   for (int i = 0; i < MAP_HEIGHT; i++)
     for (int j = 0; j < MAP_WIDTH; j++)
@@ -123,6 +129,10 @@ void init_map_objects(
       case IS_BUTTERFLY:
         butterfly_init(&butterfly[*butterflyCount], j * BLOCK_SIZE, i * BLOCK_SIZE);
         (*butterflyCount)++;
+        break;
+      case IS_AMOEBA:
+        amoeba_init(&amoeba[*amoebaCount], j * BLOCK_SIZE, i * BLOCK_SIZE);
+        (*amoebaCount)++;
         break;
       default:
         break;
