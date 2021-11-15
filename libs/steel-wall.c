@@ -13,10 +13,11 @@ void steel_wall_init(STEEL_WALL_STRUCT *steelWall, int pos_x, int pos_y)
 }
 
 void steel_wall_update(
-  STEEL_WALL_STRUCT *steelWall, 
-  char map[MAP_HEIGHT][MAP_WIDTH],
-  ROCKFORD_STRUCT *rockford, 
-  long int count)
+    STEEL_WALL_STRUCT *steelWall,
+    int *steelWallCount,
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    ROCKFORD_STRUCT *rockford,
+    long int count)
 {
   return;
 }

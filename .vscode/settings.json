@@ -13,6 +13,8 @@
     "map.h": "c",
     "stdio.h": "c",
     "sprite.h": "c",
-    "allegro_font.h": "c"
+    "allegro_font.h": "c",
+    "brick-wall.h": "c",
+    "magic-wall.h": "c"
   }
 }

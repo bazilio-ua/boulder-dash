@@ -14,19 +14,30 @@ void dirt_init(DIRT_STRUCT *dirt, int pos_x, int pos_y)
 
 void dirt_update(
     DIRT_STRUCT *dirt,
+    int *dirtCount,
     char map[MAP_HEIGHT][MAP_WIDTH],
     ROCKFORD_STRUCT *rockford,
     long int count)
 {
-  if (!isSpaceDirt(map, dirt->y / BLOCK_SIZE, dirt->x / BLOCK_SIZE))
-  {
-    dirt->redraw = false;
-    return;
-  }
+  DIRT_STRUCT *dirtPtr;
 
-  if (count % 5 == 0)
-    if (isCollision(dirt->x, dirt->y, rockford->x, rockford->y))
-      dirt->redraw = false;
+  for (int i = 0; i < *dirtCount; i++)
+  {
+    dirtPtr = &dirt[i];
+
+    if (dirtPtr->redraw)
+    {
+      if (!isSpaceDirt(map, dirtPtr->y / BLOCK_SIZE, dirtPtr->x / BLOCK_SIZE))
+      {
+        dirtPtr->redraw = false;
+        return;
+      }
+
+      if (count % 5 == 0)
+        if (isCollision(dirtPtr->x, dirtPtr->y, rockford->x, rockford->y))
+          dirtPtr->redraw = false;
+    }
+  }
 }
 
 void dirt_draw(DIRT_STRUCT *dirt, SPRITES_STRUCT *sprites)

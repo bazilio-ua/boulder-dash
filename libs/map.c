@@ -40,7 +40,8 @@ void count_map_objects(
     int *diamondCount,
     int *fireflyCount,
     int *butterflyCount,
-    int *amoebaCount)
+    int *amoebaCount,
+    int *magicWallCount)
 {
   for (int i = 0; i < MAP_HEIGHT; i++)
     for (int j = 0; j < MAP_WIDTH; j++)
@@ -70,6 +71,9 @@ void count_map_objects(
       case IS_AMOEBA:
         (*amoebaCount)++;
         break;
+      case IS_MAGIC_WALL:
+        (*magicWallCount)++;
+        break;
       default:
         break;
       }
@@ -86,6 +90,7 @@ void init_map_objects(
     FIREFLY_STRUCT *firefly,
     BUTTERFLY_STRUCT *butterfly,
     AMOEBA_STRUCT *amoeba,
+    MAGIC_WALL_STRUCT *magicWall,
     int *steelWallCount,
     int *brickWallCount,
     int *boulderCount,
@@ -93,7 +98,9 @@ void init_map_objects(
     int *diamondCount,
     int *fireflyCount,
     int *butterflyCount,
-    int *amoebaCount)
+    int *amoebaCount,
+    int *magicWallCount,
+    int count)
 {
   for (int i = 0; i < MAP_HEIGHT; i++)
     for (int j = 0; j < MAP_WIDTH; j++)
@@ -131,8 +138,12 @@ void init_map_objects(
         (*butterflyCount)++;
         break;
       case IS_AMOEBA:
-        amoeba_init(&amoeba[*amoebaCount], j * BLOCK_SIZE, i * BLOCK_SIZE);
+        amoeba_init(&amoeba[*amoebaCount], j * BLOCK_SIZE, i * BLOCK_SIZE, count);
         (*amoebaCount)++;
+        break;
+      case IS_MAGIC_WALL:
+        magic_wall_init(&magicWall[*magicWallCount], j * BLOCK_SIZE, i * BLOCK_SIZE);
+        (*magicWallCount)++;
         break;
       default:
         break;

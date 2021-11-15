@@ -27,12 +27,19 @@ void explosion_update(
     SPRITES_STRUCT *sprites,
     long int count)
 {
-  if (explosion->start % (EXPLOSION_DURATION / 5) == 0)
-    explosion->source_x += al_get_bitmap_width(sprites->explosion) / 5;
-  else if (explosion->start >= explosion->end)
-    explosion_reset(explosion);
+  EXPLOSION_STRUCT *explosionPtr;
 
-  explosion->start += 1;
+  for (int i = 0; i < EXPLOSION_COUNT; i++)
+  {
+    explosionPtr = &explosion[i];
+
+    if (explosionPtr->start % (EXPLOSION_DURATION / 5) == 0)
+      explosionPtr->source_x += al_get_bitmap_width(sprites->explosion) / 5;
+    else if (explosionPtr->start >= explosionPtr->end)
+      explosion_reset(explosionPtr);
+
+    explosionPtr->start += 1;
+  }
 }
 
 void explosion_draw(EXPLOSION_STRUCT *explosion, SPRITES_STRUCT *sprites)

@@ -6,6 +6,7 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_image.h>
+#include <time.h>
 
 #define BUFFER_WIDTH 320
 #define BUFFER_HEIGHT 160
@@ -46,6 +47,8 @@
 #define AMOEBA_SCALE 0.5
 #define AMOEBA_WIDTH AMOEBA_SPRITE_WIDTH *AMOEBA_SCALE
 #define AMOEBA_HEIGHT AMOEBA_SPRITE_HEIGHT *AMOEBA_SCALE
+#define TIME_TO_GROW 300
+#define AMOEBA_LIFE_TIME 3600
 
 #define BUTTERFLY_SPRITE_WIDTH 32
 #define BUTTERFLY_SPRITE_HEIGHT 32
@@ -64,6 +67,7 @@
 #define MAGIC_WALL_SCALE 0.5
 #define MAGIC_WALL_WIDTH MAGIC_WALL_SPRITE_WIDTH *MAGIC_WALL_SCALE
 #define MAGIC_WALL_HEIGHT MAGIC_WALL_SPRITE_HEIGHT *MAGIC_WALL_SCALE
+#define ACTIVE_DURATION 300
 
 #define STEEL_WALL_SPRITE_WIDTH 32
 #define STEEL_WALL_SPRITE_HEIGHT 32
@@ -99,6 +103,8 @@
 
 #define MAP_WIDTH 20
 #define MAP_HEIGHT 10
+
+#define MAX_OBJECT_QUANTITY MAP_WIDTH *MAP_HEIGHT
 
 #define IS_EMPTY 'E'
 #define IS_DIAMOND '0'
@@ -140,3 +146,6 @@ bool isSpaceButterfly(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
 
 bool isSpaceAmoeba(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
 
+bool isSpaceMagicWall(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
+
+int generateRandomNumberBetween(int lower, int upper);

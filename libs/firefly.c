@@ -86,191 +86,202 @@ bool verify_rockford_amoeba_presence_in_neighborhood_firefly(FIREFLY_STRUCT *fir
 
 void firefly_update(
     FIREFLY_STRUCT *firefly,
+    int *fireflyCount,
     char map[MAP_HEIGHT][MAP_WIDTH],
     EXPLOSION_STRUCT *explosion,
     SPRITES_STRUCT *sprites,
     long int count)
 {
-  if (isSpaceEmpty(map, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE))
+  FIREFLY_STRUCT *fireflyPtr;
+
+  for (int i = 0; i < *fireflyCount; i++)
   {
-    firefly->redraw = false;
-    return;
-  }
+    fireflyPtr = &firefly[i];
 
-  else if (!isSpaceFirefly(map, (firefly->y / BLOCK_SIZE), (firefly->x / BLOCK_SIZE)))
-  {
-    int fireflyLine = firefly->y / BLOCK_SIZE;
-    int fireflyColumn = firefly->x / BLOCK_SIZE;
-
-    EXPLOSION_STRUCT *explosionPtr;
-    int explosionCount = 0;
-
-    for (int i = fireflyLine - 1; i <= fireflyLine + 1; i++)
-      for (int j = fireflyColumn - 1; j <= fireflyColumn + 1; j++)
-        if (!isSpaceSteelWall(map, i, j))
-        {
-          update_map_state(map, IS_EMPTY, i, j);
-
-          explosionPtr = &explosion[explosionCount];
-
-          explosionPtr->x = j * BLOCK_SIZE;
-          explosionPtr->y = i * BLOCK_SIZE;
-          explosionPtr->redraw = true;
-          explosionPtr->start = 0;
-          explosionPtr->end = EXPLOSION_DURATION;
-
-          explosionCount++;
-        }
-
-    firefly->redraw = false;
-  }
-
-  else if (count % 5 == 0)
-  {
-    if (verify_rockford_amoeba_presence_in_neighborhood_firefly(firefly, map))
-      firefly->redraw = false;
-    else
-      switch (firefly->direction)
+    if (fireflyPtr->redraw)
+    {
+      if (isSpaceEmpty(map, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE))
       {
-      case RIGHT:
-        if (isSpaceEmpty(map, (firefly->y / BLOCK_SIZE - 1), (firefly->x / BLOCK_SIZE)))
-        {
-          update_map_state(map, IS_EMPTY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-          move_firefly_up(firefly);
-          update_map_state(map, IS_FIREFLY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-        }
-        else if (isSpaceEmpty(map, (firefly->y / BLOCK_SIZE), (firefly->x / BLOCK_SIZE + 1)))
-        {
-          update_map_state(map, IS_EMPTY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-          move_firefly_right(firefly);
-          update_map_state(map, IS_FIREFLY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-        }
-        else if (isSpaceEmpty(map, (firefly->y / BLOCK_SIZE + 1), (firefly->x / BLOCK_SIZE)))
-        {
-          update_map_state(map, IS_EMPTY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-          move_firefly_down(firefly);
-          update_map_state(map, IS_FIREFLY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-        }
-        else if (isSpaceEmpty(map, (firefly->y / BLOCK_SIZE), (firefly->x / BLOCK_SIZE - 1)))
-        {
-          update_map_state(map, IS_EMPTY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-          move_firefly_left(firefly);
-          update_map_state(map, IS_FIREFLY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-        }
-        break;
-      case UP:
-        if (isSpaceEmpty(map, (firefly->y / BLOCK_SIZE), (firefly->x / BLOCK_SIZE - 1)))
-        {
-          update_map_state(map, IS_EMPTY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-          move_firefly_left(firefly);
-          update_map_state(map, IS_FIREFLY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-        }
-        else if (isSpaceEmpty(map, (firefly->y / BLOCK_SIZE - 1), (firefly->x / BLOCK_SIZE)))
-        {
-          update_map_state(map, IS_EMPTY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-          move_firefly_up(firefly);
-          update_map_state(map, IS_FIREFLY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-        }
-        else if (isSpaceEmpty(map, (firefly->y / BLOCK_SIZE), (firefly->x / BLOCK_SIZE + 1)))
-        {
-          update_map_state(map, IS_EMPTY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-          move_firefly_right(firefly);
-          update_map_state(map, IS_FIREFLY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-        }
-        else if (isSpaceEmpty(map, (firefly->y / BLOCK_SIZE + 1), (firefly->x / BLOCK_SIZE)))
-        {
-          update_map_state(map, IS_EMPTY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-          move_firefly_down(firefly);
-          update_map_state(map, IS_FIREFLY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-        }
-        break;
-      case LEFT:
-        if (isSpaceEmpty(map, (firefly->y / BLOCK_SIZE + 1), (firefly->x / BLOCK_SIZE)))
-        {
-          update_map_state(map, IS_EMPTY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-          move_firefly_down(firefly);
-          update_map_state(map, IS_FIREFLY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-        }
-        else if (isSpaceEmpty(map, (firefly->y / BLOCK_SIZE), (firefly->x / BLOCK_SIZE - 1)))
-        {
-          update_map_state(map, IS_EMPTY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-          move_firefly_left(firefly);
-          update_map_state(map, IS_FIREFLY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-        }
-        else if (isSpaceEmpty(map, (firefly->y / BLOCK_SIZE - 1), (firefly->x / BLOCK_SIZE)))
-        {
-          update_map_state(map, IS_EMPTY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-          move_firefly_up(firefly);
-          update_map_state(map, IS_FIREFLY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-        }
-        else if (isSpaceEmpty(map, (firefly->y / BLOCK_SIZE), (firefly->x / BLOCK_SIZE + 1)))
-        {
-          update_map_state(map, IS_EMPTY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-          move_firefly_right(firefly);
-          update_map_state(map, IS_FIREFLY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-        }
-        break;
-      case DOWN:
-        if (isSpaceEmpty(map, (firefly->y / BLOCK_SIZE), (firefly->x / BLOCK_SIZE + 1)))
-        {
-          update_map_state(map, IS_EMPTY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-          move_firefly_right(firefly);
-          update_map_state(map, IS_FIREFLY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-        }
-        else if (isSpaceEmpty(map, (firefly->y / BLOCK_SIZE + 1), (firefly->x / BLOCK_SIZE)))
-        {
-          update_map_state(map, IS_EMPTY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-          move_firefly_down(firefly);
-          update_map_state(map, IS_FIREFLY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-        }
-        else if (isSpaceEmpty(map, (firefly->y / BLOCK_SIZE), (firefly->x / BLOCK_SIZE - 1)))
-        {
-          update_map_state(map, IS_EMPTY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-          move_firefly_left(firefly);
-          update_map_state(map, IS_FIREFLY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-        }
-        else if (isSpaceEmpty(map, (firefly->y / BLOCK_SIZE - 1), (firefly->x / BLOCK_SIZE)))
-        {
-          update_map_state(map, IS_EMPTY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-          move_firefly_up(firefly);
-          update_map_state(map, IS_FIREFLY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-        }
-        break;
-      default:
-        if (isSpaceEmpty(map, (firefly->y / BLOCK_SIZE - 1), (firefly->x / BLOCK_SIZE)))
-        {
-          update_map_state(map, IS_EMPTY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-          move_firefly_up(firefly);
-          update_map_state(map, IS_FIREFLY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-        }
-
-        else if (isSpaceEmpty(map, (firefly->y / BLOCK_SIZE), (firefly->x / BLOCK_SIZE - 1)))
-        {
-          update_map_state(map, IS_EMPTY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-          move_firefly_left(firefly);
-          update_map_state(map, IS_FIREFLY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-        }
-
-        else if (isSpaceEmpty(map, (firefly->y / BLOCK_SIZE + 1), (firefly->x / BLOCK_SIZE)))
-        {
-          update_map_state(map, IS_EMPTY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-          move_firefly_down(firefly);
-          update_map_state(map, IS_FIREFLY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-        }
-
-        else if (isSpaceEmpty(map, (firefly->y / BLOCK_SIZE), (firefly->x / BLOCK_SIZE + 1)))
-        {
-          update_map_state(map, IS_EMPTY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-          move_firefly_right(firefly);
-          update_map_state(map, IS_FIREFLY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
-        }
-        break;
+        fireflyPtr->redraw = false;
+        return;
       }
 
-    firefly->source_x += al_get_bitmap_width(sprites->firefly) / 8;
+      else if (!isSpaceFirefly(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE)))
+      {
+        int fireflyPtrLine = fireflyPtr->y / BLOCK_SIZE;
+        int fireflyPtrColumn = fireflyPtr->x / BLOCK_SIZE;
 
-    if (firefly->source_x >= al_get_bitmap_width(sprites->firefly))
-      firefly->source_x = 0;
+        EXPLOSION_STRUCT *explosionPtr;
+        int explosionCount = 0;
+
+        for (int i = fireflyPtrLine - 1; i <= fireflyPtrLine + 1; i++)
+          for (int j = fireflyPtrColumn - 1; j <= fireflyPtrColumn + 1; j++)
+            if (!isSpaceSteelWall(map, i, j))
+            {
+              update_map_state(map, IS_EMPTY, i, j);
+
+              explosionPtr = &explosion[explosionCount];
+
+              explosionPtr->x = j * BLOCK_SIZE;
+              explosionPtr->y = i * BLOCK_SIZE;
+              explosionPtr->redraw = true;
+              explosionPtr->start = 0;
+              explosionPtr->end = EXPLOSION_DURATION;
+
+              explosionCount++;
+            }
+
+        fireflyPtr->redraw = false;
+      }
+
+      else if (count % 5 == 0)
+      {
+        if (verify_rockford_amoeba_presence_in_neighborhood_firefly(fireflyPtr, map))
+          fireflyPtr->redraw = false;
+        else
+          switch (fireflyPtr->direction)
+          {
+          case RIGHT:
+            if (isSpaceEmpty(map, (fireflyPtr->y / BLOCK_SIZE - 1), (fireflyPtr->x / BLOCK_SIZE)))
+            {
+              update_map_state(map, IS_EMPTY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+              move_firefly_up(fireflyPtr);
+              update_map_state(map, IS_FIREFLY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+            }
+            else if (isSpaceEmpty(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE + 1)))
+            {
+              update_map_state(map, IS_EMPTY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+              move_firefly_right(fireflyPtr);
+              update_map_state(map, IS_FIREFLY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+            }
+            else if (isSpaceEmpty(map, (fireflyPtr->y / BLOCK_SIZE + 1), (fireflyPtr->x / BLOCK_SIZE)))
+            {
+              update_map_state(map, IS_EMPTY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+              move_firefly_down(fireflyPtr);
+              update_map_state(map, IS_FIREFLY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+            }
+            else if (isSpaceEmpty(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE - 1)))
+            {
+              update_map_state(map, IS_EMPTY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+              move_firefly_left(fireflyPtr);
+              update_map_state(map, IS_FIREFLY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+            }
+            break;
+          case UP:
+            if (isSpaceEmpty(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE - 1)))
+            {
+              update_map_state(map, IS_EMPTY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+              move_firefly_left(fireflyPtr);
+              update_map_state(map, IS_FIREFLY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+            }
+            else if (isSpaceEmpty(map, (fireflyPtr->y / BLOCK_SIZE - 1), (fireflyPtr->x / BLOCK_SIZE)))
+            {
+              update_map_state(map, IS_EMPTY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+              move_firefly_up(fireflyPtr);
+              update_map_state(map, IS_FIREFLY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+            }
+            else if (isSpaceEmpty(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE + 1)))
+            {
+              update_map_state(map, IS_EMPTY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+              move_firefly_right(fireflyPtr);
+              update_map_state(map, IS_FIREFLY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+            }
+            else if (isSpaceEmpty(map, (fireflyPtr->y / BLOCK_SIZE + 1), (fireflyPtr->x / BLOCK_SIZE)))
+            {
+              update_map_state(map, IS_EMPTY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+              move_firefly_down(fireflyPtr);
+              update_map_state(map, IS_FIREFLY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+            }
+            break;
+          case LEFT:
+            if (isSpaceEmpty(map, (fireflyPtr->y / BLOCK_SIZE + 1), (fireflyPtr->x / BLOCK_SIZE)))
+            {
+              update_map_state(map, IS_EMPTY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+              move_firefly_down(fireflyPtr);
+              update_map_state(map, IS_FIREFLY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+            }
+            else if (isSpaceEmpty(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE - 1)))
+            {
+              update_map_state(map, IS_EMPTY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+              move_firefly_left(fireflyPtr);
+              update_map_state(map, IS_FIREFLY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+            }
+            else if (isSpaceEmpty(map, (fireflyPtr->y / BLOCK_SIZE - 1), (fireflyPtr->x / BLOCK_SIZE)))
+            {
+              update_map_state(map, IS_EMPTY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+              move_firefly_up(fireflyPtr);
+              update_map_state(map, IS_FIREFLY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+            }
+            else if (isSpaceEmpty(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE + 1)))
+            {
+              update_map_state(map, IS_EMPTY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+              move_firefly_right(fireflyPtr);
+              update_map_state(map, IS_FIREFLY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+            }
+            break;
+          case DOWN:
+            if (isSpaceEmpty(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE + 1)))
+            {
+              update_map_state(map, IS_EMPTY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+              move_firefly_right(fireflyPtr);
+              update_map_state(map, IS_FIREFLY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+            }
+            else if (isSpaceEmpty(map, (fireflyPtr->y / BLOCK_SIZE + 1), (fireflyPtr->x / BLOCK_SIZE)))
+            {
+              update_map_state(map, IS_EMPTY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+              move_firefly_down(fireflyPtr);
+              update_map_state(map, IS_FIREFLY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+            }
+            else if (isSpaceEmpty(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE - 1)))
+            {
+              update_map_state(map, IS_EMPTY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+              move_firefly_left(fireflyPtr);
+              update_map_state(map, IS_FIREFLY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+            }
+            else if (isSpaceEmpty(map, (fireflyPtr->y / BLOCK_SIZE - 1), (fireflyPtr->x / BLOCK_SIZE)))
+            {
+              update_map_state(map, IS_EMPTY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+              move_firefly_up(fireflyPtr);
+              update_map_state(map, IS_FIREFLY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+            }
+            break;
+          default:
+            if (isSpaceEmpty(map, (fireflyPtr->y / BLOCK_SIZE - 1), (fireflyPtr->x / BLOCK_SIZE)))
+            {
+              update_map_state(map, IS_EMPTY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+              move_firefly_up(fireflyPtr);
+              update_map_state(map, IS_FIREFLY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+            }
+
+            else if (isSpaceEmpty(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE - 1)))
+            {
+              update_map_state(map, IS_EMPTY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+              move_firefly_left(fireflyPtr);
+              update_map_state(map, IS_FIREFLY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+            }
+
+            else if (isSpaceEmpty(map, (fireflyPtr->y / BLOCK_SIZE + 1), (fireflyPtr->x / BLOCK_SIZE)))
+            {
+              update_map_state(map, IS_EMPTY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+              move_firefly_down(fireflyPtr);
+              update_map_state(map, IS_FIREFLY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+            }
+
+            else if (isSpaceEmpty(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE + 1)))
+            {
+              update_map_state(map, IS_EMPTY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+              move_firefly_right(fireflyPtr);
+              update_map_state(map, IS_FIREFLY, fireflyPtr->y / BLOCK_SIZE, fireflyPtr->x / BLOCK_SIZE);
+            }
+            break;
+          }
+
+        fireflyPtr->source_x += al_get_bitmap_width(sprites->firefly) / 8;
+
+        if (fireflyPtr->source_x >= al_get_bitmap_width(sprites->firefly))
+          fireflyPtr->source_x = 0;
+      }
+    }
   }
 }
 

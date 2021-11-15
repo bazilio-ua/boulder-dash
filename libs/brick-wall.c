@@ -14,12 +14,20 @@ void brick_wall_init(BRICK_WALL_STRUCT *brickWall, int pos_x, int pos_y)
 
 void brick_wall_update(
     BRICK_WALL_STRUCT *brickWall,
+    int *brickWallCount,
     char map[MAP_HEIGHT][MAP_WIDTH],
     ROCKFORD_STRUCT *rockford,
     long int count)
 {
-  if (!isSpaceBrickWall(map, brickWall->y / BLOCK_SIZE, brickWall->x / BLOCK_SIZE))
-    brickWall->redraw = false;
+  BRICK_WALL_STRUCT *brickWallPtr;
+
+  for (int i = 0; i < *brickWallCount; i++)
+  {
+    brickWallPtr = &brickWall[i];
+
+    if (!isSpaceBrickWall(map, brickWallPtr->y / BLOCK_SIZE, brickWallPtr->x / BLOCK_SIZE))
+      brickWallPtr->redraw = false;
+  }
 }
 
 void brick_wall_draw(BRICK_WALL_STRUCT *brickWall, SPRITES_STRUCT *sprites)

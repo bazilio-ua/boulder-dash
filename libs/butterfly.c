@@ -13,6 +13,7 @@ void butterfly_init(BUTTERFLY_STRUCT *butterfly, int pos_x, int pos_y)
   butterfly->source_y = 0;
   butterfly->direction = NO_DIRECTION;
   butterfly->redraw = true;
+  butterfly->amount_of_diamonds = generateRandomNumberBetween(0, 5);
 }
 
 //move the butterfly to the up
@@ -84,210 +85,260 @@ bool verify_rockford_amoeba_presence_in_neighborhood_butterfly(BUTTERFLY_STRUCT 
   return false;
 }
 
+void generate_diamonds(
+    BUTTERFLY_STRUCT *butterfly,
+    DIAMOND_STRUCT *diamond,
+    int *diamondCount,
+    char map[MAP_HEIGHT][MAP_WIDTH])
+{
+  DIAMOND_STRUCT *diamondTemp;
+  int i = 0;
+
+  while (i < butterfly->amount_of_diamonds)
+  {
+    diamondTemp = &diamond[*diamondCount];
+
+    int randomLine = generateRandomNumberBetween(0, MAP_HEIGHT - 1);
+    int randomColumn = generateRandomNumberBetween(0, MAP_WIDTH - 1);
+
+    if (isSpaceDirt(map, randomLine, randomColumn))
+    {
+      (*diamondCount)++;
+      update_map_state(map, IS_DIAMOND, randomLine, randomColumn);
+
+      diamondTemp->x = randomColumn * BLOCK_SIZE;
+      diamondTemp->y = randomLine * BLOCK_SIZE;
+      diamondTemp->source_x = DIAMOND_SPRITE_WIDTH;
+      diamondTemp->source_y = 0;
+      diamondTemp->redraw = true;
+      diamondTemp->falling = false;
+
+      i++;
+    }
+  }
+
+  butterfly->redraw = false;
+}
+
 void butterfly_update(
     BUTTERFLY_STRUCT *butterfly,
+    DIAMOND_STRUCT *diamond,
+    int *butterflyCount,
+    int *diamondCount,
     char map[MAP_HEIGHT][MAP_WIDTH],
     EXPLOSION_STRUCT *explosion,
     SPRITES_STRUCT *sprites,
     long int count)
 {
-  if (isSpaceEmpty(map, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE))
+  BUTTERFLY_STRUCT *butterflyPtr;
+
+  for (int i = 0; i < *butterflyCount; i++)
   {
-    butterfly->redraw = false;
-    return;
-  }
+    butterflyPtr = &butterfly[i];
 
-  else if (!isSpaceButterfly(map, (butterfly->y / BLOCK_SIZE), (butterfly->x / BLOCK_SIZE)))
-  {
-    int butterflyLine = butterfly->y / BLOCK_SIZE;
-    int butterflyColumn = butterfly->x / BLOCK_SIZE;
-
-    EXPLOSION_STRUCT *explosionPtr;
-    int explosionCount = 0;
-
-    for (int i = butterflyLine - 1; i <= butterflyLine + 1; i++)
-      for (int j = butterflyColumn - 1; j <= butterflyColumn + 1; j++)
-        if (!isSpaceSteelWall(map, i, j))
-        {
-          update_map_state(map, IS_EMPTY, i, j);
-
-          explosionPtr = &explosion[explosionCount];
-
-          explosionPtr->x = j * BLOCK_SIZE;
-          explosionPtr->y = i * BLOCK_SIZE;
-          explosionPtr->redraw = true;
-          explosionPtr->start = 0;
-          explosionPtr->end = EXPLOSION_DURATION;
-
-          explosionCount++;
-        }
-
-    butterfly->redraw = false;
-  }
-
-  else if (count % 5 == 0)
-  {
-    if (verify_rockford_amoeba_presence_in_neighborhood_butterfly(butterfly, map))
-      butterfly->redraw = false;
-    else
-      switch (butterfly->direction)
+    if (butterflyPtr->redraw)
+    {
+      if (isSpaceEmpty(map, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE))
       {
-      case RIGHT:
-        if (isSpaceEmpty(map, (butterfly->y / BLOCK_SIZE + 1), (butterfly->x / BLOCK_SIZE)))
-        {
-          update_map_state(map, IS_EMPTY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-          move_butterfly_down(butterfly);
-          update_map_state(map, IS_BUTTERFLY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-        }
-
-        else if (isSpaceEmpty(map, (butterfly->y / BLOCK_SIZE), (butterfly->x / BLOCK_SIZE + 1)))
-        {
-          update_map_state(map, IS_EMPTY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-          move_butterfly_right(butterfly);
-          update_map_state(map, IS_BUTTERFLY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-        }
-
-        else if (isSpaceEmpty(map, (butterfly->y / BLOCK_SIZE - 1), (butterfly->x / BLOCK_SIZE)))
-        {
-          update_map_state(map, IS_EMPTY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-          move_butterfly_up(butterfly);
-          update_map_state(map, IS_BUTTERFLY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-        }
-
-        else if (isSpaceEmpty(map, (butterfly->y / BLOCK_SIZE), (butterfly->x / BLOCK_SIZE - 1)))
-        {
-          update_map_state(map, IS_EMPTY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-          move_butterfly_left(butterfly);
-          update_map_state(map, IS_BUTTERFLY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-        }
-
-        break;
-      case UP:
-        if (isSpaceEmpty(map, (butterfly->y / BLOCK_SIZE), (butterfly->x / BLOCK_SIZE + 1)))
-        {
-          update_map_state(map, IS_EMPTY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-          move_butterfly_right(butterfly);
-          update_map_state(map, IS_BUTTERFLY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-        }
-
-        else if (isSpaceEmpty(map, (butterfly->y / BLOCK_SIZE - 1), (butterfly->x / BLOCK_SIZE)))
-        {
-          update_map_state(map, IS_EMPTY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-          move_butterfly_up(butterfly);
-          update_map_state(map, IS_BUTTERFLY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-        }
-
-        else if (isSpaceEmpty(map, (butterfly->y / BLOCK_SIZE), (butterfly->x / BLOCK_SIZE - 1)))
-        {
-          update_map_state(map, IS_EMPTY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-          move_butterfly_left(butterfly);
-          update_map_state(map, IS_BUTTERFLY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-        }
-
-        else if (isSpaceEmpty(map, (butterfly->y / BLOCK_SIZE + 1), (butterfly->x / BLOCK_SIZE)))
-        {
-          update_map_state(map, IS_EMPTY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-          move_butterfly_down(butterfly);
-          update_map_state(map, IS_BUTTERFLY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-        }
-
-        break;
-      case LEFT:
-        if (isSpaceEmpty(map, (butterfly->y / BLOCK_SIZE - 1), (butterfly->x / BLOCK_SIZE)))
-        {
-          update_map_state(map, IS_EMPTY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-          move_butterfly_up(butterfly);
-          update_map_state(map, IS_BUTTERFLY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-        }
-
-        else if (isSpaceEmpty(map, (butterfly->y / BLOCK_SIZE), (butterfly->x / BLOCK_SIZE - 1)))
-        {
-          update_map_state(map, IS_EMPTY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-          move_butterfly_left(butterfly);
-          update_map_state(map, IS_BUTTERFLY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-        }
-
-        else if (isSpaceEmpty(map, (butterfly->y / BLOCK_SIZE + 1), (butterfly->x / BLOCK_SIZE)))
-        {
-          update_map_state(map, IS_EMPTY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-          move_butterfly_down(butterfly);
-          update_map_state(map, IS_BUTTERFLY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-        }
-
-        else if (isSpaceEmpty(map, (butterfly->y / BLOCK_SIZE), (butterfly->x / BLOCK_SIZE + 1)))
-        {
-          update_map_state(map, IS_EMPTY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-          move_butterfly_right(butterfly);
-          update_map_state(map, IS_BUTTERFLY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-        }
-
-        break;
-      case DOWN:
-        if (isSpaceEmpty(map, (butterfly->y / BLOCK_SIZE), (butterfly->x / BLOCK_SIZE - 1)))
-        {
-          update_map_state(map, IS_EMPTY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-          move_butterfly_left(butterfly);
-          update_map_state(map, IS_BUTTERFLY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-        }
-
-        else if (isSpaceEmpty(map, (butterfly->y / BLOCK_SIZE + 1), (butterfly->x / BLOCK_SIZE)))
-        {
-          update_map_state(map, IS_EMPTY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-          move_butterfly_down(butterfly);
-          update_map_state(map, IS_BUTTERFLY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-        }
-
-        else if (isSpaceEmpty(map, (butterfly->y / BLOCK_SIZE), (butterfly->x / BLOCK_SIZE + 1)))
-        {
-          update_map_state(map, IS_EMPTY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-          move_butterfly_right(butterfly);
-          update_map_state(map, IS_BUTTERFLY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-        }
-
-        else if (isSpaceEmpty(map, (butterfly->y / BLOCK_SIZE - 1), (butterfly->x / BLOCK_SIZE)))
-        {
-          update_map_state(map, IS_EMPTY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-          move_butterfly_up(butterfly);
-          update_map_state(map, IS_BUTTERFLY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-        }
-
-        break;
-      default:
-        if (isSpaceEmpty(map, (butterfly->y / BLOCK_SIZE), (butterfly->x / BLOCK_SIZE + 1)))
-        {
-          update_map_state(map, IS_EMPTY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-          move_butterfly_right(butterfly);
-          update_map_state(map, IS_BUTTERFLY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-        }
-
-        else if (isSpaceEmpty(map, (butterfly->y / BLOCK_SIZE + 1), (butterfly->x / BLOCK_SIZE)))
-        {
-          update_map_state(map, IS_EMPTY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-          move_butterfly_down(butterfly);
-          update_map_state(map, IS_BUTTERFLY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-        }
-
-        else if (isSpaceEmpty(map, (butterfly->y / BLOCK_SIZE - 1), (butterfly->x / BLOCK_SIZE)))
-        {
-          update_map_state(map, IS_EMPTY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-          move_butterfly_up(butterfly);
-          update_map_state(map, IS_BUTTERFLY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-        }
-
-        else if (isSpaceEmpty(map, (butterfly->y / BLOCK_SIZE), (butterfly->x / BLOCK_SIZE - 1)))
-        {
-          update_map_state(map, IS_EMPTY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-          move_butterfly_left(butterfly);
-          update_map_state(map, IS_BUTTERFLY, butterfly->y / BLOCK_SIZE, butterfly->x / BLOCK_SIZE);
-        }
-
-        break;
+        generate_diamonds(butterflyPtr, diamond, diamondCount, map);
+        return;
       }
 
-    butterfly->source_x += al_get_bitmap_width(sprites->butterfly) / 8;
+      if (!isSpaceButterfly(map, (butterflyPtr->y / BLOCK_SIZE), (butterflyPtr->x / BLOCK_SIZE)))
+      {
+        int butterflyPtrLine = butterflyPtr->y / BLOCK_SIZE;
+        int butterflyPtrColumn = butterflyPtr->x / BLOCK_SIZE;
 
-    if (butterfly->source_x >= al_get_bitmap_width(sprites->butterfly))
-      butterfly->source_x = 0;
+        EXPLOSION_STRUCT *explosionPtr;
+        int explosionCount = 0;
+
+        for (int i = butterflyPtrLine - 1; i <= butterflyPtrLine + 1; i++)
+          for (int j = butterflyPtrColumn - 1; j <= butterflyPtrColumn + 1; j++)
+            if (!isSpaceSteelWall(map, i, j))
+            {
+              update_map_state(map, IS_EMPTY, i, j);
+
+              explosionPtr = &explosion[explosionCount];
+
+              explosionPtr->x = j * BLOCK_SIZE;
+              explosionPtr->y = i * BLOCK_SIZE;
+              explosionPtr->redraw = true;
+              explosionPtr->start = 0;
+              explosionPtr->end = EXPLOSION_DURATION;
+
+              explosionCount++;
+            }
+
+        generate_diamonds(butterflyPtr, diamond, diamondCount, map);
+
+        return;
+      }
+
+      if (count % 5 == 0)
+      {
+        if (verify_rockford_amoeba_presence_in_neighborhood_butterfly(butterflyPtr, map))
+          generate_diamonds(butterflyPtr, diamond, diamondCount, map);
+        else
+          switch (butterflyPtr->direction)
+          {
+          case RIGHT:
+            if (isSpaceEmpty(map, (butterflyPtr->y / BLOCK_SIZE + 1), (butterflyPtr->x / BLOCK_SIZE)))
+            {
+              update_map_state(map, IS_EMPTY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+              move_butterfly_down(butterflyPtr);
+              update_map_state(map, IS_BUTTERFLY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+            }
+
+            else if (isSpaceEmpty(map, (butterflyPtr->y / BLOCK_SIZE), (butterflyPtr->x / BLOCK_SIZE + 1)))
+            {
+              update_map_state(map, IS_EMPTY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+              move_butterfly_right(butterflyPtr);
+              update_map_state(map, IS_BUTTERFLY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+            }
+
+            else if (isSpaceEmpty(map, (butterflyPtr->y / BLOCK_SIZE - 1), (butterflyPtr->x / BLOCK_SIZE)))
+            {
+              update_map_state(map, IS_EMPTY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+              move_butterfly_up(butterflyPtr);
+              update_map_state(map, IS_BUTTERFLY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+            }
+
+            else if (isSpaceEmpty(map, (butterflyPtr->y / BLOCK_SIZE), (butterflyPtr->x / BLOCK_SIZE - 1)))
+            {
+              update_map_state(map, IS_EMPTY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+              move_butterfly_left(butterflyPtr);
+              update_map_state(map, IS_BUTTERFLY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+            }
+
+            break;
+          case UP:
+            if (isSpaceEmpty(map, (butterflyPtr->y / BLOCK_SIZE), (butterflyPtr->x / BLOCK_SIZE + 1)))
+            {
+              update_map_state(map, IS_EMPTY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+              move_butterfly_right(butterflyPtr);
+              update_map_state(map, IS_BUTTERFLY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+            }
+
+            else if (isSpaceEmpty(map, (butterflyPtr->y / BLOCK_SIZE - 1), (butterflyPtr->x / BLOCK_SIZE)))
+            {
+              update_map_state(map, IS_EMPTY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+              move_butterfly_up(butterflyPtr);
+              update_map_state(map, IS_BUTTERFLY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+            }
+
+            else if (isSpaceEmpty(map, (butterflyPtr->y / BLOCK_SIZE), (butterflyPtr->x / BLOCK_SIZE - 1)))
+            {
+              update_map_state(map, IS_EMPTY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+              move_butterfly_left(butterflyPtr);
+              update_map_state(map, IS_BUTTERFLY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+            }
+
+            else if (isSpaceEmpty(map, (butterflyPtr->y / BLOCK_SIZE + 1), (butterflyPtr->x / BLOCK_SIZE)))
+            {
+              update_map_state(map, IS_EMPTY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+              move_butterfly_down(butterflyPtr);
+              update_map_state(map, IS_BUTTERFLY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+            }
+
+            break;
+          case LEFT:
+            if (isSpaceEmpty(map, (butterflyPtr->y / BLOCK_SIZE - 1), (butterflyPtr->x / BLOCK_SIZE)))
+            {
+              update_map_state(map, IS_EMPTY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+              move_butterfly_up(butterflyPtr);
+              update_map_state(map, IS_BUTTERFLY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+            }
+
+            else if (isSpaceEmpty(map, (butterflyPtr->y / BLOCK_SIZE), (butterflyPtr->x / BLOCK_SIZE - 1)))
+            {
+              update_map_state(map, IS_EMPTY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+              move_butterfly_left(butterflyPtr);
+              update_map_state(map, IS_BUTTERFLY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+            }
+
+            else if (isSpaceEmpty(map, (butterflyPtr->y / BLOCK_SIZE + 1), (butterflyPtr->x / BLOCK_SIZE)))
+            {
+              update_map_state(map, IS_EMPTY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+              move_butterfly_down(butterflyPtr);
+              update_map_state(map, IS_BUTTERFLY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+            }
+
+            else if (isSpaceEmpty(map, (butterflyPtr->y / BLOCK_SIZE), (butterflyPtr->x / BLOCK_SIZE + 1)))
+            {
+              update_map_state(map, IS_EMPTY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+              move_butterfly_right(butterflyPtr);
+              update_map_state(map, IS_BUTTERFLY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+            }
+
+            break;
+          case DOWN:
+            if (isSpaceEmpty(map, (butterflyPtr->y / BLOCK_SIZE), (butterflyPtr->x / BLOCK_SIZE - 1)))
+            {
+              update_map_state(map, IS_EMPTY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+              move_butterfly_left(butterflyPtr);
+              update_map_state(map, IS_BUTTERFLY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+            }
+
+            else if (isSpaceEmpty(map, (butterflyPtr->y / BLOCK_SIZE + 1), (butterflyPtr->x / BLOCK_SIZE)))
+            {
+              update_map_state(map, IS_EMPTY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+              move_butterfly_down(butterflyPtr);
+              update_map_state(map, IS_BUTTERFLY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+            }
+
+            else if (isSpaceEmpty(map, (butterflyPtr->y / BLOCK_SIZE), (butterflyPtr->x / BLOCK_SIZE + 1)))
+            {
+              update_map_state(map, IS_EMPTY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+              move_butterfly_right(butterflyPtr);
+              update_map_state(map, IS_BUTTERFLY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+            }
+
+            else if (isSpaceEmpty(map, (butterflyPtr->y / BLOCK_SIZE - 1), (butterflyPtr->x / BLOCK_SIZE)))
+            {
+              update_map_state(map, IS_EMPTY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+              move_butterfly_up(butterflyPtr);
+              update_map_state(map, IS_BUTTERFLY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+            }
+
+            break;
+          default:
+            if (isSpaceEmpty(map, (butterflyPtr->y / BLOCK_SIZE), (butterflyPtr->x / BLOCK_SIZE + 1)))
+            {
+              update_map_state(map, IS_EMPTY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+              move_butterfly_right(butterflyPtr);
+              update_map_state(map, IS_BUTTERFLY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+            }
+
+            else if (isSpaceEmpty(map, (butterflyPtr->y / BLOCK_SIZE + 1), (butterflyPtr->x / BLOCK_SIZE)))
+            {
+              update_map_state(map, IS_EMPTY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+              move_butterfly_down(butterflyPtr);
+              update_map_state(map, IS_BUTTERFLY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+            }
+
+            else if (isSpaceEmpty(map, (butterflyPtr->y / BLOCK_SIZE - 1), (butterflyPtr->x / BLOCK_SIZE)))
+            {
+              update_map_state(map, IS_EMPTY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+              move_butterfly_up(butterflyPtr);
+              update_map_state(map, IS_BUTTERFLY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+            }
+
+            else if (isSpaceEmpty(map, (butterflyPtr->y / BLOCK_SIZE), (butterflyPtr->x / BLOCK_SIZE - 1)))
+            {
+              update_map_state(map, IS_EMPTY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+              move_butterfly_left(butterflyPtr);
+              update_map_state(map, IS_BUTTERFLY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+            }
+
+            break;
+          }
+
+        butterflyPtr->source_x += al_get_bitmap_width(sprites->butterfly) / 8;
+
+        if (butterflyPtr->source_x >= al_get_bitmap_width(sprites->butterfly))
+          butterflyPtr->source_x = 0;
+      }
+    }
   }
 }
 

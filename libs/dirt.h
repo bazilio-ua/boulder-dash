@@ -17,6 +17,7 @@ void dirt_init(DIRT_STRUCT *dirt, int pos_x, int pos_y);
 
 void dirt_update(
     DIRT_STRUCT *dirt,
+    int *dirtCount,
     char map[MAP_HEIGHT][MAP_WIDTH],
     ROCKFORD_STRUCT *rockford,
     long int count);

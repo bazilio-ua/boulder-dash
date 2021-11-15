@@ -31,7 +31,7 @@ void sprites_init(SPRITES_STRUCT *sprites)
 
   sprites->steel_wall = sprite_grab(sprites, 32, 192, STEEL_WALL_SPRITE_WIDTH, STEEL_WALL_SPRITE_HEIGHT);
 
-  sprites->brick_wall = sprite_grab(sprites, 224, 192, BRICK_WALL_SPRITE_WIDTH, BRICK_WALL_SPRITE_HEIGHT);
+  sprites->brick_wall = sprite_grab(sprites, 96, 192, BRICK_WALL_SPRITE_WIDTH, BRICK_WALL_SPRITE_HEIGHT);
 
   sprites->boulder = sprite_grab(sprites, 0, 224, BOULDER_SPRITE_WIDTH, BOULDER_SPRITE_HEIGHT);
 

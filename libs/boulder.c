@@ -16,119 +16,139 @@ void boulder_init(BOULDER_STRUCT *boulder, int pos_x, int pos_y)
 
 void boulder_update(
     BOULDER_STRUCT *boulder,
+    int *boulderCount,
     char map[MAP_HEIGHT][MAP_WIDTH],
     ROCKFORD_STRUCT *rockford,
     long int count)
 {
-  if (!isSpaceBoulder(map, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE))
+  BOULDER_STRUCT *boulderPtr;
+
+  for (int i = 0; i < *boulderCount; i++)
   {
-    boulder->redraw = false;
-    return;
-  }
+    boulderPtr = &boulder[i];
 
-  if (count % 5 == 0)
-  {
-    if (boulder->falling &&
-        (isSpaceRockford(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE) ||
-         isSpaceFirefly(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE) ||
-         isSpaceButterfly(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE)))
+    if (boulderPtr->redraw)
     {
-      update_map_state(map, IS_EMPTY, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
-      boulder->y += BLOCK_SIZE;
-      update_map_state(map, IS_BOULDER, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
-      return;
-    }
-
-    boulder->falling = false;
-
-    if (isSpaceEmpty(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE))
-    {
-      update_map_state(map, IS_EMPTY, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
-      boulder->y += BLOCK_SIZE;
-      update_map_state(map, IS_BOULDER, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
-      boulder->falling = true;
-    }
-    else if (
-        isSpaceEmpty(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE - 1) &&
-        isSpaceEmpty(map, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE - 1) &&
-        (isSpaceBoulder(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE) ||
-         isSpaceBrickWall(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE) ||
-         isSpaceDiamond(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE)))
-    {
-      update_map_state(map, IS_EMPTY, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
-      boulder->x -= BLOCK_SIZE;
-      update_map_state(map, IS_BOULDER, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
-    }
-    else if (
-        isSpaceEmpty(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE + 1) &&
-        isSpaceEmpty(map, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE + 1) &&
-        (isSpaceBoulder(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE) ||
-         isSpaceBrickWall(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE) ||
-         isSpaceDiamond(map, boulder->y / BLOCK_SIZE + 1, boulder->x / BLOCK_SIZE)))
-    {
-      update_map_state(map, IS_EMPTY, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
-      boulder->x += BLOCK_SIZE;
-      update_map_state(map, IS_BOULDER, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
-    }
-    else if (
-        isSpaceRockford(map, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE + 1) &&
-        rockford->active && rockford->direction == LEFT)
-    {
-
-      if (!boulder->collision_time)
-        boulder->collision_time = count;
-
-      if (count - boulder->collision_time == 60) //1s
+      if (!isSpaceBoulder(map, boulderPtr->y / BLOCK_SIZE, boulderPtr->x / BLOCK_SIZE))
       {
-        update_map_state(map, IS_EMPTY, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
-        update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
-
-        rockford->x -= ROCKFORD_SPEED;
-        boulder->x -= ROCKFORD_SPEED;
-
-        if (map[boulder->y / BLOCK_SIZE][boulder->x / BLOCK_SIZE] != IS_EMPTY)
-        {
-          rockford->x += ROCKFORD_SPEED;
-          boulder->x += ROCKFORD_SPEED;
-        }
-
-        boulder->collision_time = count;
+        boulderPtr->redraw = false;
+        return;
       }
 
-      update_map_state(map, IS_BOULDER, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
-      update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
-    }
-
-    else if (
-        isSpaceRockford(map, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE - 1) &&
-        rockford->active && rockford->direction == RIGHT)
-    {
-
-      if (!boulder->collision_time)
-        boulder->collision_time = count;
-
-      if (count - boulder->collision_time == 60) //1s
+      if (count % 5 == 0)
       {
-        update_map_state(map, IS_EMPTY, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
-        update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
-
-        rockford->x += ROCKFORD_SPEED;
-        boulder->x += ROCKFORD_SPEED;
-
-        if (map[boulder->y / BLOCK_SIZE][boulder->x / BLOCK_SIZE] != IS_EMPTY)
+        if (boulderPtr->falling &&
+            (isSpaceRockford(map, boulderPtr->y / BLOCK_SIZE + 1, boulderPtr->x / BLOCK_SIZE) ||
+             isSpaceFirefly(map, boulderPtr->y / BLOCK_SIZE + 1, boulderPtr->x / BLOCK_SIZE) ||
+             isSpaceButterfly(map, boulderPtr->y / BLOCK_SIZE + 1, boulderPtr->x / BLOCK_SIZE)))
         {
-          rockford->x -= ROCKFORD_SPEED;
-          boulder->x -= ROCKFORD_SPEED;
+          update_map_state(map, IS_EMPTY, boulderPtr->y / BLOCK_SIZE, boulderPtr->x / BLOCK_SIZE);
+          boulderPtr->y += BLOCK_SIZE;
+          update_map_state(map, IS_BOULDER, boulderPtr->y / BLOCK_SIZE, boulderPtr->x / BLOCK_SIZE);
+          return;
         }
 
-        boulder->collision_time = count;
-      }
+        boulderPtr->falling = false;
 
-      update_map_state(map, IS_BOULDER, boulder->y / BLOCK_SIZE, boulder->x / BLOCK_SIZE);
-      update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
+        if (isSpaceEmpty(map, boulderPtr->y / BLOCK_SIZE + 1, boulderPtr->x / BLOCK_SIZE))
+        {
+          update_map_state(map, IS_EMPTY, boulderPtr->y / BLOCK_SIZE, boulderPtr->x / BLOCK_SIZE);
+          boulderPtr->y += BLOCK_SIZE;
+          update_map_state(map, IS_BOULDER, boulderPtr->y / BLOCK_SIZE, boulderPtr->x / BLOCK_SIZE);
+          boulderPtr->falling = true;
+        }
+        else if (
+            isSpaceMagicWall(map, boulderPtr->y / BLOCK_SIZE + 1, boulderPtr->x / BLOCK_SIZE) &&
+            isSpaceEmpty(map, boulderPtr->y / BLOCK_SIZE + 2, boulderPtr->x / BLOCK_SIZE))
+        {
+          update_map_state(map, IS_EMPTY, boulderPtr->y / BLOCK_SIZE, boulderPtr->x / BLOCK_SIZE);
+          boulderPtr->y += BLOCK_SIZE;
+          update_map_state(map, IS_BOULDER, boulderPtr->y / BLOCK_SIZE, boulderPtr->x / BLOCK_SIZE);
+          boulderPtr->falling = true;
+        }
+        else if (
+            isSpaceEmpty(map, boulderPtr->y / BLOCK_SIZE + 1, boulderPtr->x / BLOCK_SIZE - 1) &&
+            isSpaceEmpty(map, boulderPtr->y / BLOCK_SIZE, boulderPtr->x / BLOCK_SIZE - 1) &&
+            (isSpaceBoulder(map, boulderPtr->y / BLOCK_SIZE + 1, boulderPtr->x / BLOCK_SIZE) ||
+             isSpaceBrickWall(map, boulderPtr->y / BLOCK_SIZE + 1, boulderPtr->x / BLOCK_SIZE) ||
+             isSpaceDiamond(map, boulderPtr->y / BLOCK_SIZE + 1, boulderPtr->x / BLOCK_SIZE)))
+        {
+          update_map_state(map, IS_EMPTY, boulderPtr->y / BLOCK_SIZE, boulderPtr->x / BLOCK_SIZE);
+          boulderPtr->x -= BLOCK_SIZE;
+          update_map_state(map, IS_BOULDER, boulderPtr->y / BLOCK_SIZE, boulderPtr->x / BLOCK_SIZE);
+        }
+        else if (
+            isSpaceEmpty(map, boulderPtr->y / BLOCK_SIZE + 1, boulderPtr->x / BLOCK_SIZE + 1) &&
+            isSpaceEmpty(map, boulderPtr->y / BLOCK_SIZE, boulderPtr->x / BLOCK_SIZE + 1) &&
+            (isSpaceBoulder(map, boulderPtr->y / BLOCK_SIZE + 1, boulderPtr->x / BLOCK_SIZE) ||
+             isSpaceBrickWall(map, boulderPtr->y / BLOCK_SIZE + 1, boulderPtr->x / BLOCK_SIZE) ||
+             isSpaceDiamond(map, boulderPtr->y / BLOCK_SIZE + 1, boulderPtr->x / BLOCK_SIZE)))
+        {
+          update_map_state(map, IS_EMPTY, boulderPtr->y / BLOCK_SIZE, boulderPtr->x / BLOCK_SIZE);
+          boulderPtr->x += BLOCK_SIZE;
+          update_map_state(map, IS_BOULDER, boulderPtr->y / BLOCK_SIZE, boulderPtr->x / BLOCK_SIZE);
+        }
+        else if (
+            isSpaceRockford(map, boulderPtr->y / BLOCK_SIZE, boulderPtr->x / BLOCK_SIZE + 1) &&
+            rockford->active && rockford->direction == LEFT)
+        {
+
+          if (!boulderPtr->collision_time)
+            boulderPtr->collision_time = count;
+
+          if (count - boulderPtr->collision_time == 60) //1s
+          {
+            update_map_state(map, IS_EMPTY, boulderPtr->y / BLOCK_SIZE, boulderPtr->x / BLOCK_SIZE);
+            update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
+
+            rockford->x -= ROCKFORD_SPEED;
+            boulderPtr->x -= ROCKFORD_SPEED;
+
+            if (map[boulderPtr->y / BLOCK_SIZE][boulderPtr->x / BLOCK_SIZE] != IS_EMPTY)
+            {
+              rockford->x += ROCKFORD_SPEED;
+              boulderPtr->x += ROCKFORD_SPEED;
+            }
+
+            boulderPtr->collision_time = count;
+          }
+
+          update_map_state(map, IS_BOULDER, boulderPtr->y / BLOCK_SIZE, boulderPtr->x / BLOCK_SIZE);
+          update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
+        }
+
+        else if (
+            isSpaceRockford(map, boulderPtr->y / BLOCK_SIZE, boulderPtr->x / BLOCK_SIZE - 1) &&
+            rockford->active && rockford->direction == RIGHT)
+        {
+
+          if (!boulderPtr->collision_time)
+            boulderPtr->collision_time = count;
+
+          if (count - boulderPtr->collision_time == 60) //1s
+          {
+            update_map_state(map, IS_EMPTY, boulderPtr->y / BLOCK_SIZE, boulderPtr->x / BLOCK_SIZE);
+            update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
+
+            rockford->x += ROCKFORD_SPEED;
+            boulderPtr->x += ROCKFORD_SPEED;
+
+            if (map[boulderPtr->y / BLOCK_SIZE][boulderPtr->x / BLOCK_SIZE] != IS_EMPTY)
+            {
+              rockford->x -= ROCKFORD_SPEED;
+              boulderPtr->x -= ROCKFORD_SPEED;
+            }
+
+            boulderPtr->collision_time = count;
+          }
+
+          update_map_state(map, IS_BOULDER, boulderPtr->y / BLOCK_SIZE, boulderPtr->x / BLOCK_SIZE);
+          update_map_state(map, IS_ROCKFORD, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
+        }
+        else
+          boulderPtr->collision_time = 0;
+      }
     }
-    else
-      boulder->collision_time = 0;
   }
 }
 

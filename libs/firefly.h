@@ -20,6 +20,7 @@ void firefly_init(FIREFLY_STRUCT *firefly, int pos_x, int pos_y);
 
 void firefly_update(
     FIREFLY_STRUCT *firefly,
+    int *fireflyCount,
     char map[MAP_HEIGHT][MAP_WIDTH],
     EXPLOSION_STRUCT *explosion,
     SPRITES_STRUCT *sprites,

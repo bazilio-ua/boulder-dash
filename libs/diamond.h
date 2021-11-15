@@ -20,6 +20,7 @@ void diamond_init(DIAMOND_STRUCT *diamond, int pos_x, int pos_y);
 
 void diamond_update(
     DIAMOND_STRUCT *diamond,
+    int *diamondCount,
     char map[MAP_HEIGHT][MAP_WIDTH],
     SPRITES_STRUCT *sprites,
     ROCKFORD_STRUCT *rockford,

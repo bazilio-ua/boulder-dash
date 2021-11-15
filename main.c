@@ -49,6 +49,8 @@ void post_draw_display()
 
 int main()
 {
+  srand(time(NULL));
+
   int i;
   long frames;
   long score;
@@ -57,7 +59,6 @@ int main()
 
   SPRITES_STRUCT sprites;
   EXIT_STRUCT exit;
-  MAGIC_WALL_STRUCT magicWall;
 
   FIREFLY_STRUCT *firefly;
   int fireflyCount = 0;
@@ -85,6 +86,9 @@ int main()
   AMOEBA_STRUCT *amoeba;
   int amoebaCount = 0;
 
+  MAGIC_WALL_STRUCT *magicWall;
+  int magicWallCount = 0;
+
   EXPLOSION_STRUCT *explosion;
 
   initialize_map(map, "./resources/map.txt");
@@ -96,7 +100,8 @@ int main()
                     &diamondCount,
                     &fireflyCount,
                     &butterflyCount,
-                    &amoebaCount);
+                    &amoebaCount,
+                    &magicWallCount);
 
   steelWall = allocate_array_steel_wall(steelWallCount);
   initialize(steelWall, "steel wall");
@@ -104,14 +109,8 @@ int main()
   brickWall = allocate_array_brick_wall(brickWallCount);
   initialize(brickWall, "brick wall");
 
-  boulder = allocate_array_boulder(boulderCount);
-  initialize(boulder, "boulder");
-
   dirt = allocate_array_dirt(dirtCount);
   initialize(dirt, "dirt");
-
-  diamond = allocate_array_diamond(diamondCount);
-  initialize(diamond, "diamond");
 
   firefly = allocate_array_firefly(fireflyCount);
   initialize(firefly, "firefly");
@@ -119,11 +118,20 @@ int main()
   butterfly = allocate_array_butterfly(butterflyCount);
   initialize(butterfly, "butterfly");
 
-  amoeba = allocate_array_amoeba(amoebaCount);
-  initialize(amoeba, "amoeba");
+  magicWall = allocate_array_magic_wall(magicWallCount);
+  initialize(magicWall, "magic wall");
 
   rockford = allocate_rockford();
   initialize(rockford, "rockford");
+
+  diamond = allocate_array_diamond(MAX_OBJECT_QUANTITY);
+  initialize(diamond, "diamond");
+
+  boulder = allocate_array_boulder(MAX_OBJECT_QUANTITY);
+  initialize(boulder, "boulder");
+
+  amoeba = allocate_array_amoeba(MAX_OBJECT_QUANTITY);
+  initialize(amoeba, "amoeba");
 
   explosion = allocate_array_explosion(EXPLOSION_COUNT);
   initialize(explosion, "explosion");
@@ -173,6 +181,7 @@ int main()
       fireflyCount = 0;
       butterflyCount = 0;
       amoebaCount = 0;
+      magicWallCount = 0;
 
       init_map_objects(
           map,
@@ -185,6 +194,7 @@ int main()
           firefly,
           butterfly,
           amoeba,
+          magicWall,
           &steelWallCount,
           &brickWallCount,
           &boulderCount,
@@ -192,7 +202,9 @@ int main()
           &diamondCount,
           &fireflyCount,
           &butterflyCount,
-          &amoebaCount);
+          &amoebaCount,
+          &magicWallCount,
+          event.timer.count);
 
       restart = false;
     }
@@ -209,46 +221,97 @@ int main()
 
       if (rockford->redraw)
       {
-        rockford_update(rockford, map, explosion, &keyState, &sprites, event.timer.count);
+        rockford_update(
+            rockford,
+            map,
+            explosion,
+            &keyState,
+            &sprites,
+            event.timer.count);
 
         if (!rockford->redraw)
           restart = true;
       }
 
-      for (i = 0; i < fireflyCount; i++)
-        if (firefly[i].redraw)
-          firefly_update(&firefly[i], map, explosion, &sprites, event.timer.count);
+      firefly_update(
+          firefly,
+          &fireflyCount,
+          map,
+          explosion,
+          &sprites,
+          event.timer.count);
 
-      for (i = 0; i < butterflyCount; i++)
-        if (butterfly[i].redraw)
-          butterfly_update(&butterfly[i], map, explosion, &sprites, event.timer.count);
+      butterfly_update(
+          butterfly,
+          diamond,
+          &butterflyCount,
+          &diamondCount,
+          map,
+          explosion,
+          &sprites,
+          event.timer.count);
 
-      for (i = 0; i < amoebaCount; i++)
-        if (amoeba[i].redraw)
-          amoeba_update(&amoeba[i], map, explosion, &sprites, event.timer.count);
+      boulder_update(
+          boulder,
+          &boulderCount,
+          map,
+          rockford,
+          event.timer.count);
 
-      for (i = 0; i < steelWallCount; i++)
-        steel_wall_update(&steelWall[i], map, rockford, event.timer.count);
+      diamond_update(
+          diamond,
+          &diamondCount,
+          map,
+          &sprites,
+          rockford,
+          event.timer.count);
 
-      for (i = 0; i < diamondCount; i++)
-        if (diamond[i].redraw)
-          diamond_update(&diamond[i], map, &sprites, rockford, event.timer.count);
+      amoeba_update(
+          amoeba,
+          boulder,
+          diamond,
+          &amoebaCount,
+          &boulderCount,
+          &diamondCount,
+          map,
+          explosion,
+          &sprites,
+          event.timer.count);
 
-      for (i = 0; i < dirtCount; i++)
-        if (dirt[i].redraw)
-          dirt_update(&dirt[i], map, rockford, event.timer.count);
+      steel_wall_update(
+          steelWall,
+          &steelWallCount,
+          map,
+          rockford,
+          event.timer.count);
 
-      for (i = 0; i < brickWallCount; i++)
-        if (brickWall[i].redraw)
-          brick_wall_update(&brickWall[i], map, rockford, event.timer.count);
+      dirt_update(
+          dirt,
+          &dirtCount,
+          map,
+          rockford,
+          event.timer.count);
 
-      for (i = 0; i < boulderCount; i++)
-        if (boulder[i].redraw)
-          boulder_update(&boulder[i], map, rockford, event.timer.count);
+      brick_wall_update(
+          brickWall,
+          &brickWallCount,
+          map,
+          rockford,
+          event.timer.count);
 
-      for (i = 0; i < EXPLOSION_COUNT; i++)
-        if (explosion[i].redraw)
-          explosion_update(&explosion[i], &sprites, event.timer.count);
+      magic_wall_update(
+          magicWall,
+          diamond,
+          &magicWallCount,
+          &diamondCount,
+          map,
+          &sprites,
+          event.timer.count);
+
+      explosion_update(
+          explosion,
+          &sprites,
+          event.timer.count);
 
       redraw = true;
       break;
@@ -271,6 +334,10 @@ int main()
       for (i = 0; i < brickWallCount; i++)
         if (brickWall[i].redraw)
           brick_wall_draw(&brickWall[i], &sprites);
+
+      for (i = 0; i < magicWallCount; i++)
+        if (magicWall[i].redraw)
+          magic_wall_draw(&magicWall[i], &sprites);
 
       for (i = 0; i < boulderCount; i++)
         if (boulder[i].redraw)
@@ -324,6 +391,7 @@ int main()
   butterfly_free(butterfly);
   explosion_free(explosion);
   amoeba_free(amoeba);
+  magic_wall_free(magicWall);
   sprites_deinit(&sprites);
   destroy_display();
   al_destroy_timer(timer);
