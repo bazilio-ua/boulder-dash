@@ -8,12 +8,12 @@
 
 typedef struct MAGIC_WALL_STRUCT
 {
-  int x, y;
-  int source_x;
-  int source_y;
-  int activeStartTime;
-  bool redraw;
-  bool isActive;
+    int x, y;
+    int source_x;
+    int source_y;
+    int activeStartTime;
+    bool redraw;
+    bool isActive;
 } MAGIC_WALL_STRUCT;
 
 MAGIC_WALL_STRUCT *allocate_array_magic_wall(int magicWallCount);
@@ -34,6 +34,7 @@ void magic_wall_update(
 
 void magic_wall_draw(
     MAGIC_WALL_STRUCT *magicWall,
+    int *magicWallCount,
     SPRITES_STRUCT *sprites);
 
 void magic_wall_free(MAGIC_WALL_STRUCT *magicWall);

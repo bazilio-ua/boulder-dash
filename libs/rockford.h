@@ -17,7 +17,7 @@ typedef struct ROCKFORD_STRUCT
   int source_y;
   int score;
   int quantity_of_diamonds;
-  bool won; 
+  bool won;
   bool lose;
   bool active;
   bool redraw;
@@ -25,7 +25,10 @@ typedef struct ROCKFORD_STRUCT
 
 ROCKFORD_STRUCT *allocate_rockford();
 
-void rockford_init(ROCKFORD_STRUCT *rockford, int pos_x, int pos_y);
+void rockford_init(
+    ROCKFORD_STRUCT *rockford,
+    int pos_x,
+    int pos_y);
 
 void rockford_update(
     ROCKFORD_STRUCT *rockford,
@@ -35,7 +38,9 @@ void rockford_update(
     SPRITES_STRUCT *sprites,
     long int count);
 
-void rockford_draw(ROCKFORD_STRUCT *rockford, SPRITES_STRUCT *sprites);
+void rockford_draw(
+    ROCKFORD_STRUCT *rockford,
+    SPRITES_STRUCT *sprites);
 
 void rockford_free(ROCKFORD_STRUCT *rockford);
 

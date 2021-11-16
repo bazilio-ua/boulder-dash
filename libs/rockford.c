@@ -89,7 +89,8 @@ void rockford_update(
     {
       if (isSpaceEmpty(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE) - 1) ||
           isSpaceDirt(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE) - 1) ||
-          isSpaceDiamond(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE) - 1))
+          isSpaceDiamond(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE) - 1) ||
+          isSpaceExit(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE) - 1))
       {
         update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
         rockford->x -= ROCKFORD_SPEED;
@@ -103,7 +104,8 @@ void rockford_update(
     {
       if (isSpaceEmpty(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE) + 1) ||
           isSpaceDirt(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE) + 1) ||
-          isSpaceDiamond(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE) + 1))
+          isSpaceDiamond(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE) + 1) ||
+          isSpaceExit(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE) + 1))
       {
         update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
         rockford->x += ROCKFORD_SPEED;
@@ -117,7 +119,8 @@ void rockford_update(
     {
       if (isSpaceEmpty(map, (rockford->y / BLOCK_SIZE) - 1, (rockford->x / BLOCK_SIZE)) ||
           isSpaceDirt(map, (rockford->y / BLOCK_SIZE) - 1, (rockford->x / BLOCK_SIZE)) ||
-          isSpaceDiamond(map, (rockford->y / BLOCK_SIZE) - 1, (rockford->x / BLOCK_SIZE)))
+          isSpaceDiamond(map, (rockford->y / BLOCK_SIZE) - 1, (rockford->x / BLOCK_SIZE)) ||
+          isSpaceExit(map, (rockford->y / BLOCK_SIZE) - 1, (rockford->x / BLOCK_SIZE)))
       {
         update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
         rockford->y -= ROCKFORD_SPEED;
@@ -133,7 +136,8 @@ void rockford_update(
     {
       if (isSpaceEmpty(map, (rockford->y / BLOCK_SIZE) + 1, (rockford->x / BLOCK_SIZE)) ||
           isSpaceDirt(map, (rockford->y / BLOCK_SIZE) + 1, (rockford->x / BLOCK_SIZE)) ||
-          isSpaceDiamond(map, (rockford->y / BLOCK_SIZE) + 1, (rockford->x / BLOCK_SIZE)))
+          isSpaceDiamond(map, (rockford->y / BLOCK_SIZE) + 1, (rockford->x / BLOCK_SIZE)) ||
+          isSpaceExit(map, (rockford->y / BLOCK_SIZE) + 1, (rockford->x / BLOCK_SIZE)))
       {
         update_map_state(map, IS_EMPTY, rockford->y / BLOCK_SIZE, rockford->x / BLOCK_SIZE);
         rockford->y += ROCKFORD_SPEED;
@@ -190,52 +194,55 @@ void rockford_update(
 
 void rockford_draw(ROCKFORD_STRUCT *rockford, SPRITES_STRUCT *sprites)
 {
-  if (rockford->lives < 0)
-    return;
-  if (rockford->respawn_timer)
-    return;
-  if (((rockford->invincible_timer / 2) % 3) == 1)
-    return;
-
-  if (rockford->active)
+  if (rockford->redraw)
   {
-    if (rockford->direction == LEFT || (rockford->last_direction == LEFT && (rockford->direction == UP || rockford->direction == DOWN)))
-      al_draw_tinted_scaled_rotated_bitmap_region(
-          sprites->rockford_running_left,
-          rockford->source_x, rockford->source_y, ROCKFORD_SPRITE_WIDTH, ROCKFORD_SPRITE_HEIGHT, // source bitmap region
-          al_map_rgb(255, 255, 255),                                                             // color, just use white if you don't want a tint
-          0, 0,                                                                                  // center of rotation/scaling
-          rockford->x, rockford->y,                                                              // destination
-          ROCKFORD_SCALE, ROCKFORD_SCALE,                                                        // scale
-          0, 0);
-    else if (rockford->direction == RIGHT || (rockford->last_direction == RIGHT && (rockford->direction == UP || rockford->direction == DOWN)))
-      al_draw_tinted_scaled_rotated_bitmap_region(
-          sprites->rockford_running_right,
-          rockford->source_x, rockford->source_y, ROCKFORD_SPRITE_WIDTH, ROCKFORD_SPRITE_HEIGHT, // source bitmap region
-          al_map_rgb(255, 255, 255),                                                             // color, just use white if you don't want a tint
-          0, 0,                                                                                  // center of rotation/scaling
-          rockford->x, rockford->y,                                                              // destination
-          ROCKFORD_SCALE, ROCKFORD_SCALE,                                                        // scale
-          0, 0);
+    if (rockford->lives < 0)
+      return;
+    if (rockford->respawn_timer)
+      return;
+    if (((rockford->invincible_timer / 2) % 3) == 1)
+      return;
+
+    if (rockford->active)
+    {
+      if (rockford->direction == LEFT || (rockford->last_direction == LEFT && (rockford->direction == UP || rockford->direction == DOWN)))
+        al_draw_tinted_scaled_rotated_bitmap_region(
+            sprites->rockford_running_left,
+            rockford->source_x, rockford->source_y, ROCKFORD_SPRITE_WIDTH, ROCKFORD_SPRITE_HEIGHT, // source bitmap region
+            al_map_rgb(255, 255, 255),                                                             // color, just use white if you don't want a tint
+            0, 0,                                                                                  // center of rotation/scaling
+            rockford->x, rockford->y,                                                              // destination
+            ROCKFORD_SCALE, ROCKFORD_SCALE,                                                        // scale
+            0, 0);
+      else if (rockford->direction == RIGHT || (rockford->last_direction == RIGHT && (rockford->direction == UP || rockford->direction == DOWN)))
+        al_draw_tinted_scaled_rotated_bitmap_region(
+            sprites->rockford_running_right,
+            rockford->source_x, rockford->source_y, ROCKFORD_SPRITE_WIDTH, ROCKFORD_SPRITE_HEIGHT, // source bitmap region
+            al_map_rgb(255, 255, 255),                                                             // color, just use white if you don't want a tint
+            0, 0,                                                                                  // center of rotation/scaling
+            rockford->x, rockford->y,                                                              // destination
+            ROCKFORD_SCALE, ROCKFORD_SCALE,                                                        // scale
+            0, 0);
+      else
+        al_draw_tinted_scaled_rotated_bitmap_region(
+            sprites->rockford,
+            0, 0, ROCKFORD_SPRITE_WIDTH, ROCKFORD_SPRITE_HEIGHT, // source bitmap region
+            al_map_rgb(255, 255, 255),                           // color, just use white if you don't want a tint
+            0, 0,                                                // center of rotation/scaling
+            rockford->x, rockford->y,                            // destination
+            ROCKFORD_SCALE, ROCKFORD_SCALE,                      // scale
+            0, 0);
+    }
     else
       al_draw_tinted_scaled_rotated_bitmap_region(
-          sprites->rockford,
-          0, 0, ROCKFORD_SPRITE_WIDTH, ROCKFORD_SPRITE_HEIGHT, // source bitmap region
-          al_map_rgb(255, 255, 255),                           // color, just use white if you don't want a tint
-          0, 0,                                                // center of rotation/scaling
-          rockford->x, rockford->y,                            // destination
-          ROCKFORD_SCALE, ROCKFORD_SCALE,                      // scale
+          sprites->rockford_waiting,
+          rockford->source_x, rockford->source_y, ROCKFORD_SPRITE_WIDTH, ROCKFORD_SPRITE_HEIGHT, // source bitmap region
+          al_map_rgb(255, 255, 255),                                                             // color, just use white if you don't want a tint
+          0, 0,                                                                                  // center of rotation/scaling
+          rockford->x, rockford->y,                                                              // destination
+          ROCKFORD_SCALE, ROCKFORD_SCALE,                                                        // scale
           0, 0);
   }
-  else
-    al_draw_tinted_scaled_rotated_bitmap_region(
-        sprites->rockford_waiting,
-        rockford->source_x, rockford->source_y, ROCKFORD_SPRITE_WIDTH, ROCKFORD_SPRITE_HEIGHT, // source bitmap region
-        al_map_rgb(255, 255, 255),                                                             // color, just use white if you don't want a tint
-        0, 0,                                                                                  // center of rotation/scaling
-        rockford->x, rockford->y,                                                              // destination
-        ROCKFORD_SCALE, ROCKFORD_SCALE,                                                        // scale
-        0, 0);
 }
 
 void rockford_free(ROCKFORD_STRUCT *rockford)

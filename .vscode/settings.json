@@ -15,6 +15,8 @@
     "sprite.h": "c",
     "allegro_font.h": "c",
     "brick-wall.h": "c",
-    "magic-wall.h": "c"
+    "magic-wall.h": "c",
+    "exit.h": "c",
+    "scoreboard.h": "c"
   }
 }

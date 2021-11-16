@@ -12,6 +12,7 @@
 #include "butterfly.h"
 #include "amoeba.h"
 #include "magic-wall.h"
+#include "exit.h"
 
 void initialize_map(char map[MAP_HEIGHT][MAP_WIDTH], char *filePath);
 

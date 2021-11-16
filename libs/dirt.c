@@ -40,16 +40,21 @@ void dirt_update(
   }
 }
 
-void dirt_draw(DIRT_STRUCT *dirt, SPRITES_STRUCT *sprites)
+void dirt_draw(
+    DIRT_STRUCT *dirt,
+    int *dirtCount,
+    SPRITES_STRUCT *sprites)
 {
-  al_draw_tinted_scaled_rotated_bitmap_region(
-      sprites->dirt,
-      0, 0, AMOEBA_SPRITE_WIDTH, AMOEBA_SPRITE_HEIGHT, // source bitmap region
-      al_map_rgb(255, 255, 255),                       // color, just use white if you don't want a tint
-      0, 0,                                            // center of rotation/scaling
-      dirt->x, dirt->y,                                // destination
-      DIRT_SCALE, DIRT_SCALE,                          // scale
-      0, 0);
+  for (int i = 0; i < *dirtCount; i++)
+    if (dirt[i].redraw)
+      al_draw_tinted_scaled_rotated_bitmap_region(
+          sprites->dirt,
+          0, 0, AMOEBA_SPRITE_WIDTH, AMOEBA_SPRITE_HEIGHT, // source bitmap region
+          al_map_rgb(255, 255, 255),                       // color, just use white if you don't want a tint
+          0, 0,                                            // center of rotation/scaling
+          dirt[i].x, dirt[i].y,                            // destination
+          DIRT_SCALE, DIRT_SCALE,                          // scale
+          0, 0);
 }
 
 void dirt_free(DIRT_STRUCT *dirt)

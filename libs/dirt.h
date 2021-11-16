@@ -22,7 +22,10 @@ void dirt_update(
     ROCKFORD_STRUCT *rockford,
     long int count);
 
-void dirt_draw(DIRT_STRUCT *dirt, SPRITES_STRUCT *sprites);
+void dirt_draw(
+    DIRT_STRUCT *dirt,
+    int *dirtCount,
+    SPRITES_STRUCT *sprites);
 
 void dirt_free(DIRT_STRUCT *dirt);
 

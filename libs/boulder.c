@@ -59,7 +59,9 @@ void boulder_update(
         }
         else if (
             isSpaceMagicWall(map, boulderPtr->y / BLOCK_SIZE + 1, boulderPtr->x / BLOCK_SIZE) &&
-            isSpaceEmpty(map, boulderPtr->y / BLOCK_SIZE + 2, boulderPtr->x / BLOCK_SIZE))
+            (isSpaceEmpty(map, boulderPtr->y / BLOCK_SIZE + 2, boulderPtr->x / BLOCK_SIZE) ||
+             isSpaceButterfly(map, boulderPtr->y / BLOCK_SIZE + 2, boulderPtr->x / BLOCK_SIZE) ||
+             isSpaceFirefly(map, boulderPtr->y / BLOCK_SIZE + 2, boulderPtr->x / BLOCK_SIZE)))
         {
           update_map_state(map, IS_EMPTY, boulderPtr->y / BLOCK_SIZE, boulderPtr->x / BLOCK_SIZE);
           boulderPtr->y += BLOCK_SIZE;
@@ -152,16 +154,21 @@ void boulder_update(
   }
 }
 
-void boulder_draw(BOULDER_STRUCT *boulder, SPRITES_STRUCT *sprites)
+void boulder_draw(
+    BOULDER_STRUCT *boulder,
+    int *boulderCount,
+    SPRITES_STRUCT *sprites)
 {
-  al_draw_tinted_scaled_rotated_bitmap_region(
-      sprites->boulder,
-      0, 0, BOULDER_SPRITE_WIDTH, BOULDER_SPRITE_HEIGHT, // source bitmap region
-      al_map_rgb(255, 255, 255),                         // color, just use white if you don't want a tint
-      0, 0,                                              // center of rotation/scaling
-      boulder->x, boulder->y,                            // destination
-      BOULDER_SCALE, BOULDER_SCALE,                      // scale
-      0, 0);
+  for (int i = 0; i < *boulderCount; i++)
+    if (boulder[i].redraw)
+      al_draw_tinted_scaled_rotated_bitmap_region(
+          sprites->boulder,
+          0, 0, BOULDER_SPRITE_WIDTH, BOULDER_SPRITE_HEIGHT, // source bitmap region
+          al_map_rgb(255, 255, 255),                         // color, just use white if you don't want a tint
+          0, 0,                                              // center of rotation/scaling
+          boulder[i].x, boulder[i].y,                        // destination
+          BOULDER_SCALE, BOULDER_SCALE,                      // scale
+          0, 0);
 }
 
 void boulder_free(BOULDER_STRUCT *boulder)

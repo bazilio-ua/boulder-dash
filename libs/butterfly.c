@@ -101,7 +101,9 @@ void generate_diamonds(
     int randomLine = generateRandomNumberBetween(0, MAP_HEIGHT - 1);
     int randomColumn = generateRandomNumberBetween(0, MAP_WIDTH - 1);
 
-    if (isSpaceDirt(map, randomLine, randomColumn))
+    if (
+        isSpaceDirt(map, randomLine, randomColumn) ||
+        isSpaceEmpty(map, randomLine, randomColumn))
     {
       (*diamondCount)++;
       update_map_state(map, IS_DIAMOND, randomLine, randomColumn);
@@ -342,16 +344,21 @@ void butterfly_update(
   }
 }
 
-void butterfly_draw(BUTTERFLY_STRUCT *butterfly, SPRITES_STRUCT *sprites)
+void butterfly_draw(
+    BUTTERFLY_STRUCT *butterfly,
+    int *butterflyCount,
+    SPRITES_STRUCT *sprites)
 {
-  al_draw_tinted_scaled_rotated_bitmap_region(
-      sprites->butterfly,
-      butterfly->source_x, butterfly->source_y, BUTTERFLY_SPRITE_WIDTH, BUTTERFLY_SPRITE_HEIGHT, // source bitmap region
-      al_map_rgb(255, 255, 255),                                                                 // color, just use white if you don't want a tint
-      0, 0,                                                                                      // center of rotation/scaling
-      butterfly->x, butterfly->y,                                                                // destination
-      BUTTERFLY_SCALE, BUTTERFLY_SCALE,                                                          // scale
-      0, 0);
+  for (int i = 0; i < *butterflyCount; i++)
+    if (butterfly[i].redraw)
+      al_draw_tinted_scaled_rotated_bitmap_region(
+          sprites->butterfly,
+          butterfly[i].source_x, butterfly[i].source_y, BUTTERFLY_SPRITE_WIDTH, BUTTERFLY_SPRITE_HEIGHT, // source bitmap region
+          al_map_rgb(255, 255, 255),                                                                     // color, just use white if you don't want a tint
+          0, 0,                                                                                          // center of rotation/scaling
+          butterfly[i].x, butterfly[i].y,                                                                // destination
+          BUTTERFLY_SCALE, BUTTERFLY_SCALE,                                                              // scale
+          0, 0);
 }
 
 void butterfly_free(BUTTERFLY_STRUCT *butterfly)

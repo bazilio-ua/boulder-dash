@@ -243,16 +243,21 @@ void amoeba_update(
   }
 }
 
-void amoeba_draw(AMOEBA_STRUCT *amoeba, SPRITES_STRUCT *sprites)
+void amoeba_draw(
+    AMOEBA_STRUCT *amoeba,
+    int *amoebaCount,
+    SPRITES_STRUCT *sprites)
 {
-  al_draw_tinted_scaled_rotated_bitmap_region(
-      sprites->amoeba,
-      amoeba->source_x, amoeba->source_y, AMOEBA_SPRITE_WIDTH, AMOEBA_SPRITE_HEIGHT, // source bitmap region
-      al_map_rgb(255, 255, 255),                                                     // color, just use white if you don't want a tint
-      0, 0,                                                                          // center of rotation/scaling
-      amoeba->x, amoeba->y,                                                          // destination
-      AMOEBA_SCALE, AMOEBA_SCALE,                                                    // scale
-      0, 0);
+  for (int i = 0; i < *amoebaCount; i++)
+    if (amoeba[i].redraw)
+      al_draw_tinted_scaled_rotated_bitmap_region(
+          sprites->amoeba,
+          amoeba[i].source_x, amoeba[i].source_y, AMOEBA_SPRITE_WIDTH, AMOEBA_SPRITE_HEIGHT, // source bitmap region
+          al_map_rgb(255, 255, 255),                                                         // color, just use white if you don't want a tint
+          0, 0,                                                                              // center of rotation/scaling
+          amoeba[i].x, amoeba[i].y,                                                          // destination
+          AMOEBA_SCALE, AMOEBA_SCALE,                                                        // scale
+          0, 0);
 }
 
 void amoeba_free(AMOEBA_STRUCT *amoeba)

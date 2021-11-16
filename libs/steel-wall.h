@@ -22,7 +22,10 @@ void steel_wall_update(
     ROCKFORD_STRUCT *rockford,
     long int count);
 
-void steel_wall_draw(STEEL_WALL_STRUCT *steelWall, SPRITES_STRUCT *sprites);
+void steel_wall_draw(
+    STEEL_WALL_STRUCT *steelWall,
+    int *steelWallCount,
+    SPRITES_STRUCT *sprites);
 
 void steel_wall_free(STEEL_WALL_STRUCT *steelWall);
 

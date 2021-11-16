@@ -42,16 +42,20 @@ void explosion_update(
   }
 }
 
-void explosion_draw(EXPLOSION_STRUCT *explosion, SPRITES_STRUCT *sprites)
+void explosion_draw(
+    EXPLOSION_STRUCT *explosion,
+    SPRITES_STRUCT *sprites)
 {
-  al_draw_tinted_scaled_rotated_bitmap_region(
-      sprites->explosion,
-      explosion->source_x, explosion->source_y, EXPLOSION_SPRITE_WIDTH, EXPLOSION_SPRITE_HEIGHT, // source bitmap region
-      al_map_rgb(255, 255, 255),                                                                 // color, just use white if you don't want a tint
-      0, 0,                                                                                      // center of rotation/scaling
-      explosion->x, explosion->y,                                                                // destination
-      EXPLOSION_SCALE, EXPLOSION_SCALE,                                                          // scale
-      0, 0);
+  for (int i = 0; i < EXPLOSION_COUNT; i++)
+    if (explosion[i].redraw)
+      al_draw_tinted_scaled_rotated_bitmap_region(
+          sprites->explosion,
+          explosion[i].source_x, explosion[i].source_y, EXPLOSION_SPRITE_WIDTH, EXPLOSION_SPRITE_HEIGHT, // source bitmap region
+          al_map_rgb(255, 255, 255),                                                                     // color, just use white if you don't want a tint
+          0, 0,                                                                                          // center of rotation/scaling
+          explosion[i].x, explosion[i].y,                                                                // destination
+          EXPLOSION_SCALE, EXPLOSION_SCALE,                                                              // scale
+          0, 0);
 }
 
 void explosion_free(EXPLOSION_STRUCT *explosion)

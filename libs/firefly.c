@@ -285,16 +285,21 @@ void firefly_update(
   }
 }
 
-void firefly_draw(FIREFLY_STRUCT *firefly, SPRITES_STRUCT *sprites)
+void firefly_draw(
+    FIREFLY_STRUCT *firefly,
+    int *fireflyCount,
+    SPRITES_STRUCT *sprites)
 {
-  al_draw_tinted_scaled_rotated_bitmap_region(
-      sprites->firefly,
-      firefly->source_x, firefly->source_y, FIREFLY_SPRITE_WIDTH, FIREFLY_SPRITE_HEIGHT, // source bitmap region
-      al_map_rgb(255, 255, 255),                                                         // color, just use white if you don't want a tint
-      0, 0,                                                                              // center of rotation/scaling
-      firefly->x, firefly->y,                                                            // destination
-      FIREFLY_SCALE, FIREFLY_SCALE,                                                      // scale
-      0, 0);
+  for (int i = 0; i < *fireflyCount; i++)
+    if (firefly[i].redraw)
+      al_draw_tinted_scaled_rotated_bitmap_region(
+          sprites->firefly,
+          firefly[i].source_x, firefly[i].source_y, FIREFLY_SPRITE_WIDTH, FIREFLY_SPRITE_HEIGHT, // source bitmap region
+          al_map_rgb(255, 255, 255),                                                             // color, just use white if you don't want a tint
+          0, 0,                                                                                  // center of rotation/scaling
+          firefly[i].x, firefly[i].y,                                                            // destination
+          FIREFLY_SCALE, FIREFLY_SCALE,                                                          // scale
+          0, 0);
 }
 
 void firefly_free(FIREFLY_STRUCT *firefly)

@@ -12,6 +12,7 @@
 #include "./libs/map.h"
 #include "./libs/explosion.h"
 #include "./libs/utils.h"
+#include "./libs/scoreboard.h"
 
 ALLEGRO_DISPLAY *display;
 ALLEGRO_BITMAP *buffer;
@@ -50,23 +51,19 @@ void post_draw_display()
 int main()
 {
   srand(time(NULL));
-
-  int i;
-  long frames;
-  long score;
   char map[MAP_HEIGHT][MAP_WIDTH];
   bool restart = true;
 
   SPRITES_STRUCT sprites;
-  EXIT_STRUCT exit;
+
+  ROCKFORD_STRUCT *rockford;
+  EXIT_STRUCT *exit = NULL;
 
   FIREFLY_STRUCT *firefly;
   int fireflyCount = 0;
 
   STEEL_WALL_STRUCT *steelWall;
   int steelWallCount = 0;
-
-  ROCKFORD_STRUCT *rockford;
 
   BRICK_WALL_STRUCT *brickWall;
   int brickWallCount = 0;
@@ -124,6 +121,10 @@ int main()
   rockford = allocate_rockford();
   initialize(rockford, "rockford");
 
+  exit = allocate_exit();
+  initialize(exit, "exit");
+  exit_init(exit, -BLOCK_SIZE, -BLOCK_SIZE);
+
   diamond = allocate_array_diamond(MAX_OBJECT_QUANTITY);
   initialize(diamond, "diamond");
 
@@ -156,10 +157,7 @@ int main()
   al_register_event_source(queue, al_get_keyboard_event_source());
   al_register_event_source(queue, al_get_display_event_source(display));
   al_register_event_source(queue, al_get_timer_event_source(timer));
-
-  frames = 0;
-  score = 0;
-
+  
   bool done = false;
   bool redraw = true;
   ALLEGRO_EVENT event;
@@ -205,6 +203,8 @@ int main()
           &amoebaCount,
           &magicWallCount,
           event.timer.count);
+
+      exit_init(exit, -BLOCK_SIZE, -BLOCK_SIZE);
 
       restart = false;
     }
@@ -313,6 +313,13 @@ int main()
           &sprites,
           event.timer.count);
 
+      exit_update(
+          exit,
+          rockford,
+          map,
+          &sprites,
+          event.timer.count);
+
       redraw = true;
       break;
     default:
@@ -324,48 +331,31 @@ int main()
       pre_draw_display();
       al_clear_to_color(al_map_rgb(0, 0, 0));
 
-      if (rockford->redraw)
-        rockford_draw(rockford, &sprites);
+      rockford_draw(rockford, &sprites);
 
-      for (i = 0; i < steelWallCount; i++)
-        if (steelWall[i].redraw)
-          steel_wall_draw(&steelWall[i], &sprites);
+      steel_wall_draw(steelWall, &steelWallCount, &sprites);
 
-      for (i = 0; i < brickWallCount; i++)
-        if (brickWall[i].redraw)
-          brick_wall_draw(&brickWall[i], &sprites);
+      brick_wall_draw(brickWall, &brickWallCount, &sprites);
 
-      for (i = 0; i < magicWallCount; i++)
-        if (magicWall[i].redraw)
-          magic_wall_draw(&magicWall[i], &sprites);
+      magic_wall_draw(magicWall, &magicWallCount, &sprites);
 
-      for (i = 0; i < boulderCount; i++)
-        if (boulder[i].redraw)
-          boulder_draw(&boulder[i], &sprites);
+      boulder_draw(boulder, &boulderCount, &sprites);
 
-      for (i = 0; i < dirtCount; i++)
-        if (dirt[i].redraw)
-          dirt_draw(&dirt[i], &sprites);
+      dirt_draw(dirt, &dirtCount, &sprites);
 
-      for (i = 0; i < diamondCount; i++)
-        if (diamond[i].redraw)
-          diamond_draw(&diamond[i], &sprites);
+      diamond_draw(diamond, &diamondCount, &sprites);
 
-      for (i = 0; i < fireflyCount; i++)
-        if (firefly[i].redraw)
-          firefly_draw(&firefly[i], &sprites);
+      firefly_draw(firefly, &fireflyCount, &sprites);
 
-      for (i = 0; i < butterflyCount; i++)
-        if (butterfly[i].redraw)
-          butterfly_draw(&butterfly[i], &sprites);
+      butterfly_draw(butterfly, &butterflyCount, &sprites);
 
-      for (i = 0; i < amoebaCount; i++)
-        if (amoeba[i].redraw)
-          amoeba_draw(&amoeba[i], &sprites);
+      amoeba_draw(amoeba, &amoebaCount, &sprites);
 
-      for (i = 0; i < EXPLOSION_COUNT; i++)
-        if (explosion[i].redraw)
-          explosion_draw(&explosion[i], &sprites);
+      explosion_draw(explosion, &sprites);
+
+      exit_draw(exit, &sprites);
+
+      draw_scoreboard(rockford, &sprites);
 
       post_draw_display();
       redraw = false;
@@ -392,6 +382,7 @@ int main()
   explosion_free(explosion);
   amoeba_free(amoeba);
   magic_wall_free(magicWall);
+  exit_free(exit);
   sprites_deinit(&sprites);
   destroy_display();
   al_destroy_timer(timer);

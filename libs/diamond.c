@@ -31,9 +31,20 @@ void diamond_update(
 
     if (diamondPtr->redraw)
     {
+      if (isSpaceRockford(map, diamondPtr->y / BLOCK_SIZE, diamondPtr->x / BLOCK_SIZE))
+      {
+        rockford->quantity_of_diamonds++;
+        rockford->score += DIAMOND_SCORE;
+        diamondPtr->redraw = false;
+        printf("%d\n", rockford->quantity_of_diamonds);
+
+        return;
+      }
+
       if (!isSpaceDiamond(map, diamondPtr->y / BLOCK_SIZE, diamondPtr->x / BLOCK_SIZE))
       {
         diamondPtr->redraw = false;
+
         return;
       }
 
@@ -88,29 +99,25 @@ void diamond_update(
         if (diamondPtr->source_x >= al_get_bitmap_width(sprites->diamond))
           diamondPtr->source_x = 0;
       }
-
-      if (isCollision(diamondPtr->x, diamondPtr->y, rockford->x, rockford->y))
-      {
-        rockford->quantity_of_diamonds++;
-        rockford->score += DIAMOND_SCORE;
-        diamondPtr->redraw = false;
-        printf("%d\n", rockford->quantity_of_diamonds);
-      }
     }
   }
 }
 
-void diamond_draw(DIAMOND_STRUCT *diamond, SPRITES_STRUCT *sprites)
+void diamond_draw(
+    DIAMOND_STRUCT *diamond,
+    int *diamondCount,
+    SPRITES_STRUCT *sprites)
 {
-  al_draw_tinted_scaled_rotated_bitmap_region(
-      sprites->diamond,
-      diamond->source_x, diamond->source_y, DIAMOND_SPRITE_WIDTH, DIAMOND_SPRITE_HEIGHT, // source bitmap region
-      al_map_rgb(255, 255, 255),                                                         // color, just use white if you don't want a tint
-      0, 0,                                                                              // center of rotation/scaling
-      diamond->x, diamond->y,                                                            // destination
-      DIAMOND_SCALE, DIAMOND_SCALE,                                                      // scale
-      0, 0);
-  // al_draw_bitmap_region(sprites->diamond, diamond->source_x, diamond->source_y, DIAMOND_SPRITE_WIDTH, DIAM, diamond->x, diamond->y, 0);
+  for (int i = 0; i < *diamondCount; i++)
+    if (diamond[i].redraw)
+      al_draw_tinted_scaled_rotated_bitmap_region(
+          sprites->diamond,
+          diamond[i].source_x, diamond[i].source_y, DIAMOND_SPRITE_WIDTH, DIAMOND_SPRITE_HEIGHT, // source bitmap region
+          al_map_rgb(255, 255, 255),                                                             // color, just use white if you don't want a tint
+          0, 0,                                                                                  // center of rotation/scaling
+          diamond[i].x, diamond[i].y,                                                            // destination
+          DIAMOND_SCALE, DIAMOND_SCALE,                                                          // scale
+          0, 0);
 }
 
 void diamond_free(DIAMOND_STRUCT *diamond)

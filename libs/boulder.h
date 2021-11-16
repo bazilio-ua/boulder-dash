@@ -25,7 +25,10 @@ void boulder_update(
     ROCKFORD_STRUCT *rockford,
     long int count);
 
-void boulder_draw(BOULDER_STRUCT *boulder, SPRITES_STRUCT *sprites);
+void boulder_draw(
+    BOULDER_STRUCT *boulder,
+    int *boulderCount,
+    SPRITES_STRUCT *sprites);
 
 void boulder_free(BOULDER_STRUCT *steelWall);
 

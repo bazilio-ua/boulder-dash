@@ -30,16 +30,21 @@ void brick_wall_update(
   }
 }
 
-void brick_wall_draw(BRICK_WALL_STRUCT *brickWall, SPRITES_STRUCT *sprites)
+void brick_wall_draw(
+    BRICK_WALL_STRUCT *brickWall,
+    int *brickWallCount,
+    SPRITES_STRUCT *sprites)
 {
-  al_draw_tinted_scaled_rotated_bitmap_region(
-      sprites->brick_wall,
-      0, 0, BRICK_WALL_SPRITE_WIDTH, BRICK_WALL_SPRITE_HEIGHT, // source bitmap region
-      al_map_rgb(255, 255, 255),                               // color, just use white if you don't want a tint
-      0, 0,                                                    // center of rotation/scaling
-      brickWall->x, brickWall->y,                              // destination
-      BRICK_WALL_SCALE, BRICK_WALL_SCALE,                      // scale
-      0, 0);
+  for (int i = 0; i < *brickWallCount; i++)
+    if (brickWall[i].redraw)
+      al_draw_tinted_scaled_rotated_bitmap_region(
+          sprites->brick_wall,
+          0, 0, BRICK_WALL_SPRITE_WIDTH, BRICK_WALL_SPRITE_HEIGHT, // source bitmap region
+          al_map_rgb(255, 255, 255),                               // color, just use white if you don't want a tint
+          0, 0,                                                    // center of rotation/scaling
+          brickWall[i].x, brickWall[i].y,                              // destination
+          BRICK_WALL_SCALE, BRICK_WALL_SCALE,                      // scale
+          0, 0);
 }
 
 void brick_wall_free(BRICK_WALL_STRUCT *brickWall)

@@ -26,7 +26,10 @@ void diamond_update(
     ROCKFORD_STRUCT *rockford,
     long int count);
 
-void diamond_draw(DIAMOND_STRUCT *diamond, SPRITES_STRUCT *sprites);
+void diamond_draw(
+    DIAMOND_STRUCT *diamond,
+    int *diamondCount,
+    SPRITES_STRUCT *sprites);
 
 void diamond_free(DIAMOND_STRUCT *diamond);
 

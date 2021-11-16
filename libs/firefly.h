@@ -26,7 +26,10 @@ void firefly_update(
     SPRITES_STRUCT *sprites,
     long int count);
 
-void firefly_draw(FIREFLY_STRUCT *firefly, SPRITES_STRUCT *sprites);
+void firefly_draw(
+    FIREFLY_STRUCT *firefly,
+    int *fireflyCount,
+    SPRITES_STRUCT *sprites);
 
 void firefly_free(FIREFLY_STRUCT *firefly);
 

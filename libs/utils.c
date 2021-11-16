@@ -117,6 +117,14 @@ bool isSpaceMagicWall(
   return (map[i][j] == IS_MAGIC_WALL);
 }
 
+bool isSpaceExit(
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    int i,
+    int j)
+{
+  return (map[i][j] == IS_EXIT);
+}
+
 int generateRandomNumberBetween(
     int lower,
     int upper)

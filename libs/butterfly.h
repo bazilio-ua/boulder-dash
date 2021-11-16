@@ -8,12 +8,12 @@
 
 typedef struct BUTTERFLY_STRUCT
 {
-  int x, y;
-  int source_x;
-  int source_y;
-  int direction;
-  int amount_of_diamonds;
-  bool redraw;
+    int x, y;
+    int source_x;
+    int source_y;
+    int direction;
+    int amount_of_diamonds;
+    bool redraw;
 } BUTTERFLY_STRUCT;
 
 BUTTERFLY_STRUCT *allocate_array_butterfly(int butterflyCount);
@@ -35,6 +35,7 @@ void butterfly_update(
 
 void butterfly_draw(
     BUTTERFLY_STRUCT *butterfly,
+    int *butterflyCount,
     SPRITES_STRUCT *sprites);
 
 void butterfly_free(BUTTERFLY_STRUCT *butterfly);

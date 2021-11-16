@@ -22,16 +22,21 @@ void steel_wall_update(
   return;
 }
 
-void steel_wall_draw(STEEL_WALL_STRUCT *steelWall, SPRITES_STRUCT *sprites)
+void steel_wall_draw(
+    STEEL_WALL_STRUCT *steelWall,
+    int *steelWallCount,
+    SPRITES_STRUCT *sprites)
 {
-  al_draw_tinted_scaled_rotated_bitmap_region(
-      sprites->steel_wall,
-      0, 0, STEEL_WALL_SPRITE_WIDTH, STEEL_WALL_SPRITE_HEIGHT, // source bitmap region
-      al_map_rgb(255, 255, 255),                               // color, just use white if you don't want a tint
-      0, 0,                                                    // center of rotation/scaling
-      steelWall->x, steelWall->y,                              // destination
-      STEEL_WALL_SCALE, STEEL_WALL_SCALE,                      // scale
-      0, 0);
+  for (int i = 0; i < *steelWallCount; i++)
+    if (steelWall[i].redraw)
+      al_draw_tinted_scaled_rotated_bitmap_region(
+          sprites->steel_wall,
+          0, 0, STEEL_WALL_SPRITE_WIDTH, STEEL_WALL_SPRITE_HEIGHT, // source bitmap region
+          al_map_rgb(255, 255, 255),                               // color, just use white if you don't want a tint
+          0, 0,                                                    // center of rotation/scaling
+          steelWall[i].x, steelWall[i].y,                          // destination
+          STEEL_WALL_SCALE, STEEL_WALL_SCALE,                      // scale
+          0, 0);
 }
 
 void steel_wall_free(STEEL_WALL_STRUCT *steelWall)

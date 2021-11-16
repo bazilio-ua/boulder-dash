@@ -22,7 +22,10 @@ void brick_wall_update(
     ROCKFORD_STRUCT *rockford,
     long int count);
 
-void brick_wall_draw(BRICK_WALL_STRUCT *brickWall, SPRITES_STRUCT *sprites);
+void brick_wall_draw(
+    BRICK_WALL_STRUCT *brickWall,
+    int *brickWallCount,
+    SPRITES_STRUCT *sprites);
 
 void brick_wall_free(BRICK_WALL_STRUCT *steelWall);
 

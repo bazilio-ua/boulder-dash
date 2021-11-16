@@ -37,7 +37,10 @@ void amoeba_update(
     SPRITES_STRUCT *sprites,
     long int count);
 
-void amoeba_draw(AMOEBA_STRUCT *amoeba, SPRITES_STRUCT *sprites);
+void amoeba_draw(
+    AMOEBA_STRUCT *amoeba,
+    int *amoebaCount,
+    SPRITES_STRUCT *sprites);
 
 void amoeba_free(AMOEBA_STRUCT *amoeba);
 
