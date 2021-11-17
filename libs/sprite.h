@@ -6,6 +6,7 @@
 typedef struct SPRITES_STRUCT
 {
   ALLEGRO_BITMAP *_sheet;
+
   ALLEGRO_BITMAP *rockford;
   ALLEGRO_BITMAP *rockford_running_left;
   ALLEGRO_BITMAP *rockford_running_right;
@@ -36,7 +37,7 @@ typedef struct SPRITES_STRUCT
   ALLEGRO_BITMAP *scoreboard;
 } SPRITES_STRUCT;
 
-void sprites_init(SPRITES_STRUCT *sprites); 
+void sprites_init(SPRITES_STRUCT *sprites);
 
 void sprites_deinit(SPRITES_STRUCT *sprites);
 

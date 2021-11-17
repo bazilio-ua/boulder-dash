@@ -4,6 +4,7 @@
 #include "utils.h"
 #include "sprite.h"
 #include "explosion.h"
+#include "audio.h"
 
 typedef struct ROCKFORD_STRUCT
 {
@@ -21,6 +22,7 @@ typedef struct ROCKFORD_STRUCT
   bool lose;
   bool active;
   bool redraw;
+  bool is_easter_egg_active;
 } ROCKFORD_STRUCT;
 
 ROCKFORD_STRUCT *allocate_rockford();
@@ -34,6 +36,7 @@ void rockford_update(
     ROCKFORD_STRUCT *rockford,
     char map[MAP_HEIGHT][MAP_WIDTH],
     EXPLOSION_STRUCT *explosion,
+    AUDIO_STRUCT *audio,
     ALLEGRO_KEYBOARD_STATE *keyState,
     SPRITES_STRUCT *sprites,
     long int count);

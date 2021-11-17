@@ -5,6 +5,7 @@
 #include "sprite.h"
 #include "explosion.h"
 #include "diamond.h"
+#include "audio.h"
 
 typedef struct BUTTERFLY_STRUCT
 {
@@ -30,6 +31,7 @@ void butterfly_update(
     int *diamondCount,
     char map[MAP_HEIGHT][MAP_WIDTH],
     EXPLOSION_STRUCT *explosion,
+    AUDIO_STRUCT *audio,
     SPRITES_STRUCT *sprites,
     long int count);
 

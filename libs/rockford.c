@@ -23,12 +23,14 @@ void rockford_init(ROCKFORD_STRUCT *rockford, int pos_x, int pos_y)
   rockford->won = false;
   rockford->lose = false;
   rockford->redraw = true;
+  rockford->is_easter_egg_active = false;
 }
 
 void rockford_update(
     ROCKFORD_STRUCT *rockford,
     char map[MAP_HEIGHT][MAP_WIDTH],
     EXPLOSION_STRUCT *explosion,
+    AUDIO_STRUCT *audio,
     ALLEGRO_KEYBOARD_STATE *keyState,
     SPRITES_STRUCT *sprites,
     long int count)
@@ -43,9 +45,11 @@ void rockford_update(
   {
     rockford->redraw = false;
     rockford->lives = rockford->lives - 1;
+
+    return;
   }
 
-  else if (!isSpaceRockford(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE)))
+  if (!isSpaceRockford(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE)))
   {
     int rockfordLine = rockford->y / BLOCK_SIZE;
     int rockfordColumn = rockford->x / BLOCK_SIZE;
@@ -72,6 +76,9 @@ void rockford_update(
 
     rockford->lives = rockford->lives - 1;
     rockford->redraw = false;
+    al_play_sample(audio->explosion, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+
+    return;
   }
 
   if (rockford->lives == 0)
@@ -80,7 +87,15 @@ void rockford_update(
     return;
   }
 
-  else if (count % 5 == 0)
+  if (al_key_down(keyState, ALLEGRO_KEY_ESCAPE))
+  {
+    al_stop_sample_instance(audio->background_instance);
+    al_play_sample(audio->easter_egg, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+
+    return;
+  }
+
+  if (count % 5 == 0)
   {
 
     rockford->active = true;
@@ -154,6 +169,7 @@ void rockford_update(
 
     if (rockford->active)
     {
+      al_play_sample(audio->steps, 0.5, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
       rockford->source_y = 0;
 
       if (rockford->direction == LEFT)

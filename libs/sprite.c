@@ -9,6 +9,8 @@ ALLEGRO_BITMAP *sprite_grab(SPRITES_STRUCT *sprites, int x, int y, int w, int h)
 
 void sprites_init(SPRITES_STRUCT *sprites)
 {
+  initialize(al_init_image_addon(), "image");
+
   sprites->_sheet = al_load_bitmap("./resources/sprites.png");
   initialize(sprites->_sheet, "sprites");
 

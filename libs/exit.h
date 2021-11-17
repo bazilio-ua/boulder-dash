@@ -4,6 +4,7 @@
 #include "utils.h"
 #include "sprite.h"
 #include "rockford.h"
+#include "audio.h"
 
 typedef struct EXIT_STRUCT
 {

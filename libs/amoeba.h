@@ -6,6 +6,7 @@
 #include "boulder.h"
 #include "explosion.h"
 #include "diamond.h"
+#include "audio.h"
 
 typedef struct AMOEBA_STRUCT
 {
@@ -34,6 +35,7 @@ void amoeba_update(
     int *diamondCount,
     char map[MAP_HEIGHT][MAP_WIDTH],
     EXPLOSION_STRUCT *explosion,
+    AUDIO_STRUCT *audio,
     SPRITES_STRUCT *sprites,
     long int count);
 

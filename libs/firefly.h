@@ -4,6 +4,7 @@
 #include "utils.h"
 #include "sprite.h"
 #include "explosion.h"
+#include "audio.h"
 
 typedef struct FIREFLY_STRUCT
 {
@@ -23,6 +24,7 @@ void firefly_update(
     int *fireflyCount,
     char map[MAP_HEIGHT][MAP_WIDTH],
     EXPLOSION_STRUCT *explosion,
+    AUDIO_STRUCT *audio,
     SPRITES_STRUCT *sprites,
     long int count);
 

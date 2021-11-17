@@ -17,6 +17,7 @@
     "brick-wall.h": "c",
     "magic-wall.h": "c",
     "exit.h": "c",
-    "scoreboard.h": "c"
+    "scoreboard.h": "c",
+    "audio.h": "c"
   }
 }

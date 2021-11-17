@@ -73,6 +73,7 @@ void amoeba_update(
     int *diamondCount,
     char map[MAP_HEIGHT][MAP_WIDTH],
     EXPLOSION_STRUCT *explosion,
+    AUDIO_STRUCT *audio,
     SPRITES_STRUCT *sprites,
     long int count)
 {
@@ -122,6 +123,7 @@ void amoeba_update(
         }
 
         amoebaPtr->redraw = false;
+        al_play_sample(audio->explosion, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
 
         return;
       }

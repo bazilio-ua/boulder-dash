@@ -13,6 +13,7 @@
 #include "./libs/explosion.h"
 #include "./libs/utils.h"
 #include "./libs/scoreboard.h"
+#include "./libs/audio.h"
 
 ALLEGRO_DISPLAY *display;
 ALLEGRO_BITMAP *buffer;
@@ -53,8 +54,13 @@ int main()
   srand(time(NULL));
   char map[MAP_HEIGHT][MAP_WIDTH];
   bool restart = true;
+  bool done = false;
+  bool redraw = true;
+  ALLEGRO_EVENT event;
+  ALLEGRO_KEYBOARD_STATE keyState;
 
   SPRITES_STRUCT sprites;
+  AUDIO_STRUCT audio;
 
   ROCKFORD_STRUCT *rockford;
   EXIT_STRUCT *exit = NULL;
@@ -140,6 +146,10 @@ int main()
 
   initialize(al_init(), "allegro");
   initialize(al_install_keyboard(), "keyboard");
+  audio_init(&audio);
+
+  al_set_sample_instance_playmode(audio.background_instance, ALLEGRO_PLAYMODE_LOOP);
+  al_attach_sample_instance_to_mixer(audio.background_instance, al_get_default_mixer());
 
   ALLEGRO_TIMER *timer = al_create_timer(1.0 / 60.0);
   initialize(timer, "timer");
@@ -149,7 +159,6 @@ int main()
 
   initialize_display();
 
-  initialize(al_init_image_addon(), "image");
   sprites_init(&sprites);
 
   initialize(al_init_primitives_addon(), "primitives");
@@ -157,11 +166,8 @@ int main()
   al_register_event_source(queue, al_get_keyboard_event_source());
   al_register_event_source(queue, al_get_display_event_source(display));
   al_register_event_source(queue, al_get_timer_event_source(timer));
-  
-  bool done = false;
-  bool redraw = true;
-  ALLEGRO_EVENT event;
-  ALLEGRO_KEYBOARD_STATE keyState;
+
+  al_play_sample_instance(audio.background_instance);
 
   al_start_timer(timer);
 
@@ -225,6 +231,7 @@ int main()
             rockford,
             map,
             explosion,
+            &audio,
             &keyState,
             &sprites,
             event.timer.count);
@@ -238,6 +245,7 @@ int main()
           &fireflyCount,
           map,
           explosion,
+          &audio,
           &sprites,
           event.timer.count);
 
@@ -248,6 +256,7 @@ int main()
           &diamondCount,
           map,
           explosion,
+          &audio,
           &sprites,
           event.timer.count);
 
@@ -275,6 +284,7 @@ int main()
           &diamondCount,
           map,
           explosion,
+          &audio,
           &sprites,
           event.timer.count);
 
@@ -384,6 +394,7 @@ int main()
   magic_wall_free(magicWall);
   exit_free(exit);
   sprites_deinit(&sprites);
+  audio_deinit(&audio);
   destroy_display();
   al_destroy_timer(timer);
   al_destroy_event_queue(queue);

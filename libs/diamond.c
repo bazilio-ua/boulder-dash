@@ -36,7 +36,6 @@ void diamond_update(
         rockford->quantity_of_diamonds++;
         rockford->score += DIAMOND_SCORE;
         diamondPtr->redraw = false;
-        printf("%d\n", rockford->quantity_of_diamonds);
 
         return;
       }
