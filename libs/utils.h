@@ -1,3 +1,6 @@
+#ifndef _UTILSH_
+#define _UTILSH_
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <allegro5/allegro5.h>
@@ -6,6 +9,7 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_native_dialog.h>
 #include <time.h>
 
 #define BUFFER_WIDTH 320
@@ -166,3 +170,5 @@ bool isSpaceMagicWall(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
 bool isSpaceExit(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
 
 int generateRandomNumberBetween(int lower, int upper);
+
+#endif

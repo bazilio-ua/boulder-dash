@@ -1,8 +1,8 @@
 CFLAGS = -Wall
 
-ALLEGRO_LIBS = `pkg-config allegro-5 allegro_font-5 allegro_primitives-5 allegro_audio-5 allegro_acodec-5 allegro_image-5 --libs --cflags`
+ALLEGRO_LIBS = `pkg-config allegro-5 allegro_font-5 allegro_primitives-5 allegro_audio-5 allegro_acodec-5 allegro_image-5 allegro_dialog-5 --libs --cflags`
 
-OBJECTS = utils.o sprite.o rockford.o amoeba.o boulder.o brick-wall.o butterfly.o diamond.o dirt.o exit.o firefly.o magic-wall.o map.o steel-wall.o explosion.o scoreboard.o audio.o main.o
+OBJECTS = utils.o sprite.o rockford.o amoeba.o boulder.o brick-wall.o butterfly.o diamond.o dirt.o exit.o firefly.o magic-wall.o map.o steel-wall.o explosion.o scoreboard.o audio.o game.o display.o main.o
 
 all: boulder-dash
 
@@ -62,6 +62,12 @@ scoreboard.o: ./libs/scoreboard.c ./libs/scoreboard.h
 
 audio.o: ./libs/audio.c ./libs/audio.h
 	gcc -c ./libs/audio.c $(CFLAGS);
+
+game.o: ./libs/game.c ./libs/game.h
+	gcc -c ./libs/game.c $(CFLAGS);
+
+display.o: ./libs/display.c ./libs/display.h
+	gcc -c ./libs/display.c $(CFLAGS);
 
 clean:
 	rm -f *.o

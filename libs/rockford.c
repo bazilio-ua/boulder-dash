@@ -78,16 +78,11 @@ void rockford_update(
     rockford->redraw = false;
     al_play_sample(audio->explosion, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
 
-    return;
+    if (rockford->lives == 0)
+      rockford->lose = true;
   }
 
-  if (rockford->lives == 0)
-  {
-    rockford->lose = true;
-    return;
-  }
-
-  if (al_key_down(keyState, ALLEGRO_KEY_ESCAPE))
+  if (al_key_down(keyState, ALLEGRO_KEY_ENTER))
   {
     al_stop_sample_instance(audio->background_instance);
     al_play_sample(audio->easter_egg, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
