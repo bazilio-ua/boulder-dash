@@ -1,5 +1,4 @@
 #include "./libs/game.h"
-#include "./libs/display.h"
 
 int main()
 {
@@ -8,12 +7,12 @@ int main()
   bool restart = true;
   bool done = false;
 
+  unsigned char keyboard[ALLEGRO_KEY_MAX];
   ALLEGRO_TIMER *timer;
   ALLEGRO_EVENT_QUEUE *queue;
   ALLEGRO_DISPLAY *display;
   ALLEGRO_BITMAP *buffer;
   ALLEGRO_EVENT event;
-  ALLEGRO_KEYBOARD_STATE keyState;
   SPRITES_STRUCT sprites;
   AUDIO_STRUCT audio;
 
@@ -40,6 +39,7 @@ int main()
   EXPLOSION_STRUCT *explosion = NULL;
 
   game_initialization(
+      keyboard,
       &timer,
       &queue,
       &display,
@@ -69,106 +69,38 @@ int main()
       &magicWallCount,
       &explosion);
 
-  while (!rockford->won && !rockford->lose && !done)
-  {
-    if (restart)
-      game_restart(
-          &restart,
-          event.timer.count,
-          map,
-          &rockford,
-          &exit,
-          &firefly,
-          &fireflyCount,
-          &steelWall,
-          &steelWallCount,
-          &brickWall,
-          &brickWallCount,
-          &boulder,
-          &boulderCount,
-          &butterfly,
-          &butterflyCount,
-          &dirt,
-          &dirtCount,
-          &diamond,
-          &diamondCount,
-          &amoeba,
-          &amoebaCount,
-          &magicWall,
-          &magicWallCount,
-          &explosion);
-
-    al_wait_for_event(queue, &event);
-    al_get_keyboard_state(&keyState);
-
-    switch (event.type)
-    {
-    case ALLEGRO_EVENT_DISPLAY_CLOSE:
-      done = true;
-      break;
-    case ALLEGRO_EVENT_TIMER:
-      game_update(
-          &keyState,
-          firefly,
-          &fireflyCount,
-          map,
-          explosion,
-          &audio,
-          &sprites,
-          butterfly,
-          diamond,
-          &butterflyCount,
-          &diamondCount,
-          boulder,
-          &boulderCount,
-          rockford,
-          amoeba,
-          &amoebaCount,
-          dirt,
-          &dirtCount,
-          brickWall,
-          &brickWallCount,
-          magicWall,
-          &magicWallCount,
-          exit,
-          event.timer.count,
-          &restart);
-
-      if (al_key_down(&keyState, ALLEGRO_KEY_ESCAPE))
-        done = true;
-
-      break;
-    default:
-      break;
-    }
-
-    if (al_is_event_queue_empty(queue))
-      game_draw(
-          &display,
-          &buffer,
-          firefly,
-          &fireflyCount,
-          explosion,
-          &sprites,
-          butterfly,
-          diamond,
-          &butterflyCount,
-          &diamondCount,
-          boulder,
-          &boulderCount,
-          rockford,
-          amoeba,
-          &amoebaCount,
-          dirt,
-          &dirtCount,
-          brickWall,
-          &brickWallCount,
-          magicWall,
-          &magicWallCount,
-          steelWall,
-          &steelWallCount,
-          exit);
-  }
+  handle_game(
+      keyboard,
+      &event,
+      &queue,
+      &display,
+      &buffer,
+      map,
+      &sprites,
+      &audio,
+      &rockford,
+      &exit,
+      &firefly,
+      &fireflyCount,
+      &steelWall,
+      &steelWallCount,
+      &brickWall,
+      &brickWallCount,
+      &boulder,
+      &boulderCount,
+      &butterfly,
+      &butterflyCount,
+      &dirt,
+      &dirtCount,
+      &diamond,
+      &diamondCount,
+      &amoeba,
+      &amoebaCount,
+      &magicWall,
+      &magicWallCount,
+      &explosion,
+      &restart,
+      &done);
 
   game_clear(
       &timer,

@@ -1,5 +1,6 @@
 #include "audio.h"
 
+/* pega o áudio e verifica se é nulo ou não */
 ALLEGRO_SAMPLE *audio_grep(char *audioPath)
 {
   ALLEGRO_SAMPLE *audio = al_load_sample(audioPath);
@@ -8,6 +9,7 @@ ALLEGRO_SAMPLE *audio_grep(char *audioPath)
   return audio;
 }
 
+/* cria uma instância de áudio e verifica se é nulo ou não */
 ALLEGRO_SAMPLE_INSTANCE *audio_grep_instance(ALLEGRO_SAMPLE *audio)
 {
   ALLEGRO_SAMPLE_INSTANCE *audioInstance = al_create_sample_instance(audio);
@@ -16,6 +18,7 @@ ALLEGRO_SAMPLE_INSTANCE *audio_grep_instance(ALLEGRO_SAMPLE *audio)
   return audioInstance;
 }
 
+/* inicializa os áudios */
 void audio_init(AUDIO_STRUCT *audios)
 {
   initialize(al_install_audio(), "audio");
@@ -32,6 +35,7 @@ void audio_init(AUDIO_STRUCT *audios)
   audios->steps = audio_grep("./resources/steps.wav");
 }
 
+/* libera os áudios */
 void audio_deinit(AUDIO_STRUCT *audios)
 {
   al_destroy_sample(audios->background);

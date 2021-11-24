@@ -1,5 +1,6 @@
 #include "display.h"
 
+/* inicializa o display e o buffer */
 void initialize_display(
     ALLEGRO_DISPLAY **display,
     ALLEGRO_BITMAP **buffer)
@@ -14,6 +15,7 @@ void initialize_display(
   initialize(*buffer, "bitmap buffer");
 }
 
+/* destroi o display e o buffer */
 void destroy_display(
     ALLEGRO_DISPLAY **display,
     ALLEGRO_BITMAP **buffer)
@@ -22,11 +24,13 @@ void destroy_display(
   al_destroy_display(*display);
 }
 
+/* seleciona o bitmap para o qual todas as operações de desenho subsequentes no thread de chamada serão desenhadas */
 void pre_draw_display(ALLEGRO_BITMAP **buffer)
 {
   al_set_target_bitmap(*buffer);
 }
 
+/* seleciona o bitmap para o qual todas as operações de desenho anteriores no thread de chamada serão desenhadas */
 void post_draw_display(
     ALLEGRO_DISPLAY **display,
     ALLEGRO_BITMAP **buffer)

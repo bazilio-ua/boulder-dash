@@ -1,5 +1,6 @@
 #include "sprite.h"
 
+/* pega um sub bitmap a partir de um bitmap e verifca se é nulo ou não */
 ALLEGRO_BITMAP *sprite_grab(SPRITES_STRUCT *sprites, int x, int y, int w, int h)
 {
   ALLEGRO_BITMAP *sprite = al_create_sub_bitmap(sprites->_sheet, x, y, w, h);
@@ -7,6 +8,7 @@ ALLEGRO_BITMAP *sprite_grab(SPRITES_STRUCT *sprites, int x, int y, int w, int h)
   return sprite;
 }
 
+/* inicializa todos os bitmaps */
 void sprites_init(SPRITES_STRUCT *sprites)
 {
   initialize(al_init_image_addon(), "image");
@@ -44,6 +46,8 @@ void sprites_init(SPRITES_STRUCT *sprites)
   sprites->scoreboard = sprite_grab(sprites, 256, 256, SCOREBOARD_SPRITE_WIDTH * 2, SCOREBOARD_SPRITE_HEIGHT * 10);
 }
 
+
+/* libera todos os bitmaps */
 void sprites_deinit(SPRITES_STRUCT *sprites)
 {
   al_destroy_bitmap(sprites->rockford);

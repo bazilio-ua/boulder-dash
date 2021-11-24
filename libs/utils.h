@@ -12,6 +12,9 @@
 #include <allegro5/allegro_native_dialog.h>
 #include <time.h>
 
+#define KEY_SEEN 1
+#define KEY_RELEASED 2
+
 #define BUFFER_WIDTH 320
 #define BUFFER_HEIGHT 160
 #define DISPLAY_SCALE 4

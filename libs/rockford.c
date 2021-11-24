@@ -31,7 +31,7 @@ void rockford_update(
     char map[MAP_HEIGHT][MAP_WIDTH],
     EXPLOSION_STRUCT *explosion,
     AUDIO_STRUCT *audio,
-    ALLEGRO_KEYBOARD_STATE *keyState,
+    unsigned char key[ALLEGRO_KEY_MAX],
     SPRITES_STRUCT *sprites,
     long int count)
 {
@@ -82,7 +82,7 @@ void rockford_update(
       rockford->lose = true;
   }
 
-  if (al_key_down(keyState, ALLEGRO_KEY_ENTER))
+  if (key[ALLEGRO_KEY_ENTER])
   {
     al_stop_sample_instance(audio->background_instance);
     al_play_sample(audio->easter_egg, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
@@ -95,7 +95,7 @@ void rockford_update(
 
     rockford->active = true;
 
-    if (al_key_down(keyState, ALLEGRO_KEY_LEFT))
+    if (key[ALLEGRO_KEY_LEFT])
     {
       if (isSpaceEmpty(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE) - 1) ||
           isSpaceDirt(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE) - 1) ||
@@ -110,7 +110,7 @@ void rockford_update(
       rockford->last_direction = rockford->direction;
       rockford->direction = LEFT;
     }
-    else if (al_key_down(keyState, ALLEGRO_KEY_RIGHT))
+    else if (key[ALLEGRO_KEY_RIGHT])
     {
       if (isSpaceEmpty(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE) + 1) ||
           isSpaceDirt(map, (rockford->y / BLOCK_SIZE), (rockford->x / BLOCK_SIZE) + 1) ||
@@ -125,7 +125,7 @@ void rockford_update(
       rockford->last_direction = rockford->direction;
       rockford->direction = RIGHT;
     }
-    else if (al_key_down(keyState, ALLEGRO_KEY_UP))
+    else if (key[ALLEGRO_KEY_UP])
     {
       if (isSpaceEmpty(map, (rockford->y / BLOCK_SIZE) - 1, (rockford->x / BLOCK_SIZE)) ||
           isSpaceDirt(map, (rockford->y / BLOCK_SIZE) - 1, (rockford->x / BLOCK_SIZE)) ||
@@ -142,7 +142,7 @@ void rockford_update(
 
       rockford->direction = UP;
     }
-    else if (al_key_down(keyState, ALLEGRO_KEY_DOWN))
+    else if (key[ALLEGRO_KEY_DOWN])
     {
       if (isSpaceEmpty(map, (rockford->y / BLOCK_SIZE) + 1, (rockford->x / BLOCK_SIZE)) ||
           isSpaceDirt(map, (rockford->y / BLOCK_SIZE) + 1, (rockford->x / BLOCK_SIZE)) ||

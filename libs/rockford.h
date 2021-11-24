@@ -8,21 +8,21 @@
 
 typedef struct ROCKFORD_STRUCT
 {
-  int x, y;
-  int lives;
-  int respawn_timer;
-  int invincible_timer;
-  int direction;
-  int last_direction;
-  int source_x;
-  int source_y;
-  int score;
-  int quantity_of_diamonds;
-  bool won;
-  bool lose;
-  bool active;
-  bool redraw;
-  bool is_easter_egg_active;
+    int x, y;
+    int lives;
+    int respawn_timer;
+    int invincible_timer;
+    int direction;
+    int last_direction;
+    int source_x;
+    int source_y;
+    int score;
+    int quantity_of_diamonds;
+    bool won;
+    bool lose;
+    bool active;
+    bool redraw;
+    bool is_easter_egg_active;
 } ROCKFORD_STRUCT;
 
 ROCKFORD_STRUCT *allocate_rockford();
@@ -37,7 +37,7 @@ void rockford_update(
     char map[MAP_HEIGHT][MAP_WIDTH],
     EXPLOSION_STRUCT *explosion,
     AUDIO_STRUCT *audio,
-    ALLEGRO_KEYBOARD_STATE *keyState,
+    unsigned char key[ALLEGRO_KEY_MAX],
     SPRITES_STRUCT *sprites,
     long int count);
 

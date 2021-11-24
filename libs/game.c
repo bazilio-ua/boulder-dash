@@ -1,6 +1,8 @@
 #include "game.h"
 
+/* função que lida com todas as inicializações necessárias começar o jogo */
 void game_initialization(
+    unsigned char key[ALLEGRO_KEY_MAX],
     ALLEGRO_TIMER **timer,
     ALLEGRO_EVENT_QUEUE **queue,
     ALLEGRO_DISPLAY **display,
@@ -88,7 +90,7 @@ void game_initialization(
   al_set_sample_instance_playmode(audio->background_instance, ALLEGRO_PLAYMODE_LOOP);
   al_attach_sample_instance_to_mixer(audio->background_instance, al_get_default_mixer());
 
-  *timer = al_create_timer(1.0 / 60.0);
+  *timer = al_create_timer(1.0 / 60.0); //Cria o timer a 60 fps
   initialize(*timer, "timer");
 
   *queue = al_create_event_queue();
@@ -104,11 +106,14 @@ void game_initialization(
   al_register_event_source(*queue, al_get_display_event_source(*display));
   al_register_event_source(*queue, al_get_timer_event_source(*timer));
 
+  keyboard_init(key);
+
   al_play_sample_instance(audio->background_instance);
 
   al_start_timer(*timer);
 }
 
+/* Função que faz o jogo reiniciar, seja porque o usuário teclou R ou porque o rockford morreu */
 void game_restart(
     bool *restart,
     int count,
@@ -175,8 +180,9 @@ void game_restart(
   *restart = false;
 }
 
+/* Função que atualiza o estado do jogo e dos objetos */
 void game_update(
-    ALLEGRO_KEYBOARD_STATE *keyState,
+    unsigned char key[ALLEGRO_KEY_MAX],
     FIREFLY_STRUCT *firefly,
     int *fireflyCount,
     char map[MAP_HEIGHT][MAP_WIDTH],
@@ -200,7 +206,8 @@ void game_update(
     int *magicWallCount,
     EXIT_STRUCT *exit,
     long int count,
-    bool *restart)
+    bool *restart,
+    bool *done)
 {
   if (rockford->redraw)
   {
@@ -209,11 +216,11 @@ void game_update(
         map,
         explosion,
         audio,
-        keyState,
+        key,
         sprites,
         count);
 
-    if (!rockford->redraw)
+    if (!rockford->redraw) // caso o rockford morra, reinicia o jogo
       *restart = true;
   }
 
@@ -299,8 +306,14 @@ void game_update(
       map,
       sprites,
       count);
+
+  if (!key[ALLEGRO_KEY_ESCAPE]) //only way that i found to fix this bug. its close the game when you press ESC
+    *done = true;
+  if (key[ALLEGRO_KEY_R]) //reinicia o jogo
+    *restart = true;
 }
 
+/* Função responsável por desenhar o estado atual do jogo */
 void game_draw(
     ALLEGRO_DISPLAY **display,
     ALLEGRO_BITMAP **buffer,
@@ -359,6 +372,142 @@ void game_draw(
   post_draw_display(display, buffer);
 }
 
+/* Função que lida com o jogo. Loop principal */
+void handle_game(
+    unsigned char key[ALLEGRO_KEY_MAX],
+    ALLEGRO_EVENT *event,
+    ALLEGRO_EVENT_QUEUE **queue,
+    ALLEGRO_DISPLAY **display,
+    ALLEGRO_BITMAP **buffer,
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    SPRITES_STRUCT *sprites,
+    AUDIO_STRUCT *audio,
+    ROCKFORD_STRUCT **rockford,
+    EXIT_STRUCT **exit,
+    FIREFLY_STRUCT **firefly,
+    int *fireflyCount,
+    STEEL_WALL_STRUCT **steelWall,
+    int *steelWallCount,
+    BRICK_WALL_STRUCT **brickWall,
+    int *brickWallCount,
+    BOULDER_STRUCT **boulder,
+    int *boulderCount,
+    BUTTERFLY_STRUCT **butterfly,
+    int *butterflyCount,
+    DIRT_STRUCT **dirt,
+    int *dirtCount,
+    DIAMOND_STRUCT **diamond,
+    int *diamondCount,
+    AMOEBA_STRUCT **amoeba,
+    int *amoebaCount,
+    MAGIC_WALL_STRUCT **magicWall,
+    int *magicWallCount,
+    EXPLOSION_STRUCT **explosion,
+    bool *restart,
+    bool *done)
+{
+
+  while (!(*rockford)->won && !(*rockford)->lose && !(*done))
+  {
+    if (*restart)
+      game_restart(
+          restart,
+          event->timer.count,
+          map,
+          rockford,
+          exit,
+          firefly,
+          fireflyCount,
+          steelWall,
+          steelWallCount,
+          brickWall,
+          brickWallCount,
+          boulder,
+          boulderCount,
+          butterfly,
+          butterflyCount,
+          dirt,
+          dirtCount,
+          diamond,
+          diamondCount,
+          amoeba,
+          amoebaCount,
+          magicWall,
+          magicWallCount,
+          explosion);
+
+    al_wait_for_event(*queue, event);
+
+    keyboard_update(key, event);
+
+    switch (event->type)
+    {
+    case ALLEGRO_EVENT_DISPLAY_CLOSE:
+      *done = true;
+      break;
+    case ALLEGRO_EVENT_TIMER:
+      game_update(
+          key,
+          *firefly,
+          fireflyCount,
+          map,
+          *explosion,
+          audio,
+          sprites,
+          *butterfly,
+          *diamond,
+          butterflyCount,
+          diamondCount,
+          *boulder,
+          boulderCount,
+          *rockford,
+          *amoeba,
+          amoebaCount,
+          *dirt,
+          dirtCount,
+          *brickWall,
+          brickWallCount,
+          *magicWall,
+          magicWallCount,
+          *exit,
+          event->timer.count,
+          restart,
+          done);
+      break;
+    default:
+      break;
+    }
+
+    if (al_is_event_queue_empty(*queue))
+      game_draw(
+          display,
+          buffer,
+          *firefly,
+          fireflyCount,
+          *explosion,
+          sprites,
+          *butterfly,
+          *diamond,
+          butterflyCount,
+          diamondCount,
+          *boulder,
+          boulderCount,
+          *rockford,
+          *amoeba,
+          amoebaCount,
+          *dirt,
+          dirtCount,
+          *brickWall,
+          brickWallCount,
+          *magicWall,
+          magicWallCount,
+          *steelWall,
+          steelWallCount,
+          *exit);
+  }
+}
+
+/* Função que faz todas as liberações necessárias */
 void game_clear(
     ALLEGRO_TIMER **timer,
     ALLEGRO_EVENT_QUEUE **queue,
@@ -391,9 +540,9 @@ void game_clear(
   amoeba_free(*amoeba);
   magic_wall_free(*magicWall);
   exit_free(*exit);
+
   sprites_deinit(sprites);
   audio_deinit(audio);
-
   destroy_display(display, buffer);
   al_destroy_timer(*timer);
   al_destroy_event_queue(*queue);
