@@ -1,9 +1,9 @@
 #include "keyboard.h"
 
 /* Inicializa o teclado */
-void keyboard_init(unsigned char key[ALLEGRO_KEY_MAX])
+void keyboard_init(unsigned char *key)
 {
-  memset(key, 0, sizeof(key));
+  memset(key, 0, sizeof(unsigned char) * ALLEGRO_KEY_MAX);
 }
 
 /* Atualiza o estado do teclado */

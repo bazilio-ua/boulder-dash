@@ -1,5 +1,6 @@
 #include "map.h"
 
+/* inicializa o mapa, lendo o txt */
 void initialize_map(char map[MAP_HEIGHT][MAP_WIDTH], char *filePath)
 {
   FILE *file;
@@ -31,6 +32,7 @@ void initialize_map(char map[MAP_HEIGHT][MAP_WIDTH], char *filePath)
   fclose(file);
 }
 
+/* Contabiliza os objetos do mapa para fazer suas devidas alocações */
 void count_map_objects(
     char map[MAP_HEIGHT][MAP_WIDTH],
     int *steelWallCount,
@@ -79,6 +81,7 @@ void count_map_objects(
       }
 }
 
+/* Inicializa os objetos no mapa */
 void init_map_objects(
     char map[MAP_HEIGHT][MAP_WIDTH],
     STEEL_WALL_STRUCT *steelWall,

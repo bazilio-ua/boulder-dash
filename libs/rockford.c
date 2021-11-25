@@ -23,7 +23,12 @@ void rockford_init(ROCKFORD_STRUCT *rockford, int pos_x, int pos_y)
   rockford->won = false;
   rockford->lose = false;
   rockford->redraw = true;
-  rockford->is_easter_egg_active = false;
+
+  if (!rockford->is_easter_egg_active)
+  {
+    rockford->is_easter_egg_active = false;
+    rockford->started_time_easter_egg = 0;
+  }
 }
 
 void rockford_update(
@@ -80,14 +85,6 @@ void rockford_update(
 
     if (rockford->lives == 0)
       rockford->lose = true;
-  }
-
-  if (key[ALLEGRO_KEY_ENTER])
-  {
-    al_stop_sample_instance(audio->background_instance);
-    al_play_sample(audio->easter_egg, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
-
-    return;
   }
 
   if (count % 5 == 0)

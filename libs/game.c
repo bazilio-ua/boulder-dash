@@ -306,11 +306,6 @@ void game_update(
       map,
       sprites,
       count);
-
-  if (!key[ALLEGRO_KEY_ESCAPE]) //only way that i found to fix this bug. its close the game when you press ESC
-    *done = true;
-  if (key[ALLEGRO_KEY_R]) //reinicia o jogo
-    *restart = true;
 }
 
 /* Função responsável por desenhar o estado atual do jogo */
@@ -370,6 +365,29 @@ void game_draw(
   draw_scoreboard(rockford, sprites);
 
   post_draw_display(display, buffer);
+}
+
+/* Controla a lógica do easter egg */
+void handle_easter_egg(
+    unsigned char *key,
+    ROCKFORD_STRUCT **rockford,
+    AUDIO_STRUCT *audio,
+    int count)
+{
+  if (key[ALLEGRO_KEY_ENTER] && !(*rockford)->is_easter_egg_active)
+  {
+    al_stop_sample_instance(audio->background_instance);
+    al_play_sample(audio->easter_egg, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+    (*rockford)->is_easter_egg_active = true;
+    (*rockford)->started_time_easter_egg = count;
+  }
+  if ((*rockford)->is_easter_egg_active)
+    if (count - (*rockford)->started_time_easter_egg >= EASTER_EGG_TIME)
+    {
+      (*rockford)->is_easter_egg_active = false;
+      (*rockford)->started_time_easter_egg = 0;
+      al_play_sample_instance(audio->background_instance);
+    }
 }
 
 /* Função que lida com o jogo. Loop principal */
@@ -445,7 +463,38 @@ void handle_game(
     case ALLEGRO_EVENT_DISPLAY_CLOSE:
       *done = true;
       break;
+    case ALLEGRO_EVENT_KEY_DOWN:
+      // if (event->keyboard.keycode == ALLEGRO_KEY_H)
+      //   al_show_native_message_box(
+      //       *display,
+      //       "Help",
+      //       "Help",
+      //       "Use the arrow keys to move the character.\n"
+      //       "Use the space bar to shoot.\n"
+      //       "Use the 'R' key to restart the game.\n"
+      //       "Use the 'H' key to show this help.\n"
+      //       "Use the 'ESC' key to exit the game.\n",
+      //       NULL,
+      //       ALLEGRO_MESSAGEBOX_WARN);
+      break;
     case ALLEGRO_EVENT_TIMER:
+      if (key[ALLEGRO_KEY_ESCAPE]) //its close the game when you press ESC
+      {
+        *done = true;
+        break;
+      }
+      if (key[ALLEGRO_KEY_R]) //reinicia o jogo
+      {
+        *restart = true;
+        break;
+      }
+
+      handle_easter_egg(
+          key,
+          rockford,
+          audio,
+          event->timer.count);
+
       game_update(
           key,
           *firefly,

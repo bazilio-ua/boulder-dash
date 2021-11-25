@@ -1,19 +1,20 @@
 #include "scoreboard.h"
 
+/* Desenha o placar */
 void draw_scoreboard(
     ROCKFORD_STRUCT *rockford,
     SPRITES_STRUCT *sprites)
 {
   int quantityOfDiamondsAux = rockford->quantity_of_diamonds;
-  int diamondsUnity;
-  int diamondsTens;
+  int diamondsUnity; /* Quantidade de diamantes por unidade */
+  int diamondsTens;  /* Quantidade de diamantes por dezena */
 
   int scoreAux = rockford->score;
-  int scoreUnity;
-  int scoreTens;
-  int scoreHundreds;
-  int scoreThousands;
-  int scoreTensOfThousands;
+  int scoreUnity;           /* Pontuação por unidade */
+  int scoreTens;            /* Pontuação por dezena */
+  int scoreHundreds;        /* Pontuação por centena */
+  int scoreThousands;       /* Pontuação por milhar */
+  int scoreTensOfThousands; /* Pontuação por dezena de milhar */
 
   diamondsUnity = quantityOfDiamondsAux % 10;
   quantityOfDiamondsAux = quantityOfDiamondsAux / 10;

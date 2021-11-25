@@ -18,6 +18,7 @@ typedef struct ROCKFORD_STRUCT
     int source_y;
     int score;
     int quantity_of_diamonds;
+    int started_time_easter_egg;
     bool won;
     bool lose;
     bool active;
