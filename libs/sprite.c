@@ -29,7 +29,7 @@ void sprites_init(SPRITES_STRUCT *sprites)
 
   sprites->butterfly = sprite_grab(sprites, 0, 352, BUTTERFLY_SPRITE_WIDTH * 8, BUTTERFLY_SPRITE_HEIGHT);
 
-  sprites->exit = sprite_grab(sprites, 0, 192, EXIT_SPRITE_WIDTH * 3, EXIT_SPRITE_HEIGHT);
+  sprites->exit = sprite_grab(sprites, 0, 192, EXIT_SPRITE_WIDTH * SUB_EXIT_SPRITE_QTD, EXIT_SPRITE_HEIGHT);
 
   sprites->magic_wall = sprite_grab(sprites, 96, 192, MAGIC_WALL_SPRITE_WIDTH * 5, MAGIC_WALL_SPRITE_HEIGHT);
 
@@ -41,11 +41,10 @@ void sprites_init(SPRITES_STRUCT *sprites)
 
   sprites->dirt = sprite_grab(sprites, 32, 224, DIRT_SPRITE_WIDTH, DIRT_SPRITE_HEIGHT);
 
-  sprites->explosion = sprite_grab(sprites, 0, 0, EXPLOSION_SPRITE_WIDTH * 5, EXPLOSION_SPRITE_HEIGHT);
+  sprites->explosion = sprite_grab(sprites, 0, 0, EXPLOSION_SPRITE_WIDTH * SUB_EXPLOSION_SPRITE_QTD, EXPLOSION_SPRITE_HEIGHT);
 
   sprites->scoreboard = sprite_grab(sprites, 256, 256, SCOREBOARD_SPRITE_WIDTH * 2, SCOREBOARD_SPRITE_HEIGHT * 10);
 }
-
 
 /* libera todos os bitmaps */
 void sprites_deinit(SPRITES_STRUCT *sprites)

@@ -32,64 +32,64 @@ void draw_scoreboard(
 
   al_draw_tinted_scaled_rotated_bitmap_region(
       sprites->scoreboard,
-      32, (diamondsTens)*SCOREBOARD_SPRITE_HEIGHT, SCOREBOARD_SPRITE_WIDTH, SCOREBOARD_SPRITE_HEIGHT, // source bitmap region
-      al_map_rgb(255, 255, 255),                                                                      // color, just use white if you don't want a tint
-      0, 0,                                                                                           // center of rotation/scaling
-      0, 0,                                                                                           // destination
-      SCOREBOARD_WIDTH_SCALE, SCOREBOARD_HEIGHT_SCALE,                                                // scale
+      32, (diamondsTens)*SCOREBOARD_SPRITE_HEIGHT, SCOREBOARD_SPRITE_WIDTH, SCOREBOARD_SPRITE_HEIGHT, /* região de bitmap de origem até o fim. x_ini, y_ini, x_fim, y_fim */
+      al_map_rgb(255, 255, 255),                                                                      /* coloração da imagem */
+      0, 0,                                                                                           /* centro de rotação */
+      0, 0,                                                                                           /* posição atual */
+      SCOREBOARD_WIDTH_SCALE, SCOREBOARD_HEIGHT_SCALE,                                                /* escala */
       0, 0);
 
   al_draw_tinted_scaled_rotated_bitmap_region(
       sprites->scoreboard,
-      32, (diamondsUnity)*SCOREBOARD_SPRITE_HEIGHT, SCOREBOARD_SPRITE_WIDTH, SCOREBOARD_SPRITE_HEIGHT, // source bitmap region
-      al_map_rgb(255, 255, 255),                                                                       // color, just use white if you don't want a tint
-      0, 0,                                                                                            // center of rotation/scaling
-      BLOCK_SIZE, 0,                                                                                   // destination
-      SCOREBOARD_WIDTH_SCALE, SCOREBOARD_HEIGHT_SCALE,                                                 // scale
+      32, (diamondsUnity)*SCOREBOARD_SPRITE_HEIGHT, SCOREBOARD_SPRITE_WIDTH, SCOREBOARD_SPRITE_HEIGHT, /* região de bitmap de origem até o fim. x_ini, y_ini, x_fim, y_fim */
+      al_map_rgb(255, 255, 255),                                                                       /* coloração da imagem */
+      0, 0,                                                                                            /* centro de rotação */
+      BLOCK_SIZE, 0,                                                                                   /* posição atual */
+      SCOREBOARD_WIDTH_SCALE, SCOREBOARD_HEIGHT_SCALE,                                                 /* escala */
       0, 0);
 
   al_draw_tinted_scaled_rotated_bitmap_region(
       sprites->scoreboard,
-      0, (scoreUnity)*SCOREBOARD_SPRITE_HEIGHT, SCOREBOARD_SPRITE_WIDTH, SCOREBOARD_SPRITE_HEIGHT, // source bitmap region
-      al_map_rgb(255, 255, 255),                                                                   // color, just use white if you don't want a tint
-      0, 0,                                                                                        // center of rotation/scaling
-      (MAP_WIDTH - 1) * BLOCK_SIZE, 0,                                                             // destination
-      SCOREBOARD_WIDTH_SCALE, SCOREBOARD_HEIGHT_SCALE,                                             // scale
+      0, (scoreUnity)*SCOREBOARD_SPRITE_HEIGHT, SCOREBOARD_SPRITE_WIDTH, SCOREBOARD_SPRITE_HEIGHT, /* região de bitmap de origem até o fim. x_ini, y_ini, x_fim, y_fim */
+      al_map_rgb(255, 255, 255),                                                                   /* coloração da imagem */
+      0, 0,                                                                                        /* centro de rotação */
+      (MAP_WIDTH - 1) * BLOCK_SIZE, 0,                                                             /* posição atual */
+      SCOREBOARD_WIDTH_SCALE, SCOREBOARD_HEIGHT_SCALE,                                             /* escala */
       0, 0);
 
   al_draw_tinted_scaled_rotated_bitmap_region(
       sprites->scoreboard,
-      0, (scoreTens)*SCOREBOARD_SPRITE_HEIGHT, SCOREBOARD_SPRITE_WIDTH, SCOREBOARD_SPRITE_HEIGHT, // source bitmap region
-      al_map_rgb(255, 255, 255),                                                                  // color, just use white if you don't want a tint
-      0, 0,                                                                                       // center of rotation/scaling
-      (MAP_WIDTH - 2) * BLOCK_SIZE, 0,                                                            // destination
-      SCOREBOARD_WIDTH_SCALE, SCOREBOARD_HEIGHT_SCALE,                                            // scale
+      0, (scoreTens)*SCOREBOARD_SPRITE_HEIGHT, SCOREBOARD_SPRITE_WIDTH, SCOREBOARD_SPRITE_HEIGHT, /* região de bitmap de origem até o fim. x_ini, y_ini, x_fim, y_fim */
+      al_map_rgb(255, 255, 255),                                                                  /* coloração da imagem */
+      0, 0,                                                                                       /* centro de rotação */
+      (MAP_WIDTH - 2) * BLOCK_SIZE, 0,                                                            /* posição atual */
+      SCOREBOARD_WIDTH_SCALE, SCOREBOARD_HEIGHT_SCALE,                                            /* escala */
       0, 0);
 
   al_draw_tinted_scaled_rotated_bitmap_region(
       sprites->scoreboard,
-      0, (scoreHundreds)*SCOREBOARD_SPRITE_HEIGHT, SCOREBOARD_SPRITE_WIDTH, SCOREBOARD_SPRITE_HEIGHT, // source bitmap region
-      al_map_rgb(255, 255, 255),                                                                      // color, just use white if you don't want a tint
-      0, 0,                                                                                           // center of rotation/scaling
-      (MAP_WIDTH - 3) * BLOCK_SIZE, 0,                                                                // destination
-      SCOREBOARD_WIDTH_SCALE, SCOREBOARD_HEIGHT_SCALE,                                                // scale
+      0, (scoreHundreds)*SCOREBOARD_SPRITE_HEIGHT, SCOREBOARD_SPRITE_WIDTH, SCOREBOARD_SPRITE_HEIGHT, /* região de bitmap de origem até o fim. x_ini, y_ini, x_fim, y_fim */
+      al_map_rgb(255, 255, 255),                                                                      /* coloração da imagem */
+      0, 0,                                                                                           /* centro de rotação */
+      (MAP_WIDTH - 3) * BLOCK_SIZE, 0,                                                                /* posição atual */
+      SCOREBOARD_WIDTH_SCALE, SCOREBOARD_HEIGHT_SCALE,                                                /* escala */
       0, 0);
 
   al_draw_tinted_scaled_rotated_bitmap_region(
       sprites->scoreboard,
-      0, (scoreThousands)*SCOREBOARD_SPRITE_HEIGHT, SCOREBOARD_SPRITE_WIDTH, SCOREBOARD_SPRITE_HEIGHT, // source bitmap region
-      al_map_rgb(255, 255, 255),                                                                       // color, just use white if you don't want a tint
-      0, 0,                                                                                            // center of rotation/scaling
-      (MAP_WIDTH - 4) * BLOCK_SIZE, 0,                                                                 // destination
-      SCOREBOARD_WIDTH_SCALE, SCOREBOARD_HEIGHT_SCALE,                                                 // scale
+      0, (scoreThousands)*SCOREBOARD_SPRITE_HEIGHT, SCOREBOARD_SPRITE_WIDTH, SCOREBOARD_SPRITE_HEIGHT, /* região de bitmap de origem até o fim. x_ini, y_ini, x_fim, y_fim */
+      al_map_rgb(255, 255, 255),                                                                       /* coloração da imagem */
+      0, 0,                                                                                            /* centro de rotação */
+      (MAP_WIDTH - 4) * BLOCK_SIZE, 0,                                                                 /* posição atual */
+      SCOREBOARD_WIDTH_SCALE, SCOREBOARD_HEIGHT_SCALE,                                                 /* escala */
       0, 0);
 
   al_draw_tinted_scaled_rotated_bitmap_region(
       sprites->scoreboard,
-      0, (scoreTensOfThousands)*SCOREBOARD_SPRITE_HEIGHT, SCOREBOARD_SPRITE_WIDTH, SCOREBOARD_SPRITE_HEIGHT, // source bitmap region
-      al_map_rgb(255, 255, 255),                                                                             // color, just use white if you don't want a tint
-      0, 0,                                                                                                  // center of rotation/scaling
-      (MAP_WIDTH - 5) * BLOCK_SIZE, 0,                                                                       // destination
-      SCOREBOARD_WIDTH_SCALE, SCOREBOARD_HEIGHT_SCALE,                                                       // scale
+      0, (scoreTensOfThousands)*SCOREBOARD_SPRITE_HEIGHT, SCOREBOARD_SPRITE_WIDTH, SCOREBOARD_SPRITE_HEIGHT, /* região de bitmap de origem até o fim. x_ini, y_ini, x_fim, y_fim */
+      al_map_rgb(255, 255, 255),                                                                             /* coloração da imagem */
+      0, 0,                                                                                                  /* centro de rotação */
+      (MAP_WIDTH - 5) * BLOCK_SIZE, 0,                                                                       /* posição atual */
+      SCOREBOARD_WIDTH_SCALE, SCOREBOARD_HEIGHT_SCALE,                                                       /* escala */
       0, 0);
 }

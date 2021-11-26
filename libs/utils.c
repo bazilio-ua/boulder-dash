@@ -37,7 +37,24 @@ bool isSpaceEmpty(
   return (map[i][j] == IS_EMPTY);
 }
 
+bool is_space_empty(
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    int i,
+    int j)
+{
+  return (map[i][j] == IS_EMPTY);
+}
+
+
 bool isSpaceDirt(
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    int i,
+    int j)
+{
+  return (map[i][j] == IS_DIRT);
+}
+
+bool is_space_dirt(
     char map[MAP_HEIGHT][MAP_WIDTH],
     int i,
     int j)
@@ -69,7 +86,23 @@ bool isSpaceRockford(
   return (map[i][j] == IS_ROCKFORD);
 }
 
+bool is_space_rockford(
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    int i,
+    int j)
+{
+  return (map[i][j] == IS_ROCKFORD);
+}
+
 bool isSpaceBrickWall(
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    int i,
+    int j)
+{
+  return (map[i][j] == IS_BRICK_WALL);
+}
+
+bool is_space_brick_wall(
     char map[MAP_HEIGHT][MAP_WIDTH],
     int i,
     int j)
@@ -126,6 +159,13 @@ bool isSpaceExit(
 }
 
 int generateRandomNumberBetween(
+    int lower,
+    int upper)
+{
+  return (rand() % (upper - lower + 1)) + lower;
+}
+
+int generate_random_number_between(
     int lower,
     int upper)
 {

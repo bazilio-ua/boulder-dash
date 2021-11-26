@@ -105,7 +105,7 @@ void amoeba_update(
         {
           for (k = amoebaPtrColumn - 1; k <= amoebaPtrColumn + 1; k++)
           {
-            if (!isSpaceSteelWall(map, j, k))
+            if (!isSpaceSteelWall(map, i, j) && !isSpaceExit(map, i, j))
             {
               update_map_state(map, IS_EMPTY, j, k);
 

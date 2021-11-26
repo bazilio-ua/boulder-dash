@@ -9,7 +9,7 @@ typedef struct EXPLOSION_STRUCT
   int x, y;
   int source_x;
   int source_y;
-  int start; 
+  int start;
   int end;
   bool redraw;
 } EXPLOSION_STRUCT;
@@ -20,8 +20,7 @@ void explosion_init(EXPLOSION_STRUCT *explosion);
 
 void explosion_update(
     EXPLOSION_STRUCT *explosion,
-    SPRITES_STRUCT *sprites,
-    long int count);
+    SPRITES_STRUCT *sprites);
 
 void explosion_draw(EXPLOSION_STRUCT *explosion, SPRITES_STRUCT *sprites);
 

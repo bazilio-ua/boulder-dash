@@ -64,7 +64,7 @@ void rockford_update(
 
     for (int i = rockfordLine - 1; i <= rockfordLine + 1; i++)
       for (int j = rockfordColumn - 1; j <= rockfordColumn + 1; j++)
-        if (!isSpaceSteelWall(map, i, j))
+        if (!isSpaceSteelWall(map, i, j) && !isSpaceExit(map, i, j))
         {
           update_map_state(map, IS_EMPTY, i, j);
 

@@ -157,7 +157,7 @@ void butterfly_update(
 
         for (int i = butterflyPtrLine - 1; i <= butterflyPtrLine + 1; i++)
           for (int j = butterflyPtrColumn - 1; j <= butterflyPtrColumn + 1; j++)
-            if (!isSpaceSteelWall(map, i, j))
+            if (!isSpaceSteelWall(map, i, j) && !isSpaceExit(map, i, j))
             {
               update_map_state(map, IS_EMPTY, i, j);
 

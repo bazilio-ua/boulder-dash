@@ -275,16 +275,12 @@ void game_update(
   dirt_update(
       dirt,
       dirtCount,
-      map,
-      rockford,
-      count);
+      map);
 
   brick_wall_update(
       brickWall,
       brickWallCount,
-      map,
-      rockford,
-      count);
+      map);
 
   magic_wall_update(
       magicWall,
@@ -297,8 +293,7 @@ void game_update(
 
   explosion_update(
       explosion,
-      sprites,
-      count);
+      sprites);
 
   exit_update(
       exit,
@@ -464,6 +459,16 @@ void handle_game(
       *done = true;
       break;
     case ALLEGRO_EVENT_KEY_DOWN:
+      if (key[ALLEGRO_KEY_ESCAPE]) // fecha o jogo
+      {
+        *done = true;
+        break;
+      }
+      if (key[ALLEGRO_KEY_R]) //reinicia o jogo
+      {
+        *restart = true;
+        break;
+      }
       // if (event->keyboard.keycode == ALLEGRO_KEY_H)
       //   al_show_native_message_box(
       //       *display,
@@ -478,16 +483,6 @@ void handle_game(
       //       ALLEGRO_MESSAGEBOX_WARN);
       break;
     case ALLEGRO_EVENT_TIMER:
-      if (key[ALLEGRO_KEY_ESCAPE]) //its close the game when you press ESC
-      {
-        *done = true;
-        break;
-      }
-      if (key[ALLEGRO_KEY_R]) //reinicia o jogo
-      {
-        *restart = true;
-        break;
-      }
 
       handle_easter_egg(
           key,

@@ -18,9 +18,7 @@ void brick_wall_init(BRICK_WALL_STRUCT *brickWall, int pos_x, int pos_y);
 void brick_wall_update(
     BRICK_WALL_STRUCT *brickWall,
     int *brickWallCount,
-    char map[MAP_HEIGHT][MAP_WIDTH],
-    ROCKFORD_STRUCT *rockford,
-    long int count);
+    char map[MAP_HEIGHT][MAP_WIDTH]);
 
 void brick_wall_draw(
     BRICK_WALL_STRUCT *brickWall,

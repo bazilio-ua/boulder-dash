@@ -13,7 +13,10 @@ typedef struct STEEL_WALL_STRUCT
 
 STEEL_WALL_STRUCT *allocate_array_steel_wall(int steelWallCount);
 
-void steel_wall_init(STEEL_WALL_STRUCT *steelWall, int pos_x, int pos_y);
+void steel_wall_init(
+    STEEL_WALL_STRUCT *steelWall,
+    int pos_x,
+    int pos_y);
 
 void steel_wall_draw(
     STEEL_WALL_STRUCT *steelWall,
