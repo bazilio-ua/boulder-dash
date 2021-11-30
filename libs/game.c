@@ -511,7 +511,7 @@ void handle_game(
         *restart = true;
         break;
       }
-      if (key[ALLEGRO_KEY_K]) 
+      if (key[ALLEGRO_KEY_H]) 
         al_show_native_message_box(
             *display,
             "Help",
