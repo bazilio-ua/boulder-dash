@@ -399,14 +399,14 @@ void handle_socore(ROCKFORD_STRUCT *rockford)
   {
     sprintf(message, "New High Score = %d", rockford->score);
 
-    // al_show_native_message_box(
-    //     NULL,
-    //     "New High Score!",
-    //     "Congratulations!",
-    //     message,
-    //     NULL,
-    //     ALLEGRO_MESSAGEBOX_WARN);
-    // fprintf(scoreFile, "%s", rockford->score);
+    al_show_native_message_box(
+        NULL,
+        "New High Score!",
+        "Congratulations!",
+        message,
+        NULL,
+        ALLEGRO_MESSAGEBOX_WARN);
+    fprintf(scoreFile, "%s", rockford->score);
     printf("%s", message);
 
     scoreFile = fopen("./resources/score.txt", "w+");
@@ -417,14 +417,13 @@ void handle_socore(ROCKFORD_STRUCT *rockford)
   {
     sprintf(message, "Score = %d", rockford->score);
 
-    // al_show_native_message_box(
-    //     NULL,
-    //     "Score",
-    //     "Score",
-    //     "Your score is %d",
-    //     rockford->score,
-    //     ALLEGRO_MESSAGEBOX_WARN);
-    printf("%s", message);
+    al_show_native_message_box(
+        NULL,
+        "Score",
+        "Score",
+        message,
+        rockford->score,
+        ALLEGRO_MESSAGEBOX_WARN);
   }
 }
 
@@ -512,18 +511,18 @@ void handle_game(
         *restart = true;
         break;
       }
-      // if (event->keyboard.keycode == ALLEGRO_KEY_H)
-      //   al_show_native_message_box(
-      //       *display,
-      //       "Help",
-      //       "Help",
-      //       "Use the arrow keys to move the character.\n"
-      //       "Use the space bar to shoot.\n"
-      //       "Use the 'R' key to restart the game.\n"
-      //       "Use the 'H' key to show this help.\n"
-      //       "Use the 'ESC' key to exit the game.\n",
-      //       NULL,
-      //       ALLEGRO_MESSAGEBOX_WARN);
+      if (key[ALLEGRO_KEY_K]) 
+        al_show_native_message_box(
+            *display,
+            "Help",
+            "Help",
+            "Use the arrow keys to move the character.\n"
+            "Use the space bar to shoot.\n"
+            "Use the 'R' key to restart the game.\n"
+            "Use the 'H' key to show this help.\n"
+            "Use the 'ESC' key to exit the game.\n",
+            NULL,
+            ALLEGRO_MESSAGEBOX_WARN);
       break;
     case ALLEGRO_EVENT_TIMER:
       handle_easter_egg(
