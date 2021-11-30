@@ -32,11 +32,13 @@
 #define RIGHT 2
 #define UP 3
 
+#define SUB_DIAMOND_SPRITE_QTD 8
 #define DIAMOND_SPRITE_WIDTH 32
 #define DIAMOND_SPRITE_HEIGHT 32
 #define DIAMOND_SCALE 0.5
 #define DIAMOND_SCORE 10
 
+#define SUB_FIREFLY_SPRITE_QTD 8
 #define FIREFLY_SPRITE_WIDTH 32
 #define FIREFLY_SPRITE_HEIGHT 32
 #define FIREFLY_SCALE 0.5
@@ -47,16 +49,18 @@
 #define TIME_TO_GROW 300
 #define AMOEBA_LIFE_TIME 3600
 
+#define SUB_BUTTERFLY_SPRITE_QTD 8
 #define BUTTERFLY_SPRITE_WIDTH 32
 #define BUTTERFLY_SPRITE_HEIGHT 32
 #define BUTTERFLY_SCALE 0.5
 
-#define SUB_EXIT_SPRITE_QTD 3  
+#define SUB_EXIT_SPRITE_QTD 3
 #define EXIT_SPRITE_WIDTH 32
 #define EXIT_SPRITE_HEIGHT 32
 #define EXIT_SCALE 0.5
 #define EXIT_AMOUNT_NEEDED_TO_APPEAR 5
 
+#define SUB_MAGIC_WALL_SPRITE_QTD 5
 #define MAGIC_WALL_SPRITE_WIDTH 32
 #define MAGIC_WALL_SPRITE_HEIGHT 32
 #define MAGIC_WALL_SCALE 0.5
@@ -69,6 +73,7 @@
 #define BOULDER_SPRITE_WIDTH 32
 #define BOULDER_SPRITE_HEIGHT 32
 #define BOULDER_SCALE 0.5
+#define COLLISION_TIME_UNTIL_MOVE 60 /* 1s */
 
 #define DIRT_SPRITE_WIDTH 32
 #define DIRT_SPRITE_HEIGHT 32
@@ -136,7 +141,17 @@ bool is_space_dirt(
 
 bool isSpaceDiamond(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
 
+bool is_space_diamond(
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    int i,
+    int j);
+
 bool isSpaceBoulder(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
+
+bool is_space_boulder(
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    int i,
+    int j);
 
 bool isSpaceRockford(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
 
@@ -154,15 +169,45 @@ bool is_space_brick_wall(
 
 bool isSpaceSteelWall(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
 
+bool is_space_steel_wall(
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    int i,
+    int j);
+
 bool isSpaceFirefly(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
+
+bool is_space_firefly(
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    int i,
+    int j);
 
 bool isSpaceButterfly(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
 
+bool is_space_butterfly(
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    int i,
+    int j);
+
 bool isSpaceAmoeba(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
+
+bool is_space_amoeba(
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    int i,
+    int j);
 
 bool isSpaceMagicWall(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
 
+bool is_space_magic_wall(
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    int i,
+    int j);
+
 bool isSpaceExit(char map[MAP_HEIGHT][MAP_WIDTH], int i, int j);
+
+bool is_space_exit(
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    int i,
+    int j);
 
 int generateRandomNumberBetween(int lower, int upper);
 

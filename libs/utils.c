@@ -45,7 +45,6 @@ bool is_space_empty(
   return (map[i][j] == IS_EMPTY);
 }
 
-
 bool isSpaceDirt(
     char map[MAP_HEIGHT][MAP_WIDTH],
     int i,
@@ -70,7 +69,23 @@ bool isSpaceDiamond(
   return (map[i][j] == IS_DIAMOND);
 }
 
+bool is_space_diamond(
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    int i,
+    int j)
+{
+  return (map[i][j] == IS_DIAMOND);
+}
+
 bool isSpaceBoulder(
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    int i,
+    int j)
+{
+  return (map[i][j] == IS_BOULDER);
+}
+
+bool is_space_boulder(
     char map[MAP_HEIGHT][MAP_WIDTH],
     int i,
     int j)
@@ -118,7 +133,23 @@ bool isSpaceSteelWall(
   return (map[i][j] == IS_STEEL_WALL);
 }
 
+bool is_space_steel_wall(
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    int i,
+    int j)
+{
+  return (map[i][j] == IS_STEEL_WALL);
+}
+
 bool isSpaceFirefly(
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    int i,
+    int j)
+{
+  return (map[i][j] == IS_FIREFLY);
+}
+
+bool is_space_firefly(
     char map[MAP_HEIGHT][MAP_WIDTH],
     int i,
     int j)
@@ -134,7 +165,23 @@ bool isSpaceButterfly(
   return (map[i][j] == IS_BUTTERFLY);
 }
 
+bool is_space_butterfly(
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    int i,
+    int j)
+{
+  return (map[i][j] == IS_BUTTERFLY);
+}
+
 bool isSpaceAmoeba(
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    int i,
+    int j)
+{
+  return (map[i][j] == IS_AMOEBA);
+}
+
+bool is_space_amoeba(
     char map[MAP_HEIGHT][MAP_WIDTH],
     int i,
     int j)
@@ -150,7 +197,23 @@ bool isSpaceMagicWall(
   return (map[i][j] == IS_MAGIC_WALL);
 }
 
+bool is_space_magic_wall(
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    int i,
+    int j)
+{
+  return (map[i][j] == IS_MAGIC_WALL);
+}
+
 bool isSpaceExit(
+    char map[MAP_HEIGHT][MAP_WIDTH],
+    int i,
+    int j)
+{
+  return (map[i][j] == IS_EXIT);
+}
+
+bool is_space_exit(
     char map[MAP_HEIGHT][MAP_WIDTH],
     int i,
     int j)

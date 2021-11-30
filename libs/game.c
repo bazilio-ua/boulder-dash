@@ -70,13 +70,13 @@ void game_initialization(
   initialize(*exit, "exit");
   exit_init(*exit, -BLOCK_SIZE, -BLOCK_SIZE);
 
-  *diamond = allocate_array_diamond(MAX_OBJECT_QUANTITY);
+  *diamond = allocate_array_diamond(MAX_OBJECT_QUANTITY); /* aloco memória dessse jeito, porque a quantidade de diamantes pode aumentar */
   initialize(*diamond, "diamond");
 
-  *boulder = allocate_array_boulder(MAX_OBJECT_QUANTITY);
+  *boulder = allocate_array_boulder(MAX_OBJECT_QUANTITY); /* aloco memória dessse jeito, porque a quantidade de pedras pode aumentar */
   initialize(*boulder, "boulder");
 
-  *amoeba = allocate_array_amoeba(MAX_OBJECT_QUANTITY);
+  *amoeba = allocate_array_amoeba(MAX_OBJECT_QUANTITY); /* aloco memória dessse jeito, porque a quantidade de amoebas pode aumentar */
   initialize(*amoeba, "amoeba");
 
   *explosion = allocate_array_explosion(EXPLOSION_COUNT);

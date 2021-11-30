@@ -21,17 +21,17 @@ void sprites_init(SPRITES_STRUCT *sprites)
   sprites->rockford_running_right = sprite_grab(sprites, 0, 160, ROCKFORD_SPRITE_WIDTH * 8, ROCKFORD_SPRITE_HEIGHT);
   sprites->rockford_waiting = sprite_grab(sprites, 0, 32, ROCKFORD_SPRITE_WIDTH * 8, ROCKFORD_SPRITE_HEIGHT * 3);
 
-  sprites->diamond = sprite_grab(sprites, 0, 320, DIAMOND_SPRITE_WIDTH * 8, DIAMOND_SPRITE_HEIGHT);
+  sprites->diamond = sprite_grab(sprites, 0, 320, DIAMOND_SPRITE_WIDTH * SUB_DIAMOND_SPRITE_QTD, DIAMOND_SPRITE_HEIGHT);
 
-  sprites->firefly = sprite_grab(sprites, 0, 288, FIREFLY_SPRITE_WIDTH * 8, FIREFLY_SPRITE_HEIGHT);
+  sprites->firefly = sprite_grab(sprites, 0, 288, FIREFLY_SPRITE_WIDTH * SUB_FIREFLY_SPRITE_QTD, FIREFLY_SPRITE_HEIGHT);
 
   sprites->amoeba = sprite_grab(sprites, 0, 256, AMOEBA_SPRITE_WIDTH * 8, AMOEBA_SPRITE_HEIGHT);
 
-  sprites->butterfly = sprite_grab(sprites, 0, 352, BUTTERFLY_SPRITE_WIDTH * 8, BUTTERFLY_SPRITE_HEIGHT);
+  sprites->butterfly = sprite_grab(sprites, 0, 352, BUTTERFLY_SPRITE_WIDTH * SUB_BUTTERFLY_SPRITE_QTD, BUTTERFLY_SPRITE_HEIGHT);
 
   sprites->exit = sprite_grab(sprites, 0, 192, EXIT_SPRITE_WIDTH * SUB_EXIT_SPRITE_QTD, EXIT_SPRITE_HEIGHT);
 
-  sprites->magic_wall = sprite_grab(sprites, 96, 192, MAGIC_WALL_SPRITE_WIDTH * 5, MAGIC_WALL_SPRITE_HEIGHT);
+  sprites->magic_wall = sprite_grab(sprites, 96, 192, MAGIC_WALL_SPRITE_WIDTH * SUB_MAGIC_WALL_SPRITE_QTD, MAGIC_WALL_SPRITE_HEIGHT);
 
   sprites->steel_wall = sprite_grab(sprites, 32, 192, STEEL_WALL_SPRITE_WIDTH, STEEL_WALL_SPRITE_HEIGHT);
 
