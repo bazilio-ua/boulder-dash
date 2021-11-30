@@ -128,7 +128,7 @@ void firefly_update(
         return;
       }
 
-      else if (!isSpaceFirefly(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE))) /* se o firefly não ocupa o próprio espaço. Isso pode ocorrer quando algo o matou e esta para explodir */
+      else if (!is_space_firefly(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE))) /* se o firefly não ocupa o próprio espaço. Isso pode ocorrer quando algo o matou e esta para explodir */
       {
         int fireflyPtrLine = fireflyPtr->y / BLOCK_SIZE;
         int fireflyPtrColumn = fireflyPtr->x / BLOCK_SIZE;
@@ -138,7 +138,7 @@ void firefly_update(
 
         for (int i = fireflyPtrLine - 1; i <= fireflyPtrLine + 1; i++)
           for (int j = fireflyPtrColumn - 1; j <= fireflyPtrColumn + 1; j++)
-            if (!isSpaceSteelWall(map, i, j) && !isSpaceExit(map, i, j))
+            if (!is_space_steel_wall(map, i, j) && !is_space_exit(map, i, j))
             {
               update_map_state(map, IS_EMPTY, i, j);
 
@@ -159,58 +159,73 @@ void firefly_update(
           fireflyPtr->redraw = false;
         else
         {
+          int fireflyLine = fireflyPtr->y / BLOCK_SIZE;
+          int fireflyColumn = fireflyPtr->x / BLOCK_SIZE;
+
+          int topLine = fireflyLine - 1;
+          int topColumn = fireflyColumn;
+
+          int rightLine = fireflyLine;
+          int rightColumn = fireflyColumn + 1;
+
+          int bottomLine = fireflyLine + 1;
+          int bottomColumn = fireflyColumn;
+
+          int leftLine = fireflyLine;
+          int leftColumn = fireflyColumn - 1;
+
           update_map_state(map, IS_EMPTY, firefly->y / BLOCK_SIZE, firefly->x / BLOCK_SIZE);
 
           switch (fireflyPtr->direction)
           {
           case RIGHT:
-            if (is_space_empty(map, (fireflyPtr->y / BLOCK_SIZE - 1), (fireflyPtr->x / BLOCK_SIZE)))
+            if (is_space_empty(map, topLine, topColumn))
               move_firefly_up(fireflyPtr);
-            else if (is_space_empty(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE + 1)))
+            else if (is_space_empty(map, rightLine, rightColumn))
               move_firefly_right(fireflyPtr);
-            else if (is_space_empty(map, (fireflyPtr->y / BLOCK_SIZE + 1), (fireflyPtr->x / BLOCK_SIZE)))
+            else if (is_space_empty(map, bottomLine, bottomColumn))
               move_firefly_down(fireflyPtr);
-            else if (is_space_empty(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE - 1)))
+            else if (is_space_empty(map, leftLine, leftColumn))
               move_firefly_left(fireflyPtr);
             break;
           case UP:
-            if (is_space_empty(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE - 1)))
+            if (is_space_empty(map, leftLine, leftColumn))
               move_firefly_left(fireflyPtr);
-            else if (is_space_empty(map, (fireflyPtr->y / BLOCK_SIZE - 1), (fireflyPtr->x / BLOCK_SIZE)))
+            else if (is_space_empty(map, topLine, topColumn))
               move_firefly_up(fireflyPtr);
-            else if (is_space_empty(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE + 1)))
+            else if (is_space_empty(map, rightLine, rightColumn))
               move_firefly_right(fireflyPtr);
-            else if (is_space_empty(map, (fireflyPtr->y / BLOCK_SIZE + 1), (fireflyPtr->x / BLOCK_SIZE)))
+            else if (is_space_empty(map, bottomLine, bottomColumn))
               move_firefly_down(fireflyPtr);
             break;
           case LEFT:
-            if (is_space_empty(map, (fireflyPtr->y / BLOCK_SIZE + 1), (fireflyPtr->x / BLOCK_SIZE)))
+            if (is_space_empty(map, bottomLine, bottomColumn))
               move_firefly_down(fireflyPtr);
-            else if (is_space_empty(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE - 1)))
+            else if (is_space_empty(map, leftLine, leftColumn))
               move_firefly_left(fireflyPtr);
-            else if (is_space_empty(map, (fireflyPtr->y / BLOCK_SIZE - 1), (fireflyPtr->x / BLOCK_SIZE)))
+            else if (is_space_empty(map, topLine, topColumn))
               move_firefly_up(fireflyPtr);
-            else if (is_space_empty(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE + 1)))
+            else if (is_space_empty(map, rightLine, rightColumn))
               move_firefly_right(fireflyPtr);
             break;
           case DOWN:
-            if (is_space_empty(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE + 1)))
+            if (is_space_empty(map, rightLine, rightColumn))
               move_firefly_right(fireflyPtr);
-            else if (is_space_empty(map, (fireflyPtr->y / BLOCK_SIZE + 1), (fireflyPtr->x / BLOCK_SIZE)))
+            else if (is_space_empty(map, bottomLine, bottomColumn))
               move_firefly_down(fireflyPtr);
-            else if (is_space_empty(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE - 1)))
+            else if (is_space_empty(map, leftLine, leftColumn))
               move_firefly_left(fireflyPtr);
-            else if (is_space_empty(map, (fireflyPtr->y / BLOCK_SIZE - 1), (fireflyPtr->x / BLOCK_SIZE)))
+            else if (is_space_empty(map, topLine, topColumn))
               move_firefly_up(fireflyPtr);
             break;
           default:
-            if (is_space_empty(map, (fireflyPtr->y / BLOCK_SIZE - 1), (fireflyPtr->x / BLOCK_SIZE)))
+            if (is_space_empty(map, topLine, topColumn))
               move_firefly_up(fireflyPtr);
-            else if (is_space_empty(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE - 1)))
+            else if (is_space_empty(map, leftLine, leftColumn))
               move_firefly_left(fireflyPtr);
-            else if (is_space_empty(map, (fireflyPtr->y / BLOCK_SIZE + 1), (fireflyPtr->x / BLOCK_SIZE)))
+            else if (is_space_empty(map, bottomLine, bottomColumn))
               move_firefly_down(fireflyPtr);
-            else if (is_space_empty(map, (fireflyPtr->y / BLOCK_SIZE), (fireflyPtr->x / BLOCK_SIZE + 1)))
+            else if (is_space_empty(map, rightLine, rightColumn))
               move_firefly_right(fireflyPtr);
             break;
           }

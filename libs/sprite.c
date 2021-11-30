@@ -17,15 +17,15 @@ void sprites_init(SPRITES_STRUCT *sprites)
   initialize(sprites->_sheet, "sprites");
 
   sprites->rockford = sprite_grab(sprites, 0, 0, ROCKFORD_SPRITE_WIDTH, ROCKFORD_SPRITE_HEIGHT);
-  sprites->rockford_running_left = sprite_grab(sprites, 0, 128, ROCKFORD_SPRITE_WIDTH * 8, ROCKFORD_SPRITE_HEIGHT);
-  sprites->rockford_running_right = sprite_grab(sprites, 0, 160, ROCKFORD_SPRITE_WIDTH * 8, ROCKFORD_SPRITE_HEIGHT);
-  sprites->rockford_waiting = sprite_grab(sprites, 0, 32, ROCKFORD_SPRITE_WIDTH * 8, ROCKFORD_SPRITE_HEIGHT * 3);
+  sprites->rockford_running_left = sprite_grab(sprites, 0, 128, ROCKFORD_SPRITE_WIDTH * SUB_ROCKFORD_SPRITE_QTD, ROCKFORD_SPRITE_HEIGHT);
+  sprites->rockford_running_right = sprite_grab(sprites, 0, 160, ROCKFORD_SPRITE_WIDTH * SUB_ROCKFORD_SPRITE_QTD, ROCKFORD_SPRITE_HEIGHT);
+  sprites->rockford_waiting = sprite_grab(sprites, 0, 32, ROCKFORD_SPRITE_WIDTH * SUB_ROCKFORD_SPRITE_QTD, ROCKFORD_SPRITE_HEIGHT * SUB_ROCKFORD_SPRITE_HEIGHT_QTD);
 
   sprites->diamond = sprite_grab(sprites, 0, 320, DIAMOND_SPRITE_WIDTH * SUB_DIAMOND_SPRITE_QTD, DIAMOND_SPRITE_HEIGHT);
 
   sprites->firefly = sprite_grab(sprites, 0, 288, FIREFLY_SPRITE_WIDTH * SUB_FIREFLY_SPRITE_QTD, FIREFLY_SPRITE_HEIGHT);
 
-  sprites->amoeba = sprite_grab(sprites, 0, 256, AMOEBA_SPRITE_WIDTH * 8, AMOEBA_SPRITE_HEIGHT);
+  sprites->amoeba = sprite_grab(sprites, 0, 256, AMOEBA_SPRITE_WIDTH * SUB_AMOEBA_SPRITE_QTD, AMOEBA_SPRITE_HEIGHT);
 
   sprites->butterfly = sprite_grab(sprites, 0, 352, BUTTERFLY_SPRITE_WIDTH * SUB_BUTTERFLY_SPRITE_QTD, BUTTERFLY_SPRITE_HEIGHT);
 

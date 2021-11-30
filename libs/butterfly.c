@@ -206,58 +206,73 @@ void butterfly_update(
           generate_diamonds(butterflyPtr, diamond, diamondCount, map);
         else
         {
-          update_map_state(map, IS_EMPTY, butterflyPtr->y / BLOCK_SIZE, butterflyPtr->x / BLOCK_SIZE);
+          int butterflyLine = butterflyPtr->y / BLOCK_SIZE;
+          int butterflyColumn = butterflyPtr->x / BLOCK_SIZE;
+
+          int topLine = butterflyLine - 1;
+          int topColumn = butterflyColumn;
+
+          int rightLine = butterflyLine;
+          int rightColumn = butterflyColumn + 1;
+
+          int bottomLine = butterflyLine + 1;
+          int bottomColumn = butterflyColumn;
+
+          int leftLine = butterflyLine;
+          int leftColumn = butterflyColumn - 1;
+
+          update_map_state(map, IS_EMPTY, butterflyLine, butterflyColumn);
 
           switch (butterflyPtr->direction)
           {
           case RIGHT:
-            if (is_space_empty(map, (butterflyPtr->y / BLOCK_SIZE + 1), (butterflyPtr->x / BLOCK_SIZE)))
+            if (is_space_empty(map, bottomLine, bottomColumn))
               move_butterfly_down(butterflyPtr);
-            else if (is_space_empty(map, (butterflyPtr->y / BLOCK_SIZE), (butterflyPtr->x / BLOCK_SIZE + 1)))
+            else if (is_space_empty(map, rightLine, rightColumn))
               move_butterfly_right(butterflyPtr);
-            else if (is_space_empty(map, (butterflyPtr->y / BLOCK_SIZE - 1), (butterflyPtr->x / BLOCK_SIZE)))
+            else if (is_space_empty(map, topLine, topColumn))
               move_butterfly_up(butterflyPtr);
-            else if (is_space_empty(map, (butterflyPtr->y / BLOCK_SIZE), (butterflyPtr->x / BLOCK_SIZE - 1)))
+            else if (is_space_empty(map, leftLine, leftColumn))
               move_butterfly_left(butterflyPtr);
             break;
           case UP:
-            if (is_space_empty(map, (butterflyPtr->y / BLOCK_SIZE), (butterflyPtr->x / BLOCK_SIZE + 1)))
+            if (is_space_empty(map, rightLine, rightColumn))
               move_butterfly_right(butterflyPtr);
-            else if (is_space_empty(map, (butterflyPtr->y / BLOCK_SIZE - 1), (butterflyPtr->x / BLOCK_SIZE)))
+            else if (is_space_empty(map, topLine, topColumn))
               move_butterfly_up(butterflyPtr);
-            else if (is_space_empty(map, (butterflyPtr->y / BLOCK_SIZE), (butterflyPtr->x / BLOCK_SIZE - 1)))
+            else if (is_space_empty(map, leftLine, leftColumn))
               move_butterfly_left(butterflyPtr);
-            else if (is_space_empty(map, (butterflyPtr->y / BLOCK_SIZE + 1), (butterflyPtr->x / BLOCK_SIZE)))
+            else if (is_space_empty(map, bottomLine, bottomColumn))
               move_butterfly_down(butterflyPtr);
             break;
           case LEFT:
-            if (is_space_empty(map, (butterflyPtr->y / BLOCK_SIZE - 1), (butterflyPtr->x / BLOCK_SIZE)))
+            if (is_space_empty(map, topLine, topColumn))
               move_butterfly_up(butterflyPtr);
-            else if (is_space_empty(map, (butterflyPtr->y / BLOCK_SIZE), (butterflyPtr->x / BLOCK_SIZE - 1)))
+            else if (is_space_empty(map, leftLine, leftColumn))
               move_butterfly_left(butterflyPtr);
-            else if (is_space_empty(map, (butterflyPtr->y / BLOCK_SIZE + 1), (butterflyPtr->x / BLOCK_SIZE)))
+            else if (is_space_empty(map, bottomLine, bottomColumn))
               move_butterfly_down(butterflyPtr);
-            else if (is_space_empty(map, (butterflyPtr->y / BLOCK_SIZE), (butterflyPtr->x / BLOCK_SIZE + 1)))
+            else if (is_space_empty(map, rightLine, rightColumn))
               move_butterfly_right(butterflyPtr);
             break;
           case DOWN:
-            if (is_space_empty(map, (butterflyPtr->y / BLOCK_SIZE), (butterflyPtr->x / BLOCK_SIZE - 1)))
+            if (is_space_empty(map, leftLine, leftColumn))
               move_butterfly_left(butterflyPtr);
-            else if (is_space_empty(map, (butterflyPtr->y / BLOCK_SIZE + 1), (butterflyPtr->x / BLOCK_SIZE)))
+            else if (is_space_empty(map, bottomLine, bottomColumn))
               move_butterfly_down(butterflyPtr);
-            else if (is_space_empty(map, (butterflyPtr->y / BLOCK_SIZE), (butterflyPtr->x / BLOCK_SIZE + 1)))
+            else if (is_space_empty(map, rightLine, rightColumn))
               move_butterfly_right(butterflyPtr);
-            else if (is_space_empty(map, (butterflyPtr->y / BLOCK_SIZE - 1), (butterflyPtr->x / BLOCK_SIZE)))
+            else if (is_space_empty(map, topLine, topColumn))
               move_butterfly_up(butterflyPtr);
             break;
           default:
-            if (is_space_empty(map, (butterflyPtr->y / BLOCK_SIZE), (butterflyPtr->x / BLOCK_SIZE + 1)))
+            if (is_space_empty(map, rightLine, rightColumn))
               move_butterfly_right(butterflyPtr);
-            else if (is_space_empty(map, (butterflyPtr->y / BLOCK_SIZE + 1), (butterflyPtr->x / BLOCK_SIZE)))
+            else if (is_space_empty(map, bottomLine, bottomColumn))
               move_butterfly_down(butterflyPtr);
-            else if (is_space_empty(map, (butterflyPtr->y / BLOCK_SIZE - 1), (butterflyPtr->x / BLOCK_SIZE)))
+            else if (is_space_empty(map, topLine, topColumn))
               move_butterfly_up(butterflyPtr);
-            else if (is_space_empty(map, (butterflyPtr->y / BLOCK_SIZE), (butterflyPtr->x / BLOCK_SIZE - 1)))
+            else if (is_space_empty(map, leftLine, leftColumn))
               move_butterfly_left(butterflyPtr);
 
             break;

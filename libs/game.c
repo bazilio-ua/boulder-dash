@@ -385,6 +385,49 @@ void handle_easter_egg(
     }
 }
 
+void handle_socore(ROCKFORD_STRUCT *rockford)
+{
+  FILE *scoreFile;
+  char fileLine[LINE_SIZE + 1];
+  char message[LINE_SIZE + 1] = "";
+
+  scoreFile = fopen("./resources/score.txt", "r+");
+  fgets(fileLine, LINE_SIZE, scoreFile);
+  fclose(scoreFile);
+
+  if (rockford->score > atoi(fileLine))
+  {
+    sprintf(message, "New High Score = %d", rockford->score);
+
+    // al_show_native_message_box(
+    //     NULL,
+    //     "New High Score!",
+    //     "Congratulations!",
+    //     message,
+    //     NULL,
+    //     ALLEGRO_MESSAGEBOX_WARN);
+    // fprintf(scoreFile, "%s", rockford->score);
+    printf("%s", message);
+
+    scoreFile = fopen("./resources/score.txt", "w+");
+    fprintf(scoreFile, "%d", rockford->score);
+    fclose(scoreFile);
+  }
+  else
+  {
+    sprintf(message, "Score = %d", rockford->score);
+
+    // al_show_native_message_box(
+    //     NULL,
+    //     "Score",
+    //     "Score",
+    //     "Your score is %d",
+    //     rockford->score,
+    //     ALLEGRO_MESSAGEBOX_WARN);
+    printf("%s", message);
+  }
+}
+
 /* Função que lida com o jogo. Loop principal */
 void handle_game(
     unsigned char key[ALLEGRO_KEY_MAX],
@@ -425,7 +468,7 @@ void handle_game(
     if (*restart)
       game_restart(
           restart,
-          event->timer.count,
+          (event->timer.count >= 0) ? event->timer.count : 0,
           map,
           rockford,
           exit,
@@ -483,7 +526,6 @@ void handle_game(
       //       ALLEGRO_MESSAGEBOX_WARN);
       break;
     case ALLEGRO_EVENT_TIMER:
-
       handle_easter_egg(
           key,
           rockford,
@@ -549,6 +591,8 @@ void handle_game(
           steelWallCount,
           *exit);
   }
+
+  handle_socore(*rockford);
 }
 
 /* Função que faz todas as liberações necessárias */

@@ -10,8 +10,6 @@ typedef struct ROCKFORD_STRUCT
 {
     int x, y;
     int lives;
-    int respawn_timer;
-    int invincible_timer;
     int direction;
     int last_direction;
     int source_x;
