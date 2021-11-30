@@ -397,7 +397,7 @@ void handle_socore(ROCKFORD_STRUCT *rockford)
 
   if (rockford->score > atoi(fileLine))
   {
-    sprintf(message, "New High Score = %d", rockford->score);
+    sprintf(message, "New High Score: %d", rockford->score);
 
     al_show_native_message_box(
         NULL,
@@ -413,7 +413,7 @@ void handle_socore(ROCKFORD_STRUCT *rockford)
   }
   else
   {
-    sprintf(message, "Score = %d", rockford->score);
+    sprintf(message, "Your score: %d", rockford->score);
 
     al_show_native_message_box(
         NULL,
@@ -515,7 +515,6 @@ void handle_game(
             "Help",
             "Help",
             "Use the arrow keys to move the character.\n"
-            "Use the space bar to shoot.\n"
             "Use the 'R' key to restart the game.\n"
             "Use the 'H' key to show this help.\n"
             "Use the 'ESC' key to exit the game.\n",
