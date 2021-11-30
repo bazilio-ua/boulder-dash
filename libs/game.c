@@ -406,8 +406,6 @@ void handle_socore(ROCKFORD_STRUCT *rockford)
         message,
         NULL,
         ALLEGRO_MESSAGEBOX_WARN);
-    fprintf(scoreFile, "%s", rockford->score);
-    printf("%s", message);
 
     scoreFile = fopen("./resources/score.txt", "w+");
     fprintf(scoreFile, "%d", rockford->score);
@@ -422,7 +420,7 @@ void handle_socore(ROCKFORD_STRUCT *rockford)
         "Score",
         "Score",
         message,
-        rockford->score,
+        NULL,
         ALLEGRO_MESSAGEBOX_WARN);
   }
 }
