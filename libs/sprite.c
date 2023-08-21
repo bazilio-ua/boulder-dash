@@ -13,7 +13,7 @@ void sprites_init(SPRITES_STRUCT *sprites)
 {
   initialize(al_init_image_addon(), "image");
 
-  sprites->_sheet = al_load_bitmap("./resources/sprites.png");
+  sprites->_sheet = al_load_bitmap("./res/sprites.png");
   initialize(sprites->_sheet, "sprites");
 
   sprites->rockford = sprite_grab(sprites, 0, 0, ROCKFORD_SPRITE_WIDTH, ROCKFORD_SPRITE_HEIGHT);

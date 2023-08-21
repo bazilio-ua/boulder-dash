@@ -1,7 +1,13 @@
 #include "./libs/game.h"
 
-int main()
+int main(int argc, char *argv[])
 {
+  printf("Path relative to the working directory is: %s\n", argv[0]);
+
+  char path [128];
+  getcwd (path, 128);
+  printf ("\n\nThe actual directory is: %s\n",  path);
+
   srand(time(NULL));
   char map[MAP_HEIGHT][MAP_WIDTH];
   bool restart = true;

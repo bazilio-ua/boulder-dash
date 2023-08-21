@@ -33,7 +33,7 @@ void game_initialization(
     EXPLOSION_STRUCT **explosion)
 {
 
-  initialize_map(map, "./resources/map.txt");
+  initialize_map(map, "./res/map.txt");
   count_map_objects(map,
                     steelWallCount,
                     brickWallCount,
@@ -140,7 +140,7 @@ void game_restart(
     int *magicWallCount,
     EXPLOSION_STRUCT **explosion)
 {
-  initialize_map(map, "./resources/map.txt");
+  initialize_map(map, "./res/map.txt");
 
   *steelWallCount = 0;
   *brickWallCount = 0;
@@ -391,7 +391,7 @@ void handle_socore(ROCKFORD_STRUCT *rockford)
   char fileLine[LINE_SIZE + 1];
   char message[LINE_SIZE + 1] = "";
 
-  scoreFile = fopen("./resources/score.txt", "r+");
+  scoreFile = fopen("./res/score.txt", "r+");
   fgets(fileLine, LINE_SIZE, scoreFile);
   fclose(scoreFile);
 
@@ -407,7 +407,7 @@ void handle_socore(ROCKFORD_STRUCT *rockford)
         NULL,
         ALLEGRO_MESSAGEBOX_WARN);
 
-    scoreFile = fopen("./resources/score.txt", "w+");
+    scoreFile = fopen("./res/score.txt", "w+");
     fprintf(scoreFile, "%d", rockford->score);
     fclose(scoreFile);
   }

@@ -22,6 +22,9 @@
     "allegro_native_dialog.h": "c",
     "game.h": "c",
     "display.h": "c",
-    "keyboard.h": "c"
-  }
+    "keyboard.h": "c",
+    "allegro5.h": "c",
+    "allegro.h": "c"
+  },
+  "C_Cpp.errorSquiggles": "disabled"
 }

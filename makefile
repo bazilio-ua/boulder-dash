@@ -1,13 +1,15 @@
-CFLAGS = -Wall
+INC=-I/opt/local/include
 
-ALLEGRO_LIBS = `pkg-config allegro-5 allegro_font-5 allegro_primitives-5 allegro_audio-5 allegro_acodec-5 allegro_image-5 allegro_dialog-5 --libs --cflags`
+CFLAGS = -g -Wall $(INC)
+
+LIBS=-L/opt/local/lib -lallegro -lallegro_main -lallegro_font -lallegro_primitives -lallegro_audio -lallegro_acodec -lallegro_image -lallegro_dialog
 
 OBJECTS = utils.o sprite.o rockford.o amoeba.o boulder.o brick-wall.o butterfly.o diamond.o dirt.o exit.o firefly.o magic-wall.o map.o steel-wall.o explosion.o scoreboard.o audio.o game.o display.o keyboard.o main.o
 
 all: boulder-dash
 
 boulder-dash: $(OBJECTS)
-	gcc $(OBJECTS) -o boulder-dash $(ALLEGRO_LIBS)
+	gcc $(OBJECTS) -o boulder-dash $(LIBS)
 
 main.o: main.c
 	gcc -c main.c $(CFLAGS);

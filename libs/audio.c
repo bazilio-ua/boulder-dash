@@ -27,12 +27,12 @@ void audio_init(AUDIO_STRUCT *audios)
 
   audios->playing_audio = false;
 
-  audios->background = audio_grep("./resources/background.wav");
+  audios->background = audio_grep("./res/background.wav");
   audios->background_instance = audio_grep_instance(audios->background);
 
-  audios->easter_egg = audio_grep("./resources/samba.wav");
-  audios->explosion = audio_grep("./resources/explosion.wav");
-  audios->steps = audio_grep("./resources/steps.wav");
+  audios->easter_egg = audio_grep("./res/samba.wav");
+  audios->explosion = audio_grep("./res/explosion.wav");
+  audios->steps = audio_grep("./res/steps.wav");
 }
 
 /* libera os áudios */
